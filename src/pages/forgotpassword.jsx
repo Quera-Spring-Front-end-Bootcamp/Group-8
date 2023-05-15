@@ -1,5 +1,14 @@
+import { AuthFooter } from "../components/AuthFooter/AuthFooter";
+import { AuthHeader } from "../components/AuthHeader/AuthHeader";
+
 const forgotpassword = () => {
-    return <h1>Forget Password</h1>
+    return (
+        <>
+            <AuthHeader />
+
+            <AuthFooter />
+        </>
+    );
 };
 
 export default forgotpassword;
