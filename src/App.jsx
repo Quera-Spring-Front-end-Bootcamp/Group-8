@@ -5,12 +5,17 @@ import Login from "./pages/login";
 
 function App() {
   return (
-    <Routes>
-      <Route index element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgotpassword" element={<Forgotpassword />} />
-      <Route path="/login" element={<Login />} />
-    </Routes>
+    <>
+      <Route path="/register">
+        <Register />
+      </Route>
+      <Route path="/forgotpassword">
+        <Forgotpassword />
+      </Route>
+      <Route path="/login">
+        <Login />
+      </Route>
+    </>
   );
 }
 
