@@ -5,7 +5,11 @@ import { AuthHeader } from "../components/AuthHeader/AuthHeader";
 const login = () => {
   return (
     <>
-      <AuthHeader />
+      <AuthHeader
+        text={"ثبت نام نکردی؟"}
+        buttonText={"ثبت نام"}
+        link={"Register"}
+      />
       <LoginForm />
       <AuthFooter />
     </>
