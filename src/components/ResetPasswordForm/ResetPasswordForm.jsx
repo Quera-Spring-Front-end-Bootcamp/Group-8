@@ -6,7 +6,8 @@ import "./../../styles/index.css";
 
 const ResetPassword = () => {
   const [formErrorMessage, setFormErrorMessage] = useState("");
-  const [formIsValid, setFormIsValid] = useState(false);
+  
+  let formIsValid = false;
 
   let passwordInputErrorMessage = "";
   let confirmPasswordInputErrorMessage = "";
@@ -56,21 +57,21 @@ const ResetPassword = () => {
   });
 
   if (passwordIsValid && confirmPasswordIsValid) {
-    setFormIsValid(true);
+    formIsValid = true;
   }
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
     if (passwordInputHasError || confirmPasswordInputHasError) {
-      setFormIsValid(false);
+      formIsValid = false;
       setFormErrorMessage("");
       return;
     }
 
     if (!formIsValid) {
       setFormErrorMessage("لطفاً رمز عبور جدید و تاییدیه آن را وارد نمایید.");
-      setFormIsValid(false);
+      formIsValid = false;
       return;
     }
 
@@ -118,7 +119,7 @@ const ResetPassword = () => {
             )}
           </div>
           <div>
-            <label htmlFor="confirm-password">رمز عبور</label>
+            <label htmlFor="confirm-password">تایید رمز عبور</label>
             <input
               type="password"
               name="confirm-password"

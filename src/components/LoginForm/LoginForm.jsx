@@ -7,8 +7,8 @@ import "./../../styles/index.css";
 
 const Login = () => {
   const [formErrorMessage, setFormErrorMessage] = useState("");
-  const [formIsValid, setFormIsValid] = useState(false);
-
+  
+  let formIsValid = false;
   let emailInputErrorMessage = "";
 
   const {
@@ -21,15 +21,12 @@ const Login = () => {
   } = useInput((value) => {
     if (value.trim() === "") {
       emailInputErrorMessage = "لطفا پست الکترونیک خود را وارد نمایید";
-      console.log('false');
       return false;
     } else {
       if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(value)) {
-        console.log('true');
         return true;
       } else {
         emailInputErrorMessage = "پست الکترونیک واردشده معتبر نیست";
-        console.log('false');
         return false;
       }
     }
@@ -45,21 +42,21 @@ const Login = () => {
   } = useInput((value) => value.trim() !== "");
 
   if (emailIsValid && passwordIsValid) {
-    setFormIsValid(true);
+    formIsValid = true;
   }
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
     if (emailInputHasError || passwordInputHasError) {
-      setFormIsValid(false);
+      formIsValid = false;
       setFormErrorMessage('');
       return;
     }
 
     if (!formIsValid) {
       setFormErrorMessage("لطفاً پست الکترونیک و رمز عبور خود را وارد نمایید.");
-      setFormIsValid(false);
+      formIsValid = false;
       return;
     }
 
@@ -88,7 +85,7 @@ const Login = () => {
         </h1>
         <form onSubmit={onSubmitHandler} onChange={onChangeHandler}>
           <div>
-            {!formIsValid && (
+            {!formIsValid && formErrorMessage && (
               <p className="my-8 text-sm text-[#D7284B]">{formErrorMessage}</p>
             )}
           </div>

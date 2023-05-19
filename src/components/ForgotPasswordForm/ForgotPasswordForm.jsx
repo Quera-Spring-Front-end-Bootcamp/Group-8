@@ -1,31 +1,56 @@
-import { useReducer } from "react";
+import useInput from "../../hooks/useInput";
 
 import "./../../styles/index.css";
 
-const reducer = (state, action) => {
-    switch (action.type) {
-      case "email":
-        return { ...state, email: action.payload };
-      case "submit":
-        console.log(state.email);
-        return state;
-      default:
-        throw new Error();
-    }
-  };
-
 const ForgotPassword = () => {
-  const initialState = { email: "" };
-  const [state, dispatch] = useReducer(reducer, initialState);
+  let formIsValid = false;
 
-  const handleChange = (e) => {
-    dispatch({ type: e.target.name, payload: e.target.value });
-  };
+  let emailInputErrorMessage = "";
 
-  const handleSubmit = (e) => {
+  const {
+    value: email,
+    isValid: emailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangedHandler,
+    inputBlurHandler: emailBlurHandler,
+    resetHandler: emailInputResetHandler,
+  } = useInput((value) => {
+    if (value.trim() === "") {
+      emailInputErrorMessage = "لطفا پست الکترونیک خود را وارد نمایید";
+      return false;
+    } else {
+      if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(value)) {
+        return true;
+      } else {
+        emailInputErrorMessage = "پست الکترونیک واردشده معتبر نیست";
+        return false;
+      }
+    }
+  });
+
+  if (emailIsValid ) {
+    formIsValid = true;
+  }
+
+  const onSubmitHandler = (e) => {
     e.preventDefault();
-    dispatch({ type: "submit" });
+
+    if (emailInputHasError) {
+      formIsValid = false;
+      return;
+    }
+
+    if (!formIsValid) {
+      formIsValid = false;
+      return;
+    }
+
+    emailInputResetHandler();
   };
+
+  const emailInputClasses = emailInputHasError
+  ? "border-2 border-[#D7284B]"
+  : "border border-gray-300";
 
   return (
     <div className="flex items-center justify-center h-[70vh]">
@@ -33,7 +58,7 @@ const ForgotPassword = () => {
         <h1 className="text-2xl font-normal text-center">
           فراموشی رمز عبور
         </h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmitHandler}>
           <div className="mt-7 mb-5">
             <label htmlFor="email">
               پست الکترونیک خود را وارد نمایید
@@ -41,10 +66,16 @@ const ForgotPassword = () => {
             <input
               type="email"
               name="email"
-              value={state.email}
-              onChange={handleChange}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded"
+              value={email}
+              onChange={emailChangedHandler}
+              onBlur={emailBlurHandler}
+              className={`w-full mt-1 px-3 py-2 rounded ${emailInputClasses}`}
             />
+            {emailInputHasError && (
+              <p className="mt-1 mr-4 text-sm text-[#D7284B]">
+                {emailInputErrorMessage}
+              </p>
+            )}
           </div>
           <div className="mt-8">
             <button
