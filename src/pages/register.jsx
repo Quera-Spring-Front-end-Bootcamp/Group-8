@@ -12,3 +12,5 @@ const Register = () => {
 };
 
 export default Register;
+
+export default register;
