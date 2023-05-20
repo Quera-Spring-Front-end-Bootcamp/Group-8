@@ -9,14 +9,15 @@ import "./styles/App.css";
 function App() {
   return (
     <>
-      <Route exact path="/" component={Login} />
-      <Route path="/Register">
+      <Route exact path="/login" component={Login} />
+
+      <Route path="/register">
         <Register />
       </Route>
-      <Route path="/ForgotPassword">
+      <Route path="/forgotPassword">
         <Forgotpassword />
       </Route>
-      <Route path="/ResetPassword">
+      <Route path="/resetPassword">
         <ResetPassword />
       </Route>
       <Route path="/sendpassword">

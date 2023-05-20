@@ -8,7 +8,7 @@ const register = () => {
            <AuthHeader
         text={"قبلاً ثبت نام کردی؟"}
         buttonText={"ورود"}
-        link={"Login"}
+        link={"login"}
       />
       <RegisterForm />
       <AuthFooter />
