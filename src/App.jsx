@@ -9,8 +9,10 @@ import "./styles/App.css";
 function App() {
   return (
     <>
-      <Route exact path="/login" component={Login} />
-
+      <Route exact path="/" component={Login} />
+      <Route path="/login">
+        <Login />
+      </Route>
       <Route path="/register">
         <Register />
       </Route>
