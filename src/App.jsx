@@ -1,8 +1,8 @@
 import { Route } from "react-router-dom";
-import Forgotpassword from "./pages/forgot_password";
+import Forgotpassword from "./pages/forgotpassword";
 import Register from "./pages/register";
 import Login from "./pages/login";
-import ResetPassword from "./pages/reset_password";
+import ResetPassword from "./pages/resetpassword";
 
 function App() {
   return (
