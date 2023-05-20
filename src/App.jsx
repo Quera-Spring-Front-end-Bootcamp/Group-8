@@ -3,13 +3,15 @@ import Forgotpassword from "./pages/forgotpassword";
 import Register from "./pages/register";
 import Login from "./pages/login";
 import ResetPassword from "./pages/resetpassword";
+import "./styles/App.css";
 
 function App() {
   return (
     <>
-      <Route path="/Login">
+      {/* <Route path="/Login">
         <Login />
-      </Route>
+      </Route> */}
+      <Route exact path="/" component={Login} />
       <Route path="/Register">
         <Register />
       </Route>

@@ -1,0 +1,7 @@
+.caption-gradient {
+    background: linear-gradient(90deg, #118c80 0%, #4ab7d8 120%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
