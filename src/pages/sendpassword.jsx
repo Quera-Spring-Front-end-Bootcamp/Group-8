@@ -2,7 +2,7 @@ import { AuthFooter } from "../components/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/AuthHeader/AuthHeader";
 import SendPasswordForm from "../components/SendPasswordForm/SendPasswordForm";
 
-const ForgotPassword = () => {
+const forgotPassword = () => {
   return (
     <>
       <AuthHeader
@@ -16,4 +16,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default forgotPassword;
