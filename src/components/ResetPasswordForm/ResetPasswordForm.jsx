@@ -6,7 +6,7 @@ import "./../../styles/index.css";
 
 const ResetPassword = () => {
   const [formErrorMessage, setFormErrorMessage] = useState("");
-  
+
   let formIsValid = false;
 
   let passwordInputErrorMessage = "";
@@ -86,15 +86,20 @@ const ResetPassword = () => {
 
   const passwordInputClasses = passwordInputHasError
     ? "border-2 border-[#D7284B]"
-    : "border border-gray-300";
+    : "border border-[#AAAAAA]";
 
   const confirmPasswordInputClasses = confirmPasswordInputHasError
-    ? "border-2 border-[#D7284B] rounded"
-    : "border border-gray-300 rounded";
+    ? "border-2 border-[#D7284B]"
+    : "border border-[#AAAAAA]";
 
   return (
     <div className="flex items-center justify-center h-[70vh]">
-      <div className="w-max p-6 bg-white rounded shadow">
+      <div
+        className="w-max p-6 bg-white rounded-[20px] shadow"
+        style={{
+          boxShadow: "0px 12px 50px rgba(0, 0, 0, 0.18)",
+        }}
+      >
         <h1 className="text-2xl font-normal text-center">بازنشانی رمز عبور</h1>
         <form onSubmit={onSubmitHandler} onChange={onChangeHandler}>
           <div>
@@ -110,7 +115,7 @@ const ResetPassword = () => {
               value={password}
               onChange={passwordChangedHandler}
               onBlur={passwordBlurHandler}
-              className={`w-full mt-1 px-3 py-2 rounded ${passwordInputClasses}`}
+              className={`w-full mt-1 px-3 py-2 border-solid rounded-md ${passwordInputClasses}`}
             />
             {passwordInputHasError && (
               <p className="mt-1 mr-4 text-sm text-[#D7284B]">

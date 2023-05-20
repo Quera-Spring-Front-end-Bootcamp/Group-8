@@ -28,7 +28,7 @@ const ForgotPassword = () => {
     }
   });
 
-  if (emailIsValid ) {
+  if (emailIsValid) {
     formIsValid = true;
   }
 
@@ -49,27 +49,28 @@ const ForgotPassword = () => {
   };
 
   const emailInputClasses = emailInputHasError
-  ? "border-2 border-[#D7284B]"
-  : "border border-gray-300";
+    ? "border-2 border-[#D7284B]"
+    : "border border-[#AAAAAA]";
 
   return (
     <div className="flex items-center justify-center h-[70vh]">
-      <div className="w-max p-6 bg-white rounded shadow">
-        <h1 className="text-2xl font-normal text-center">
-          فراموشی رمز عبور
-        </h1>
+      <div
+        className="w-max p-6 bg-white rounded-[20px] shadow"
+        style={{
+          boxShadow: "0px 12px 50px rgba(0, 0, 0, 0.18)",
+        }}
+      >
+        <h1 className="text-2xl font-normal text-center">فراموشی رمز عبور</h1>
         <form onSubmit={onSubmitHandler}>
           <div className="mt-7 mb-5">
-            <label htmlFor="email">
-              پست الکترونیک خود را وارد نمایید
-            </label>
+            <label htmlFor="email">پست الکترونیک خود را وارد نمایید</label>
             <input
               type="email"
               name="email"
               value={email}
               onChange={emailChangedHandler}
               onBlur={emailBlurHandler}
-              className={`w-full mt-1 px-3 py-2 rounded ${emailInputClasses}`}
+              className={`w-full mt-1 px-3 py-2 border-solid rounded-md ${emailInputClasses}`}
             />
             {emailInputHasError && (
               <p className="mt-1 mr-4 text-sm text-[#D7284B]">
