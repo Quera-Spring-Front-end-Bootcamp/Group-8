@@ -1,5 +1,16 @@
+import { AuthFooter } from "../components/AuthFooter/AuthFooter";
+import { AuthHeader } from "../components/AuthHeader/AuthHeader";
+import RegisterForm from "../components/RegisterForm/RegisterForm";
+
 const register = () => {
-    return <h1>register</h1>
+    return (
+        <>
+            <AuthHeader />
+            <RegisterForm/>
+            <AuthFooter />
+        </>
+    )
+
 };
 
 export default register;
