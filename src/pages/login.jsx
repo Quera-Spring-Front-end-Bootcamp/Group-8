@@ -2,7 +2,7 @@ import LoginForm from "../components/LoginForm/LoginForm";
 import { AuthFooter } from "../components/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/AuthHeader/AuthHeader";
 
-const login = () => {
+const Login = () => {
   return (
     <>
       <AuthHeader
@@ -16,4 +16,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

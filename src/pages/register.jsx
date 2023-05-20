@@ -1,7 +1,7 @@
 import { AuthFooter } from "../components/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/AuthHeader/AuthHeader";
 
-const register = () => {
+const Register = () => {
   return (
     <>
       <AuthHeader />
@@ -11,4 +11,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;

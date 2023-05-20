@@ -1,8 +1,8 @@
 import { AuthFooter } from "../components/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/AuthHeader/AuthHeader";
-import ForgotPassword from "../components/ForgotPasswordForm/ForgotPasswordForm";
+import ForgotPasswordForm from "../components/ForgotPasswordForm/ForgotPasswordForm";
 
-const forgotpassword = () => {
+const ForgotPassword = () => {
   return (
     <>
       <AuthHeader
@@ -10,10 +10,10 @@ const forgotpassword = () => {
         buttonText={"ورود"}
         link={"Login"}
       />
-      <ForgotPassword />
+      <ForgotPasswordForm />
       <AuthFooter />
     </>
   );
 };
 
-export default forgotpassword;
+export default ForgotPassword;
