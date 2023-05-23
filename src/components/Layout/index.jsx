@@ -7,7 +7,6 @@ import SearchIcon from "../svg-components/SearchIcon";
 import "../../styles/Layout.css";
 
 const Layout = ({ button, children }) => {
-  
   const options = [
     { label: "Option 1", value: "1" },
     { label: "Option 2", value: "2" },
@@ -26,7 +25,7 @@ const Layout = ({ button, children }) => {
 
           <div className="menu pt-3">
             <DropDown
-              label="ورک اسپیس ها"
+              label= "ورک اسپیس ها"
               Options={options}
               className="h-9 w-[278px] items-center rounded-md bg-[#FAFBFC]  p-1 cursor-pointer"
             />
@@ -90,7 +89,10 @@ const Layout = ({ button, children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
+                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
+                  <span class="material-symbols-outlined">
+                    format_list_bulleted
+                  </span>
                   پروژه اول
                 </Button>
               </li>
@@ -98,7 +100,8 @@ const Layout = ({ button, children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
+                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
+                  <span class="material-symbols-outlined">view_week</span>
                   پروژه اول
                 </Button>
               </li>
@@ -106,7 +109,8 @@ const Layout = ({ button, children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
+                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
+                  <span class="material-symbols-outlined">calendar_month</span>
                   پروژه اول
                 </Button>
               </li>
@@ -116,7 +120,8 @@ const Layout = ({ button, children }) => {
             </ul>
             <ul className="flex mt-1">
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
+                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
+                  <span class="material-symbols-outlined">share</span>
                   اشتراک گذاری
                 </Button>
               </li>
@@ -133,15 +138,13 @@ const Layout = ({ button, children }) => {
               />
             </li>
 
-            <li class="mr-3">
-              { button }
-            </li>
+            <li class="mr-3">{button}</li>
           </ul>
 
           {/* Dashboard Content stays here! */}
           <div className="p-5 pt-12 text-2x1 font-semibold flex-1 h-36 top-10">
             <h1>Hello Home Page!</h1>
-            { children }
+            {children}
           </div>
         </div>
       </div>
