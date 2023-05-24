@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Forgotpassword from "./pages/forgotpassword";
 import Register from "./pages/register";
 import Login from "./pages/login";
@@ -10,7 +10,7 @@ import "./styles/App.css";
 function App() {
   return (
     <>
-      <Routes>
+
         <Route exact path="/" component={Login} />
         <Route path="/login">
           <Login />
@@ -27,13 +27,16 @@ function App() {
         <Route path="/sendpassword">
           <SendPasswordForm />
         </Route>
-      </Routes>
-
-      <Routes>
         <Route path="/layout">
           <Layout />
         </Route>
-      </Routes>
+
+
+      {/* <Routes>
+        <Route path="/layout">
+          <Layout />
+        </Route>
+      </Routes> */}
     </>
   );
 }
