@@ -2,7 +2,7 @@ import { AuthFooter } from "../components/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/AuthHeader/AuthHeader";
 import ResetPasswordForm from "../components/ResetPasswordForm/ResetPasswordForm"
 
-const ResetPassword = () => {
+const resetPassword = () => {
   return (
     <>
       <AuthHeader
@@ -16,4 +16,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default resetPassword;

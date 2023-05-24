@@ -1,14 +1,20 @@
 import { AuthFooter } from "../components/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/AuthHeader/AuthHeader";
+import RegisterForm from "../components/RegisterForm/RegisterForm"
 
-const Register = () => {
-  return (
-    <>
-      <AuthHeader />
-
+const register = () => {
+    return (
+        <>
+           <AuthHeader
+        text={"قبلاً ثبت نام کردی؟"}
+        buttonText={"ورود"}
+        link={"login"}
+      />
+      <RegisterForm />
       <AuthFooter />
-    </>
-  );
+        </>
+    )
+
 };
 
-export default Register;
+export default register;

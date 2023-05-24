@@ -1,6 +1,6 @@
 import { AuthFooter } from "../components/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/AuthHeader/AuthHeader";
-import ForgotPasswordForm from "../components/ForgotPasswordForm/ForgotPasswordForm";
+import SendPasswordForm from "../components/SendPasswordForm/SendPasswordForm";
 
 const forgotPassword = () => {
   return (
@@ -8,9 +8,9 @@ const forgotPassword = () => {
       <AuthHeader
         text={"قبلاً ثبت نام کردی؟"}
         buttonText={"ورود"}
-        link={"login"}
+        link={"Login"}
       />
-      <ForgotPasswordForm />
+      <SendPasswordForm />
       <AuthFooter />
     </>
   );
