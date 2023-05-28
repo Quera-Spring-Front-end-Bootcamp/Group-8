@@ -1,13 +1,63 @@
 import DropDown from "./SideMenu/DropDown";
-import Button from "../Button/Buttom";
+import Button from "../Button/Button";
 import Caption from "./SideMenu/SideMenuCaption/Caption";
 import SideMenuItem from "./SideMenu/SideMenuItem";
 import SideMenuInput from "./SideMenu/SideMenuInput";
-import SearchIcon from "../svg-components/SearchIcon";
+import ProfileOption from "./SideMenu/ProfileOption";
+import FilterModal from "../Modal/FilterModal";
+import ModalProjectMenu from "../Modal/ModalProjectMenu";
+import ModalTaskMenu from "../Modal/ModalTaskMenu";
+import ModalNewWorkSpace from "../Modal/ModalNewWorkSpace";
+import ModalPickColor from "../Modal/ModalPickColor";
+import ShareProjectModal from '../Modal/ShareProjectModal'
+import ShareWSModal from '../Modal/ShareWSModal'
+import InformationModal from '../Modal/InformationModal'
+import TaskDetails from '../Modal/TaskDetails'
+import { useState } from "react";
+import MakeTaskModal from "../Modal/MakeTaskModal";
 import "../../styles/Layout.css";
 
-const Layout = ({ button, children }) => {
-  
+const Layout = ({ children }) => {
+  const [showFilter, setShowFilter] = useState(false);
+  const [showShareProject, setShowShareProject] = useState(false);
+  const [showNewTask, setShowNewTask] = useState(false);
+
+  const showNewTaskModal = () => {
+    if (showNewTask) {
+      setShowNewTask(false);
+    } else {
+      setShowNewTask(true);
+    }
+    console.log(showNewTask);
+  };
+
+  const showShareProjectModal = () => {
+    if (showShareProject) {
+      setShowShareProject(false);
+    } else {
+      setShowShareProject(true);
+    }
+    // console.log(showShareProject);
+  };
+
+  const showFilterModal = () => {
+    if (showFilter) {
+      setShowFilter(false);
+    } else {
+      setShowFilter(true);
+    }
+    // console.log(showFilter);
+  };
+
+  const showWSModal = () => {
+    if (showWS) {
+      setShowWS(false);
+    } else {
+      setShowWS(true);
+    }
+    // console.log(showWS);
+  };
+
   const options = [
     { label: "Option 1", value: "1" },
     { label: "Option 2", value: "2" },
@@ -41,11 +91,15 @@ const Layout = ({ button, children }) => {
           </div>
 
           <div className="menu pt-3">
-            <Button className="h-[32px] items-center rounded-md bg-[#D3D3D3] text-center p-1">
+            <Button
+              className=" flex h-[32px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-1"
+              onClick={showWSModal}
+            >
+              <span class="material-symbols-rounded">add_box</span>
               ساختن اسپیس جدید
             </Button>
           </div>
-          <nav className=" h-[68%] flex flex-col border  border-black justify-between">
+          <nav className=" h-[68%] flex flex-col justify-between">
             <ul className=" menu pt-6">
               <SideMenuItem
                 className=" menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
@@ -69,8 +123,9 @@ const Layout = ({ button, children }) => {
               ></SideMenuItem>
             </ul>
             <ul className="menu pt-6">
+              <ProfileOption english="Zahra Moradi" persian="زهرا مرادی" />
               <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
-                <span class="material-symbols-outlined p-0">door_open</span>
+                <span class="material-symbols-rounded">door_open</span>
                 خروج
               </li>
             </ul>
@@ -78,7 +133,7 @@ const Layout = ({ button, children }) => {
         </div>
 
         <div className="  p-5 pt-12 text-2x1 font-semibold flex-1 h-36 top-10 ">
-          <nav className=" flex justify-between pb-2 border-b-2">
+          <nav className=" flex justify-between border-b-2">
             {/* first line menu */}
             <ul class="flex mt-1 ">
               <li class="mr-3">
@@ -90,24 +145,27 @@ const Layout = ({ button, children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
-                  پروژه اول
+                <Button className=" flex hover:text-[#208D8E] pb-5 text-[16px] px-3 text-gray-700">
+                  <span class="material-symbols-rounded">list</span>
+                  نمایش لیستی
                 </Button>
               </li>
               <li className="">
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
-                  پروژه اول
+                <Button className=" flex active pb-5 text-[16px] px-3  text-gray-700">
+                  <span class="material-symbols-rounded">view_week</span>
+                  نمایش ستونی
                 </Button>
               </li>
               <li className="">
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
-                  پروژه اول
+                <Button className=" flex hover:text-[#208D8E] text-[16px] px-3 rounded-md text-gray-700">
+                  <span class="material-symbols-rounded">calendar_month</span>
+                  تقویم
                 </Button>
               </li>
               <li className="">
@@ -116,7 +174,8 @@ const Layout = ({ button, children }) => {
             </ul>
             <ul className="flex mt-1">
               <li class="mr-3">
-                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
+                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700" onClick={showShareProjectModal}>
+                  <span class="material-symbols-rounded">share</span>
                   اشتراک گذاری
                 </Button>
               </li>
@@ -125,26 +184,55 @@ const Layout = ({ button, children }) => {
 
           {/* secound line menu */}
           <ul class="flex mt-2 pb-2 border-b-2 border-gray-200">
-            <li class="mr-3">
+            <li class="flex mr-3">
+              <span class=" px-1 material-symbols-rounded">search</span>
               <input
                 type="text"
-                placeholder="Type here"
+                placeholder="جستجوی تسک ها"
                 className="input w-full max-w-xs border-gray-600 border-l-2"
               />
             </li>
 
             <li class="mr-3">
-              { button }
+              <Button
+                className=" flex hover:text-[#208D8E] text-[14px] px-3 text-gray-700"
+                onClick={showFilterModal}
+              >
+                <span class=" px-2 material-symbols-rounded">page_info</span>
+                فیلتر
+              </Button>
+            </li>
+            <li className="mr-3">
+              <span className=" px-3 text-[12px] bg-[#E9F9FF] rounded-[4px]">
+                دسته بندی شده با: وضعیت
+              </span>
             </li>
           </ul>
 
           {/* Dashboard Content stays here! */}
-          <div className="p-5 pt-12 text-2x1 font-semibold flex-1 h-36 top-10">
-            <h1>Hello Home Page!</h1>
-            { children }
+          <div className=" h-[75vh] p-5 pt-12 text-2x1 font-semibold flex-1 top-10 relative">
+            {children}
+
+            <Button className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed" onClick={showNewTaskModal}>
+              <span class=" text-[#FFFFFF] material-symbols-rounded">
+                add_box
+              </span>
+              تسک جدید
+            </Button>
           </div>
         </div>
       </div>
+      {false && <ShareWSModal />}
+      {showShareProject && <ShareProjectModal/>}
+      {showFilter && <FilterModal></FilterModal>}
+      {false && <ModalProjectMenu></ModalProjectMenu>}
+      {false && <ModalTaskMenu></ModalTaskMenu>}
+      {false && <ModalNewWorkSpace></ModalNewWorkSpace>}
+      {false && <ModalPickColor></ModalPickColor>}
+      {false && <InformationModal></InformationModal>}
+      {showNewTask && <MakeTaskModal></MakeTaskModal>}
+      {false && <TaskDetails></TaskDetails>}
+
     </>
   );
 };
