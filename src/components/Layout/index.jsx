@@ -1,5 +1,5 @@
 import DropDown from "./SideMenu/DropDown";
-import Button from "../Button/Buttom";
+import Button from "../common/Button/Buttom";
 import Caption from "./SideMenu/SideMenuCaption/Caption";
 import SideMenuItem from "./SideMenu/SideMenuItem";
 import SideMenuInput from "./SideMenu/SideMenuInput";
