@@ -1,5 +1,5 @@
 import DropDown from "./SideMenu/DropDown";
-import Button from "../common/Button/Buttom";
+import Button from "../Button/Buttom";
 import Caption from "./SideMenu/SideMenuCaption/Caption";
 import SideMenuItem from "./SideMenu/SideMenuItem";
 import SideMenuInput from "./SideMenu/SideMenuInput";
@@ -7,6 +7,7 @@ import SearchIcon from "../svg-components/SearchIcon";
 import "../../styles/Layout.css";
 
 const Layout = ({ button, children }) => {
+  
   const options = [
     { label: "Option 1", value: "1" },
     { label: "Option 2", value: "2" },
@@ -40,12 +41,11 @@ const Layout = ({ button, children }) => {
           </div>
 
           <div className="menu pt-3">
-            <Button className=" flex  h-[32px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-1">
-              <span class="material-symbols-rounded">add_box</span>
+            <Button className="h-[32px] items-center rounded-md bg-[#D3D3D3] text-center p-1">
               ساختن اسپیس جدید
             </Button>
           </div>
-          <nav className=" h-[68%] flex flex-col justify-between">
+          <nav className=" h-[68%] flex flex-col border  border-black justify-between">
             <ul className=" menu pt-6">
               <SideMenuItem
                 className=" menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
@@ -70,7 +70,7 @@ const Layout = ({ button, children }) => {
             </ul>
             <ul className="menu pt-6">
               <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
-                <span class="material-symbols-rounded">door_open</span>
+                <span class="material-symbols-outlined p-0">door_open</span>
                 خروج
               </li>
             </ul>
@@ -90,8 +90,7 @@ const Layout = ({ button, children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
-                  <span class="material-symbols-rounded">list</span>
+                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
                   پروژه اول
                 </Button>
               </li>
@@ -99,8 +98,7 @@ const Layout = ({ button, children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
-                  <span class="material-symbols-rounded">view_week</span>
+                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
                   پروژه اول
                 </Button>
               </li>
@@ -108,8 +106,7 @@ const Layout = ({ button, children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li class="mr-3">
-                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
-                  <span class="material-symbols-rounded">calendar_month</span>
+                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
                   پروژه اول
                 </Button>
               </li>
@@ -119,8 +116,7 @@ const Layout = ({ button, children }) => {
             </ul>
             <ul className="flex mt-1">
               <li class="mr-3">
-                <Button className=" flex text-[16px] px-3 rounded-md text-gray-700">
-                  <span class="material-symbols-rounded">share</span>
+                <Button className=" text-[16px] inline-block px-3 rounded-md text-gray-700">
                   اشتراک گذاری
                 </Button>
               </li>
@@ -137,13 +133,15 @@ const Layout = ({ button, children }) => {
               />
             </li>
 
-            <li class="mr-3">{button}</li>
+            <li class="mr-3">
+              { button }
+            </li>
           </ul>
 
           {/* Dashboard Content stays here! */}
           <div className="p-5 pt-12 text-2x1 font-semibold flex-1 h-36 top-10">
             <h1>Hello Home Page!</h1>
-            {children}
+            { children }
           </div>
         </div>
       </div>
