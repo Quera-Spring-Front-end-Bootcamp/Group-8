@@ -4,44 +4,14 @@ import Register from "./pages/register";
 import Login from "./pages/login";
 import ResetPassword from "./pages/resetpassword";
 import SendPasswordForm from "./pages/sendpassword";
-<<<<<<< HEAD
-import Layout from './components/Dashboard/Layout/index';
-=======
->>>>>>> Hussein
+
+import Layout from "./components/Dashboard/Layout/index";
+
 import "./styles/App.css";
 
 function App() {
   return (
     <>
-<<<<<<< HEAD
-
-        <Route exact path="/" component={Login} />
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/register">
-          <Register />
-        </Route>
-        <Route path="/forgotPassword">
-          <Forgotpassword />
-        </Route>
-        <Route path="/resetPassword">
-          <ResetPassword />
-        </Route>
-        <Route path="/sendpassword">
-          <SendPasswordForm />
-        </Route>
-        <Route path="/layout">
-          <Layout />
-        </Route>
-
-
-      {/* <Routes>
-        <Route path="/layout">
-          <Layout />
-        </Route>
-      </Routes> */}
-=======
       <Route exact path="/" component={Login} />
       <Route path="/login">
         <Login />
@@ -58,7 +28,9 @@ function App() {
       <Route path="/sendpassword">
         <SendPasswordForm />
       </Route>
->>>>>>> Hussein
+      <Route path="/layout">
+        <Layout />
+      </Route>
     </>
   );
 }
