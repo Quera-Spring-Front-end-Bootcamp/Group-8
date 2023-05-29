@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Tag from "./Tag";
+import Tag from "../ColTask/Tag";
 
-const ColTask = ({
+const ColTask = ({ inputRef,
   imgSrc,
   projectName,
   userName,
@@ -10,10 +10,24 @@ const ColTask = ({
   date,
 }) => {
   const [show, setShow] = useState(false);
+  const [taskName, setTaskName] = useState("");
+  const [isClicked, setIsClicked] = useState(false);
+  const [isClicked1, setIsClicked1] = useState(true);
+  
+
+  const taskDone = () => {
+    setIsClicked(true);
+    setIsClicked1(false);
+  }
+
+  const handleEditTask=()=>{
+    setIsClicked(false);
+    setIsClicked1(true);
+  }
 
   return (
     <div
-      className="flex flex-col gap-[18px] w-[250px] mt-[12px] mr-[16px] p-[10px] bg-[#FFFFFF] border border-solid border-[#EFF0F0] rounded-[4px] cursor-pointer "
+      className="flex flex-col gap-[18px] w-[250px] mt-[12px] p-[10px] bg-[#FFFFFF] border border-solid border-[#EFF0F0] rounded-[4px] cursor-pointer "
       style={{
         boxShadow: "0px 6px 8px rgba(0, 0, 0, 0.14)",
       }}
@@ -32,6 +46,7 @@ const ColTask = ({
       />
       <div className="flex flex-row items-center justify-between">
         <span className="font-medium text-[10px] leading-[15px] text-right text-[#534D60]  self-start">
+
           {(projectName = "پروژه اول")}
         </span>
         <span
@@ -41,12 +56,22 @@ const ColTask = ({
           {(userName = "NM")}
         </span>
       </div>
-      <div className="flex flex-row items-baseLine gap-[10px]">
-        <h4 className="font-medium text-[12px] leading-[18px] text text-right	text-[#0E0E0E] ">
-        {(taskTitle = "این یک تیتر برای این تسک است.")}
+      <h4 onClick={handleEditTask} className="flex flex-row items-baseLine gap-[10px]">
+        {isClicked && (<div  className="font-medium text-[12px] leading-[18px] text text-right	text-[#0E0E0E] ">{taskName} </div>)}
+        
+        {isClicked1 &&
+          (<input value={taskName ? taskName : ""} autoFocus ref={inputRef} type="text" onChange={(e) => { setTaskName(e.target.value) }}
+            placeholder="نام تسک خود را وارد کنید"
+            className="outline-none w-full "
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                taskDone();
+              }
+            }} />)}
+        {/* {(taskTitle = "این یک تیتر برای این تسک است.")} */}
+
+        <span onClick={taskDone} className="material-symbols-rounded text-[#BDC0C6] w-[12px] h-[12px]" style={{ fontSize: "15px" }}>Done</span>
       </h4>
-      <span class="material-symbols-rounded text-[#BDC0C6] w-[12px] h-[12px]"style={{fontSize:"15px"}}>format_align_right</span>
-      </div>
       <div className="flex flex-row items-baseLine justify-start gap-[27px]">
         <div className="flex flex-row items-center gap-[1px]">
           <span className="material-symbols-rounded w-[16px] h-[16px] text-[#FB0606] pb-[32px]">
