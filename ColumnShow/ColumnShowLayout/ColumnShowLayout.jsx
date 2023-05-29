@@ -12,6 +12,7 @@ function ColumnShowLayout() {
     const [showPicker, setShowPicker] = useState(true);
     const parentRef = useRef(null);
     
+
     useEffect(() => {
         const handleClickOutside = (event) => {
           if (parentRef.current && !parentRef.current.contains(event.target)) {
@@ -59,6 +60,7 @@ function ColumnShowLayout() {
         ]);
         setIsClicked(false)
         setIsClicked1(true)
+        setColumnText("")
         }
         
     };
@@ -86,9 +88,10 @@ function ColumnShowLayout() {
     }
 
     return (
-        <div ref={parentRef} className='flex flex-row gap-8'>
-
+        <div ref={parentRef} className='flex flex-row '>
+            
             <div className="flex">
+                
                 {columns.map(({ id, borderColor, columnText }) => (
                     <Column
                         id={id}
@@ -109,7 +112,7 @@ function ColumnShowLayout() {
                             ساختن ستون جدید
 
                         </div>
-                        <span className="material-symbols-outlined">
+                        <span className="material-symbols-rounded">
                             add
                         </span>
                     </div>
@@ -137,7 +140,7 @@ function ColumnShowLayout() {
                                       addColumn();
                                     }
                                   }} />
-                        <span onClick={addColumn} className="material-symbols-outlined">
+                        <span onClick={addColumn} className="material-symbols-rounded">
                             add
                         </span>
                     </div>
