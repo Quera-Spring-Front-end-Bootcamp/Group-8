@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import useInput from "../../hooks/useInput";
+import useInput from "../../../hooks/useInput";
 
-import "./../../styles/index.css";
+import "../../../styles/index.css";
 
 const Login = () => {
   const [formErrorMessage, setFormErrorMessage] = useState("");

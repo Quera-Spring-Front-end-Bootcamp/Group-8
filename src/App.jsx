@@ -4,7 +4,7 @@ import Register from "./pages/register";
 import Login from "./pages/login";
 import ResetPassword from "./pages/resetpassword";
 import SendPasswordForm from "./pages/sendpassword";
-import Layout from "./components/Layout/index";
+import Layout from './components/Dashboard/Layout/index';
 import "./styles/App.css";
 
 function App() {
