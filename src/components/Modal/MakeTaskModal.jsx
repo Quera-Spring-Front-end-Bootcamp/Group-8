@@ -11,7 +11,7 @@ const MakeTaskModal = (props) => {
               عنوان تسک
             </h2>
           </div>
-          <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer">
+          <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>
             close
           </span>
         </header>

@@ -21,6 +21,16 @@ const Layout = ({ children }) => {
   const [showFilter, setShowFilter] = useState(false);
   const [showShareProject, setShowShareProject] = useState(false);
   const [showNewTask, setShowNewTask] = useState(false);
+  const [showNewWS, setShowNewWS] = useState(false);
+
+  const showNewWSModal = () => {
+    if (showNewWS) {
+      setShowNewWS(false);
+    } else {
+      setShowNewWS(true);
+    }
+    console.log(showNewTask);
+  };
 
   const showNewTaskModal = () => {
     if (showNewTask) {
@@ -28,7 +38,7 @@ const Layout = ({ children }) => {
     } else {
       setShowNewTask(true);
     }
-    console.log(showNewTask);
+    // console.log(showNewTask);
   };
 
   const showShareProjectModal = () => {
@@ -47,15 +57,6 @@ const Layout = ({ children }) => {
       setShowFilter(true);
     }
     // console.log(showFilter);
-  };
-
-  const showWSModal = () => {
-    if (showWS) {
-      setShowWS(false);
-    } else {
-      setShowWS(true);
-    }
-    // console.log(showWS);
   };
 
   const options = [
@@ -93,7 +94,7 @@ const Layout = ({ children }) => {
           <div className="menu pt-3">
             <Button
               className=" flex h-[32px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-1"
-              onClick={showWSModal}
+              onClick={showNewWSModal}
             >
               <span class="material-symbols-rounded">add_box</span>
               ساختن اسپیس جدید
@@ -223,14 +224,14 @@ const Layout = ({ children }) => {
         </div>
       </div>
       {false && <ShareWSModal />}
-      {showShareProject && <ShareProjectModal/>}
-      {showFilter && <FilterModal></FilterModal>}
+      {showShareProject && <ShareProjectModal onClick={() => setShowShareProject(false)}/>}
+      {showFilter && <FilterModal onClick={() => setShowFilter(false)}></FilterModal>}
       {false && <ModalProjectMenu></ModalProjectMenu>}
       {false && <ModalTaskMenu></ModalTaskMenu>}
-      {false && <ModalNewWorkSpace></ModalNewWorkSpace>}
+      {showNewWS && <ModalNewWorkSpace onClick={() => setShowNewWS(false)}></ModalNewWorkSpace>}
       {false && <ModalPickColor></ModalPickColor>}
       {false && <InformationModal></InformationModal>}
-      {showNewTask && <MakeTaskModal></MakeTaskModal>}
+      {showNewTask && <MakeTaskModal onClick={() => setShowNewTask(false)}></MakeTaskModal>}
       {false && <TaskDetails></TaskDetails>}
 
     </>

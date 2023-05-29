@@ -5,6 +5,9 @@ import Login from "./pages/login";
 import ResetPassword from "./pages/resetpassword";
 import SendPasswordForm from "./pages/sendpassword";
 import Layout from "./components/Dashboard/Layout/index";
+import Profile from './pages/profile'
+import ListView from './pages/listview'
+import ColumnView from './pages/columnview'
 import "./styles/App.css";
 
 function App() {
@@ -29,6 +32,15 @@ function App() {
       </Route>
       <Route path="/layout">
         <Layout />
+      </Route>
+      <Route path="/profile">
+        <Profile />
+      </Route>
+      <Route path='/listview'>
+          <ListView/>
+      </Route>
+      <Route path='/columnview'>
+          <ColumnView/>
       </Route>
       
     </>
