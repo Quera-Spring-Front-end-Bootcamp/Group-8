@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-const NewSpaceButton = (props) => {
-    return <div className={`cursor-pointer ${props.className}`} onClick={props.onClick}>{props.children}</div>
-};
-
-export default NewSpaceButton;
-=======
 const Button = (props) => {
   return (
     <div
@@ -22,4 +15,3 @@ const Button = (props) => {
 };
 
 export default Button;
->>>>>>> 02ffb7a45c32f4c1531fa73c8d98d1cdc57d0760
