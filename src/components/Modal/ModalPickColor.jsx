@@ -43,7 +43,7 @@ const ModalPickColor = (props) => {
     <div>
       <div className=" fixed left-[30%] top-[30%] w-[501px] h-[307px] rounded-[12px] border shadow-md">
         <header className="flex p-5 justify-between w-[100%]">
-          <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer">close</span>
+          <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>close</span>
           <h2 className=" justify-center items-center text-center ">
             ساختن ورک اسپیس جدید
           </h2>

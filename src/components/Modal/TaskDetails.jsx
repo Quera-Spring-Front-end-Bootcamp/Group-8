@@ -1,4 +1,4 @@
-import DropDown from "../Layout/SideMenu/DropDown";
+import DropDown from "../Dashboard/Layout/SideMenu/DropDown";
 import Profile from "../../img/cute.png";
 
 const TaskDetails = (props) => {
@@ -6,7 +6,7 @@ const TaskDetails = (props) => {
     <div>
       <div className=" fixed items-center justify-center bg-[#FFFFFF] border-[2px] left-[10%] top-[10%] w-[1166px] h-[484px] rounded-[12px] shadow-md">
         <div>
-          <span class="text-slate-500 hover:text-black cursor-pointer p-3 material-symbols-rounded">
+          <span class="text-slate-500 hover:text-black cursor-pointer p-3 material-symbols-rounded" onClick={props.onClick}>
             close
           </span>
         </div>

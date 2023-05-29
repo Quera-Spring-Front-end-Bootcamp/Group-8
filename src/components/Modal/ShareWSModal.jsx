@@ -1,5 +1,5 @@
 import Profile from "../../img/cute.png";
-import ShareDropDown from "../Layout/Share/ShareDropDown";
+import ShareDropDown from "../Dashboard/Layout/Share/ShareDropDown";
 
 function ShareProjectModal(props) {
   const options = [
@@ -36,7 +36,7 @@ function ShareProjectModal(props) {
     <div>
       <div className=" fixed left-[30%] top-[30%] w-[550px] h-[378px] rounded-[12px] border shadow-sm">
         <header className="flex justify-between w-[100%]">
-          <span class=" p-5 material-symbols-rounded">close</span>
+          <span class=" p-5 material-symbols-rounded" onClick={props.onClick}>close</span>
           <h2 className=" py-3 justify-center items-center text-[20px] text-center font-medium">
             اشتراک گذاری ورک اسپیس
           </h2>

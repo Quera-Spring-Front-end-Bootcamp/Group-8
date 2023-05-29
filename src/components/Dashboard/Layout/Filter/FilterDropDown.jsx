@@ -1,11 +1,20 @@
 const FilterDropDown = (props) => {
-        console.log(props.Options);
+
+  // const colors = [
+  //   "#FF5733",
+  //   "#DAF7A6",
+  //   "#900C3F",
+  //   "#581845",
+  // ];
 
     return (
       <div>
         <select className={props.className} onChange={props.onChange}>
           {props.Options.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option 
+            className={`p-1 bg-[${option.color}]`}                    
+            key={option.value} 
+            value={option.value}>
               {option.label}
             </option>
           ))}

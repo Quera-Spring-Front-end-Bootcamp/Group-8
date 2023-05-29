@@ -1,21 +1,21 @@
 import DropDown from "./SideMenu/DropDown";
-import Button from "../Button/Button";
+import Button from "../../common/Button/Button";
 import Caption from "./SideMenu/SideMenuCaption/Caption";
 import SideMenuItem from "./SideMenu/SideMenuItem";
 import SideMenuInput from "./SideMenu/SideMenuInput";
 import ProfileOption from "./SideMenu/ProfileOption";
-import FilterModal from "../Modal/FilterModal";
-import ModalProjectMenu from "../Modal/ModalProjectMenu";
-import ModalTaskMenu from "../Modal/ModalTaskMenu";
-import ModalNewWorkSpace from "../Modal/ModalNewWorkSpace";
-import ModalPickColor from "../Modal/ModalPickColor";
-import ShareProjectModal from '../Modal/ShareProjectModal'
-import ShareWSModal from '../Modal/ShareWSModal'
-import InformationModal from '../Modal/InformationModal'
-import TaskDetails from '../Modal/TaskDetails'
+import FilterModal from "../../Modal/FilterModal";
+import ModalProjectMenu from "../../Modal/ModalProjectMenu";
+import ModalTaskMenu from "../../Modal/ModalTaskMenu";
+import ModalNewWorkSpace from "../../Modal/ModalNewWorkSpace";
+import ModalPickColor from "../../Modal/ModalPickColor";
+import ShareProjectModal from '../../Modal/ShareProjectModal'
+import ShareWSModal from '../../Modal/ShareWSModal'
+import InformationModal from '../../Modal/InformationModal'
+import TaskDetails from '../../Modal/TaskDetails'
 import { useState } from "react";
-import MakeTaskModal from "../Modal/MakeTaskModal";
-import "../../styles/Layout.css";
+import MakeTaskModal from "../../Modal/MakeTaskModal";
+import "../../../styles/Layout.css";
 
 const Layout = ({ children }) => {
   const [showFilter, setShowFilter] = useState(false);

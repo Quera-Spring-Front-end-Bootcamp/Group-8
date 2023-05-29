@@ -6,7 +6,7 @@ const InformationModal = (props) => {
       <div>
         <div className=" fixed items-center justify-center left-[30%] top-[30%] w-[501px] h-[357px] rounded-[12px] border shadow-md">
           <header className="flex p-5 justify-between w-[100%]">
-            <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer">close</span>
+            <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>close</span>
             <h2 className=" justify-center text-[24px] font-medium items-center text-center ">
                 مرور اطلاعات
             </h2>

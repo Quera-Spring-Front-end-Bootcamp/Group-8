@@ -1,4 +1,4 @@
-import LoginForm from "../components/LoginForm/LoginForm";
+import LoginForm from "../components/login/LoginForm/LoginForm";
 import { AuthFooter } from "../components/login/AuthFooter/AuthFooter";
 import { AuthHeader } from "../components/login/AuthHeader/AuthHeader";
 
