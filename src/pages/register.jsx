@@ -1,6 +1,6 @@
-import { AuthFooter } from "../components/AuthFooter/AuthFooter";
-import { AuthHeader } from "../components/AuthHeader/AuthHeader";
-import RegisterForm from "../components/RegisterForm/RegisterForm"
+import { AuthFooter } from "../components/login/AuthFooter/AuthFooter";
+import { AuthHeader } from "../components/login/AuthHeader/AuthHeader";
+import RegisterForm from "../components/login/RegisterForm/RegisterForm"
 
 const register = () => {
     return (
