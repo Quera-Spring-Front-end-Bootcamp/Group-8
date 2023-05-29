@@ -5,11 +5,9 @@ import Login from "./pages/login";
 import ResetPassword from "./pages/resetpassword";
 import SendPasswordForm from "./pages/sendpassword";
 import Layout from "./components/Dashboard/Layout/index";
-import Profile from './pages/profile'
-import ListView from './pages/listview'
-import ColumnView from './pages/columnview'
-
-import Layout from "./components/Dashboard/Layout/index";
+import Profile from './pages/profile';
+import ListView from './pages/listview';
+import ColumnView from './pages/columnview';
 
 
 import "./styles/App.css";

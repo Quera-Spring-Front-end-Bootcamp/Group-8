@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
 import  "../../../styles/index.css";
-
-<<<<<<< HEAD
-=======
-import "../../../styles/index.css";
->>>>>>> eldamavandi
 import classes from "./AuthHeader.module.css";
 
 export const AuthHeader = (props) => {

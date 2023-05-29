@@ -1,11 +1,5 @@
 import { useState } from "react";
-<<<<<<< HEAD
 import useInput from "../../../hooks/useInput";
-=======
-
-import useInput from "../../../hooks/useInput";
-
->>>>>>> eldamavandi
 import "../../../styles/index.css";
 
 const ResetPassword = () => {
