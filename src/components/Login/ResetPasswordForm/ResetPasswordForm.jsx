@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import useInput from "../../hooks/useInput";
+import useInput from "../../../hooks/useInput";
 
-import "./../../styles/index.css";
+import "./../../../styles/index.css";
 
 const ResetPassword = () => {
   const [formErrorMessage, setFormErrorMessage] = useState("");

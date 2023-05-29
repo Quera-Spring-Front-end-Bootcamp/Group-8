@@ -1,6 +1,6 @@
-import { AuthFooter } from "../components/AuthFooter/AuthFooter";
-import { AuthHeader } from "../components/AuthHeader/AuthHeader";
-import SendPasswordForm from "../components/SendPasswordForm/SendPasswordForm";
+import { AuthFooter } from "../components/Login/AuthFooter/AuthFooter";
+import { AuthHeader } from "../components/Login/AuthHeader/AuthHeader";
+import SendPasswordForm from "../components/Login/SendPasswordForm/SendPasswordForm";
 
 const forgotPassword = () => {
   return (

@@ -1,6 +1,6 @@
-import { AuthFooter } from "../components/AuthFooter/AuthFooter";
-import { AuthHeader } from "../components/AuthHeader/AuthHeader";
-import ResetPasswordForm from "../components/ResetPasswordForm/ResetPasswordForm"
+import { AuthFooter } from "../components/Login/AuthFooter/AuthFooter";
+import { AuthHeader } from "../components/Login/AuthHeader/AuthHeader";
+import ResetPasswordForm from "../components/Login/ResetPasswordForm/ResetPasswordForm"
 
 const resetPassword = () => {
   return (
