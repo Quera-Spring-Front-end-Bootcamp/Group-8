@@ -9,7 +9,6 @@ import Profile from './pages/profile'
 import ListView from './pages/listview'
 import ColumnView from './pages/columnview'
 
-import Layout from "./components/Dashboard/Layout/index";
 
 
 import "./styles/App.css";
