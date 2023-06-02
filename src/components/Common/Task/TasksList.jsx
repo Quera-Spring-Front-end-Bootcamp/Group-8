@@ -1,4 +1,4 @@
-import Wrapper from "../Wrapper/Wrapper"
+import Wrapper from "../../common/Wrapper/Wrapper"
 import TaskRow from "./TaskRow";
 
 const tasksList = [

@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 
-import Wrapper from "../Wrapper/Wrapper";
+import Wrapper from "../../common/Wrapper/Wrapper";
 import DropdownItem from "./DropdownItem";
 
 import classes from "./Backdrop.module.css";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Status from "./Status";
-import TasksList from "../Task/TasksList";
+import TasksList from "../../common/Task/TasksList";
 
 const StatusRow = (props) => {
   const [isOpen, setIsOpen] = useState(true);

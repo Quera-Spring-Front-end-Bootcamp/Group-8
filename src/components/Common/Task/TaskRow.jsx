@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import StatusColor from "../Status/StatusColor";
-import Avatar from "../Avatar/Avatar";
-import DropdownModal from "../Dropdown/DropdownModal";
+import StatusColor from "../../common/Status/StatusColor";
+import Avatar from "../../common/Avatar/Avatar";
+import DropdownModal from "../../common/Dropdown/DropdownModal";
 
 const TaskRow = (props) => {
   const [flagDropdownIsOpen, setFlagDropdownIsOpen] = useState(false);
