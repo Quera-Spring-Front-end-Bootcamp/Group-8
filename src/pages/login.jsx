@@ -1,6 +1,6 @@
-import LoginForm from "../components/LoginForm/LoginForm";
-import { AuthFooter } from "../components/AuthFooter/AuthFooter";
-import { AuthHeader } from "../components/AuthHeader/AuthHeader";
+import LoginForm from "../components/Login/LoginForm/LoginForm";
+import { AuthFooter } from "../components/Login/AuthFooter/AuthFooter";
+import { AuthHeader } from "../components/Login/AuthHeader/AuthHeader";
 
 const login = () => {
   return (
