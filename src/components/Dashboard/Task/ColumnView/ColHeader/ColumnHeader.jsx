@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ColTasks from "./../ColTask/ColTask"
+import ColTask from "./../ColTask/ColTask"
 import Counter from './../../ColumnView/Counter/Counter';
+
 
 
 const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) => {
@@ -11,7 +12,6 @@ const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) 
   const [columnEditID, setColumnEditID] = useState(null);
   const [columnEditText, setColumnEditText] = useState('')
   const [isEditing, setIsEditing] = useState(false);
-  const inputRef = useRef(null);
   const parentRef =useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -27,6 +27,11 @@ const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) 
     };
   }, []);
 
+ 
+  const handleEvent= ()=>{
+    setIsSettingOpen(false);
+  }
+
   const handleMouseEnter = () => {
     setIsHovered(true);
   }
@@ -37,7 +42,9 @@ const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) 
 
   const addRow = () => {
     setRowCount(rowCount + 1);
-    inputRef.current.focus();
+    setIsSettingOpen(false);
+    
+    
   };
 
   const openSettings = () => {
@@ -73,6 +80,11 @@ const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) 
     setIsSettingHovered(true);
     setIsEditing(false);
   }
+  const handleKeyDown=(e)=>{
+    if(e.key === "Enter"){
+      handleClickDone();
+    }
+  }
 
   return (
     <div ref={parentRef} className='relative ml-8' >
@@ -87,7 +99,7 @@ const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) 
       (    
       <>
             
-            <input type='text' autoFocus onChange={changeEditText} value={columnEditText} className='outline-none' />
+            <input type='text' autoFocus onKeyDown={handleKeyDown} onChange={changeEditText} value={columnEditText} className='outline-none' />
             <span onClick={handleClickDone} className="material-symbols-rounded cursor-pointer">
               done
             </span>
@@ -122,7 +134,7 @@ const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) 
                 </span>
                 <p>ویرایش نام ستون</p>
               </div>
-              <div className='flex items-center gap-2'>
+              <div onClick={addRow} className='flex items-center gap-2'>
                 <span className="material-symbols-rounded">
                   add
                 </span>
@@ -153,7 +165,7 @@ const Column = ({ id, borderColor, columnText, handleDelete, handleClickEdit }) 
       <div className='mt-4'>
         {Array.from(Array(rowCount), (_, index) => (
           <div className="flex flex-col mt-4" key={index}>
-            <ColTasks inputRef={inputRef} />
+            <ColTask />
           </div>
         ))}
       </div>
