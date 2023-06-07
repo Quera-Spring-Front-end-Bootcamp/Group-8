@@ -8,10 +8,10 @@ import Layout from "./components/Dashboard/Layout/index";
 import Profile from './pages/profile'
 import ListView from './pages/listview'
 import ColumnView from './pages/columnview'
-
-
+import Calender from './pages/calenderview'
 
 import "./styles/App.css";
+
 
 function App() {
   return (
@@ -37,6 +37,9 @@ function App() {
         <Layout />
       </Route>
 
+      <Route path="/calender">
+        <Calender />
+      </Route>
       <Route path="/profile">
         <Profile />
       </Route>

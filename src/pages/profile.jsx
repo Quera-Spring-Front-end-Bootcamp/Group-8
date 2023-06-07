@@ -1,10 +1,9 @@
-import Layout from '../components/Dashboard/Layout/index'
-// import Profile from '../components/Dashboard/Profile/Profile'
+// import Layout from '../components/Dashboard/Layout/index'
+import Profile from '../components/Dashboard/Profile/Profile'
 
 const profile = () =>{
-    return <Layout>
-        {/* <Profile/> */}
-    </Layout>
+    return  <Profile/> 
+
 }
 
 export default profile;

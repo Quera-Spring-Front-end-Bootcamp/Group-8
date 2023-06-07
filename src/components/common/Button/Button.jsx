@@ -1,7 +1,7 @@
 const Button = (props) => {
   return (
     <div
-      className={`cursor-pointer w-max flex items-center justify-center gap-[8px] rounded-[8px] ${props.className}`}
+      className={`cursor-pointer w-max flex items-center justify-center gap-[8px]  ${props.className}`}
       onClick={props.onClick}
     >
       {props.icon && (

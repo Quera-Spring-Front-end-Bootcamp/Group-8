@@ -1,5 +1,11 @@
-import Layout from '../components/Dashboard/Layout/index'
+import Layout from "../components/Dashboard/Layout/index";
 
-const calenderview = () => {}
+const calenderview = () => {
+  return (
+    <Layout>
+      <h1>Calender View</h1>
+    </Layout>
+  );
+};
 
 export default calenderview;

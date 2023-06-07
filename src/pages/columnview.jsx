@@ -1,9 +1,10 @@
 import Layout from '../components/Dashboard/Layout/index'
-// import ColumnShowLayout from '../components/Dashboard/Task/ColumnView/ColumnShowLayout'
+import ColumnView from '../components/Dashboard/Task/ColumnView/ColumnShowLayout'
 
 const columnview = () => {
     return <Layout>
-        {/* <ColumnShowLayout/> */}
+        <h1>Column Show</h1>
+        <ColumnView/>
     </Layout>
 }
 
