@@ -1,6 +1,27 @@
-import Profile from "../../img/cute.png";
 
+import { useState, useRef, useEffect } from "react";
+import Profile from "../../img/cute.png";
+import Priority from "./NewTaskModalComponents/Priority";
+import CreateTag from "./NewTaskModalComponents/CreateTag";
+import Button from "../Common/Button/Button"
 const MakeTaskModal = (props) => {
+  const [isFlagOpen, setIsFlagOpen] = useState(false);
+  const [isTagOpen, setIsTagOpen] = useState(false);
+  const [flagColor, setFlagColor] = useState("")
+  
+  const handleChoosePriority = (color) => {
+       
+    setFlagColor(color)
+  };
+
+  const handleFlagClick = () => {
+    setIsFlagOpen((prev) => !prev);
+
+  }
+
+  const handleTagClick = () => {
+    setIsTagOpen(true)
+  }
   return (
     <div>
       <div className=" fixed items-center justify-center bg-[#FFFFFF] left-[10%] top-[10%] w-[1166px] h-[576px] rounded-[12px] border shadow-md">
