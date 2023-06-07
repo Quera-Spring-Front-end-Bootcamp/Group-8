@@ -26,7 +26,6 @@ const TagSettings = ({deletedTagId,clickedTagId, value, handleColorChange, handl
     }
     const handleTagEdit=(deletedTagId, clickedTagId)=>{
         setIsEditting(true)
-        setSelectedIdForEdit(deletedTagId, clickedTagId)
         handleEdit(deletedTagId,clickedTagId,isEditting)
         setShowSettings(prev=>!prev)
     }
