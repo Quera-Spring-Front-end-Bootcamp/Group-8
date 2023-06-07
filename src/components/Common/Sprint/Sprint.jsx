@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import StatusRow from "../Status/StatusRow";
+import StatusRow from "../../common/Status/StatusRow"
 
 const Sprint = (props) => {
   const [isOpen, setIsOpen] = useState(true);
