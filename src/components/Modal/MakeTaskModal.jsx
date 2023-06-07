@@ -50,27 +50,32 @@ const MakeTaskModal = (props) => {
           </span>
         </div>
 
-        <footer className="flex w-[85%] justify-between items-center mt-10">
-          <span className="flex">
-            <span class=" flex items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
-              <span class=" text-[35px] material-symbols-rounded">flag</span>
-            </span>
+        <footer className="  flex w-[85%] justify-between items-center mt-10">
+          <div className="flex gap-3 m-5">
+            <div onClick={handleFlagClick} class="relative flex items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
+              <span style={{ color: flagColor }} class=" text-[35px] material-symbols-rounded cursor-pointer">flag</span>
+              {isFlagOpen && (<Priority handleChoosePriority={handleChoosePriority} />)}
+            </div>
+
             <span class=" flex items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
               <span class=" text-[35px] material-symbols-rounded">
                 calendar_month
               </span>
             </span>
-            <span class=" flex items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
-              <span class=" text-[35px] material-symbols-rounded">sell</span>
-            </span>
+            <div onClick={handleTagClick} class="relative flex flex-col items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
+              <span class=" text-[35px] material-symbols-rounded cursor-pointer">sell</span>
+              {isTagOpen && (<CreateTag />)}
+            </div>
+            
             <span class=" flex items-center justify-center w-[50px] h-[50px] text-center  text-[#C1C1C1]  ">
               <span class=" text-[35px] material-symbols-rounded">visibility</span>
             </span>
-          </span>
+          </div>
           <span>
-            <button className="flex absolute p-3 w-[135px] h-[32px] text-[12px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer">
+            {/* <button className="flex absolute p-3 w-[135px] h-[32px] text-[12px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer">
               ساختن تسک
-            </button>
+            </button> */}
+            <Button children={"ساختن تسک"} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E]"} />
           </span>
         </footer>
       </div>
