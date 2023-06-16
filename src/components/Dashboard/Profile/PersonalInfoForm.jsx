@@ -93,7 +93,7 @@ const PersonalInfoForm = (userName) => {
               شماره موبایل
             </label>
             <input
-            type="number"
+            type="tel"
             name="mobileNumber"
               {...register("mobileNumber", {
                 required: true,
