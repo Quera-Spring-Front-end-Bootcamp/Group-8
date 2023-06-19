@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 
 const AccountInfoForm = () => {
+  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
   const {
     register,
     handleSubmit,
@@ -145,7 +146,7 @@ const AccountInfoForm = () => {
 
           <button
             type="submit"
-            className="flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] bg-[#208D8E] rounded-[6px] mt-[23px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] "
+            className="flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] rounded-[6px] mt-[23px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] "style={{backgroundColor:themeColor}}
           >
             ثبت تغییرات
           </button>

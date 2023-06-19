@@ -1,5 +1,10 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
+import axios from "axios";
+import { baseUrl } from "../../../App";
+import { useHistory } from "react-router-dom";
+
 let formErrorMessage;
+
 const reducer = (state, action) => {
   //dispatch reducer
   switch (action.type) {
@@ -41,9 +46,6 @@ const reducer = (state, action) => {
         state.passwordIsValid &&
         state.terms
       ) {
-        console.log(state.userName);
-        console.log(state.email);
-        console.log(state.password);
         return { ...state, formIsValid: true };
       } else {
         if (!state.userNameIsValid) {
@@ -110,6 +112,7 @@ const passwordValidation = (password) => {
 };
 
 const RegisterForm = () => {
+  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
   const initialState = {
     userName: "",
     email: "",
@@ -118,10 +121,11 @@ const RegisterForm = () => {
     emailIsValid: Boolean,
     passwordIsValid: Boolean,
     terms: false,
-    formIsValid: Boolean,
+    formIsValid: false,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
+  const history = useHistory();
 
   const handleChange = (e) => {
     // for inputs
@@ -146,7 +150,39 @@ const RegisterForm = () => {
     e.preventDefault();
     dispatch({ type: "SUBMIT" });
   };
+////////////////////////////////////////////////////////////////////////////////////////////
+  useEffect(() => {
+    if (state.formIsValid) {
+      let parts = state.email.split("@");
+      const username = parts[0];
+      parts = state.userName.split(" ");
+      const fName = parts[0];
+      const lName = parts[1];
+      const userData = {
+        username: username, //required
+        email: state.email, //required
+        password: state.password, //required
+        firstname: fName,
+        lastname: lName,
+        // "profile_url": "https://example.com/john_doe/profile.jpg",
+        // "phone": "+1-555-555-5555"
+      };
+      registerUser(userData);
+    }
+  }, [state.formIsValid]);
 
+  const registerUser = async (userData) => {
+    try {
+      const response = await axios.post(`${baseUrl}/auth/register`, userData);
+      console.log(response.data); // دریافت داده‌های پاسخ
+      alert("ثبت نام شما با موفقیت انجام شد.");
+      history.push("/login");
+    } catch (error) {
+      alert("این ایمیل قبلا ثبت شده است.");
+      console.log(error);
+    }
+  };
+///////////////////////////////////////////////////////////////////////////////////////////////
   const userNameErrorClasses = !state.userNameIsValid
     ? "border-2 border-[#D7284B]"
     : "border border-[#AAAAAA]";
@@ -270,7 +306,7 @@ const RegisterForm = () => {
             />
             قوانین و مقررات را می پذیرم.
           </label>
-          <button className="flex flex-row items-center justify-center p-[10px] gap-[10px] w-[354px] h-[48px] bg-[#208D8E] rounded-[6px] self-stretch grow-0 m-[24px] mt-[20px] font-dana not-italic font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] cursor-pointer">
+          <button className="flex flex-row items-center justify-center p-[10px] gap-[10px] w-[354px] h-[48px] rounded-[6px] self-stretch grow-0 m-[24px] mt-[20px] font-dana not-italic font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] cursor-pointer"style={{backgroundColor:themeColor}}>
             ثبت نام
           </button>
         </form>

@@ -5,6 +5,7 @@ import useInput from "../../../hooks/useInput";
 import "../../../styles/index.css";
 
 const ResetPassword = () => {
+  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
   const [formErrorMessage, setFormErrorMessage] = useState("");
 
   let formIsValid = false;
@@ -142,7 +143,7 @@ const ResetPassword = () => {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full px-4 py-2 mb-5 text-white bg-[#208D8E] rounded"
+              className="w-full px-4 py-2 mb-5 text-white rounded"style={{backgroundColor:themeColor}}
             >
               بازنشانی رمز
             </button>

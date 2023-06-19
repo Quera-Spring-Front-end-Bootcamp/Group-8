@@ -1,14 +1,18 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { baseUrl } from "../../../App";
+import axios from "axios";
 import useInput from "../../../hooks/useInput";
 
 import "../../../styles/index.css";
 
 const Login = () => {
+  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
+  const history = useHistory();
   const [formErrorMessage, setFormErrorMessage] = useState("");
 
-  let formIsValid = false;
+  const [formIsValid, setFormIsValid] = useState(false);
+
   let emailInputErrorMessage = "";
 
   const {
@@ -23,7 +27,7 @@ const Login = () => {
       emailInputErrorMessage = "لطفا پست الکترونیک خود را وارد نمایید";
       return false;
     } else {
-      if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(value)) {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
         return true;
       } else {
         emailInputErrorMessage = "پست الکترونیک واردشده معتبر نیست";
@@ -41,30 +45,51 @@ const Login = () => {
     resetHandler: passwordInputResetHandler,
   } = useInput((value) => value.trim() !== "");
 
-  if (emailIsValid && passwordIsValid) {
-    formIsValid = true;
-  }
-
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
-    if (emailInputHasError || passwordInputHasError) {
-      formIsValid = false;
+    if (emailIsValid && passwordIsValid) {
+      setFormIsValid(true);
+      setFormErrorMessage("");
+    } else if (emailInputHasError || passwordInputHasError) {
+      setFormIsValid(false);
       setFormErrorMessage("");
       return;
-    }
-
-    if (!formIsValid) {
+    } else if (!formIsValid) {
       setFormErrorMessage("لطفاً پست الکترونیک و رمز عبور خود را وارد نمایید.");
-      formIsValid = false;
+      setFormIsValid(false);
       return;
     }
 
-    setFormErrorMessage("");
-    emailInputResetHandler();
-    passwordInputResetHandler();
+    // emailInputResetHandler();
+    // passwordInputResetHandler();
   };
+  //////////////////////////////////////////////////////////////////////////
+  useEffect(() => {
+    if (formIsValid) {
+      const userData = {
+        emailOrUsername: email,
+        password: password,
+      };
+      loginUser(userData);
+      console.log("object");
+    }
+  }, [formIsValid]);
 
+  const loginUser = async (userData) => {
+    try {
+      const response = await axios.post(`${baseUrl}/auth/login`, userData);
+      console.log(response.data);
+      localStorage.setItem("accessToken",response.data.data.accessToken);
+      localStorage.setItem("refreshToken",response.data.data.refreshToken);
+      localStorage.setItem("userId",response.data.data.toBeSendUserData._id);
+      alert("ورود شما با موفقیت انجام شد.");
+      history.push("/listview");
+    } catch (error) {
+      alert("ایمیل یا رمز عبور نا متعبر است.");
+      console.log(error);
+    }
+  };
+  /////////////////////////////////////////////////////////////////////////////
   const onChangeHandler = () => {
     setFormErrorMessage("");
   };
@@ -126,19 +151,19 @@ const Login = () => {
               </p>
             )}
           </div>
-          <div className="mt-2 text-sm text-[#208D8E]">
+          <div className="mt-2 text-sm"style={{color:themeColor}}>
             <Link to="/ForgotPassword">رمز عبور را فراموش کردی؟</Link>
           </div>
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full px-4 py-2 mb-5 text-white bg-[#208D8E] rounded"
+              className="w-full px-4 py-2 mb-5 text-white rounded" style={{backgroundColor:themeColor}}
             >
               ورود
             </button>
             <div className="text-center">
               ثبت نام نکردی؟{" "}
-              <Link className="text-[#208D8E]" to="/Register">
+              <Link style={{color:themeColor}} to="/Register">
                 ثبت نام
               </Link>
             </div>

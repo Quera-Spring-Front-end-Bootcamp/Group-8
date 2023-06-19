@@ -11,6 +11,7 @@ const Profile = () => {
   });
   
   const [profilePage, setProfilePage] = useState("personalInfo");
+  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
 
   return (
     <div className="flex flex-row">
@@ -19,7 +20,7 @@ const Profile = () => {
           <a href="#">کوئرا تسک منیجر</a>
         </div>
 
-        <button className="flex flex-row items-center gap-[8px] w-[110px] h-[39px] pt-[4px]  pr-[7.5px] text-[20px] text-[#FFFFFF] bg-[#208D8E] rounded-[8px] mt-[79px]">
+        <button className="flex flex-row items-center gap-[8px] w-[110px] h-[39px] pt-[4px]  pr-[7.5px] text-[20px] text-[#FFFFFF] rounded-[8px] mt-[79px]"style={{backgroundColor:themeColor}}>
           <span className="material-symbols-rounded w-[24px] h-[24px]">
             arrow_forward
           </span>

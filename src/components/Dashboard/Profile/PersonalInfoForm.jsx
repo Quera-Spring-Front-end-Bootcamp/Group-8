@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 const PersonalInfoForm = (userName) => {
+  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
   const {
     register,
     handleSubmit,
@@ -19,7 +20,7 @@ const PersonalInfoForm = (userName) => {
 
   return (
     <div className="w-[1440px] bg-[#FAFBFC]">
-      <div className="flex flex-col mt-[170px] mr-[58px] gap-[35px] w-[354px]">
+      <div className="flex flex-col mt-[120px] mr-[58px] gap-[35px] w-[354px]">
         <h2 className="font-bold text-[31px] leading-[49px] text-right text-[#1E1E1E]">
           اطلاعات فردی
         </h2>
@@ -29,7 +30,7 @@ const PersonalInfoForm = (userName) => {
             {(userName = "NM")}
           </div>
           <div className="flex flex-col gap-[12px]">
-            <button className="w-[204px] h-[51px] p-[10px] rounded-[8px] border border-[#208D8E] font-medium text-[19px] text-[#208D8E] leading-[31px] text-right ">
+            <button className="w-[204px] h-[51px] p-[10px] rounded-[8px] border font-medium text-[19px] leading-[31px] text-right "style={{borderColor:themeColor,color:themeColor}}>
               ویرایش تصویر پروفایل
             </button>
             <span className="font-normal text-[12px] leading-[18px] text-right text-[#8A8989]">
@@ -110,7 +111,7 @@ const PersonalInfoForm = (userName) => {
             )}
           </div>
 
-          <button type="submit" className="flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] bg-[#208D8E] rounded-[6px] mt-[23px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] ">ثبت تغییرات</button>
+          <button type="submit" className="flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] rounded-[6px] mt-[23px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] "style={{backgroundColor:themeColor}}>ثبت تغییرات</button>
         </form>
       </div>
     </div>

@@ -9,13 +9,15 @@ import ModalProjectMenu from "../../Modal/ModalProjectMenu";
 import ModalTaskMenu from "../../Modal/ModalTaskMenu";
 import ModalNewWorkSpace from "../../Modal/ModalNewWorkSpace";
 import ModalPickColor from "../../Modal/ModalPickColor";
-import ShareProjectModal from '../../Modal/ShareProjectModal'
-import ShareWSModal from '../../Modal/ShareWSModal'
-import InformationModal from '../../Modal/InformationModal'
-import TaskDetails from '../../Modal/TaskDetails'
-import { useState } from "react";
+import ShareProjectModal from "../../Modal/ShareProjectModal";
+import ShareWSModal from "../../Modal/ShareWSModal";
+import InformationModal from "../../Modal/InformationModal";
+import TaskDetails from "../../Modal/TaskDetails";
+import { useState, useContext } from "react";
 import MakeTaskModal from "../../Modal/MakeTaskModal";
-import PickDateModal from '../../Modal/PickDateModal'
+import PickDateModal from "../../Modal/PickDateModal";
+import { ActiveButtonsContext } from "../../../App";
+import CalendarTitle from "../Task/CalendarView/CalendarTitle";
 import "../../../styles/Layout.css";
 
 const Layout = ({ children }) => {
@@ -25,7 +27,8 @@ const Layout = ({ children }) => {
   const [showNewWS, setShowNewWS] = useState(false);
   const [showPickColor, setShowPickColor] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  
+  const { activeListViewBtn, activeColumnViewBtn, activeCalendarBtn } =
+    useContext(ActiveButtonsContext);
 
   const showNewWSModal = () => {
     if (showNewWS) {
@@ -100,7 +103,7 @@ const Layout = ({ children }) => {
               className=" flex h-[32px] w-[279px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-1"
               onClick={showNewWSModal}
             >
-              <span class="material-symbols-rounded">add_box</span>
+              <span className="material-symbols-rounded">add_box</span>
               ساختن اسپیس جدید
             </Button>
           </div>
@@ -129,10 +132,10 @@ const Layout = ({ children }) => {
             </ul>
             <ul className="menu pt-6">
               <a href="/profile" className=" no-underline">
-              <ProfileOption english="Zahra Moradi" persian="زهرا مرادی" />
+                <ProfileOption english="Zahra Moradi" persian="زهرا مرادی" />
               </a>
               <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
-                <span class="material-symbols-rounded">door_open</span>
+                <span className="material-symbols-rounded">door_open</span>
                 خروج
               </li>
             </ul>
@@ -142,8 +145,8 @@ const Layout = ({ children }) => {
         <div className="  p-5 pt-12 text-2x1 font-semibold flex-1 h-36 top-10 ">
           <nav className=" flex justify-between border-b-2">
             {/* first line menu */}
-            <ul class="flex mt-1 ">
-              <li class="mr-3">
+            <ul className="flex mt-1 ">
+              <li className="mr-3">
                 <Button className=" text-2xl inline-block font-bold px-1 text-black">
                   پروژه اول
                 </Button>
@@ -151,27 +154,44 @@ const Layout = ({ children }) => {
               <li className="">
                 <hr className="inline-block liney" />
               </li>
-              <li class="mr-3">
-                <a href="/listview" className=" flex hover:text-[#208D8E] active pb-5 text-[16px] px-3 text-gray-700">
-                  <span class="material-symbols-rounded">list</span>
+              <li className="mr-3">
+                <a
+                  href="/listview"
+                  className={`flex hover:text-[#208D8E] pb-5 text-[16px] px-3 text-gray-700 ${
+                    activeListViewBtn ? "active" : ""
+                  }`}
+                >
+                  <span className="material-symbols-rounded">list</span>
                   نمایش لیستی
                 </a>
               </li>
               <li className="">
                 <hr className="inline-block liney" />
               </li>
-              <li class="mr-3">
-                <a href="/columnview" className=" flex pb-5 text-[16px] px-3  text-gray-700">
-                  <span class="material-symbols-rounded">view_week</span>
+              <li className="mr-3">
+                <a
+                  href="/columnview"
+                  className={` flex pb-5 text-[16px] hover:text-[#208D8E] px-3  text-gray-700 ${
+                    activeColumnViewBtn ? "active" : ""
+                  }`}
+                >
+                  <span className="material-symbols-rounded">view_week</span>
                   نمایش ستونی
                 </a>
               </li>
               <li className="">
                 <hr className="inline-block liney" />
               </li>
-              <li class="mr-3">
-                <a href="/calender" className=" flex hover:text-[#208D8E] text-[16px] px-3 text-gray-700">
-                  <span class="material-symbols-rounded">calendar_month</span>
+              <li className="mr-3">
+                <a
+                  href="/calendar"
+                  className={` flex hover:text-[#208D8E] text-[16px] px-3 pb-5 text-gray-700 ${
+                    activeCalendarBtn ? "active" : ""
+                  }`}
+                >
+                  <span className="material-symbols-rounded">
+                    calendar_month
+                  </span>
                   تقویم
                 </a>
               </li>
@@ -180,9 +200,12 @@ const Layout = ({ children }) => {
               </li>
             </ul>
             <ul className="flex mt-1">
-              <li class="mr-3">
-                <Button className=" flex text-[16px] px-3 text-gray-700" onClick={showShareProjectModal}>
-                  <span class="material-symbols-rounded">share</span>
+              <li className="mr-3">
+                <Button
+                  className=" flex text-[16px] px-3 text-gray-700"
+                  onClick={showShareProjectModal}
+                >
+                  <span className="material-symbols-rounded">share</span>
                   اشتراک گذاری
                 </Button>
               </li>
@@ -190,9 +213,11 @@ const Layout = ({ children }) => {
           </nav>
 
           {/* secound line menu */}
-          <ul class="flex mt-2 pb-2 border-b-2 border-gray-200">
-            <li class="flex mr-3">
-              <span class=" px-1 text-slate-500 material-symbols-rounded">search</span>
+          <ul className="flex mt-2 pb-2 border-b-2 border-gray-200">
+            <li className="flex mr-3">
+              <span className=" px-1 text-slate-500 material-symbols-rounded">
+                search
+              </span>
               <input
                 type="text"
                 placeholder="جستجوی تسک ها"
@@ -200,26 +225,37 @@ const Layout = ({ children }) => {
               />
             </li>
 
-            <li class="mr-3">
-              <Button
-                className=" flex hover:text-[#208D8E] text-[14px] px-3 text-gray-700"
-                onClick={showFilterModal}
-              >
-                <span class=" px-2 material-symbols-rounded">page_info</span>
-                فیلتر
-              </Button>
-            </li>
-            <li className="mr-3">
-              <span className=" px-3 text-[12px] bg-[#E9F9FF] rounded-[4px]">
-                دسته بندی شده با: وضعیت
-              </span>
-            </li>
+            {!activeCalendarBtn && (
+              <li className="mr-3">
+                <Button
+                  className=" flex hover:text-[#208D8E] text-[14px] px-3 text-gray-700"
+                  onClick={showFilterModal}
+                >
+                  <span className=" px-2 material-symbols-rounded">
+                    page_info
+                  </span>
+                  فیلتر
+                </Button>
+              </li>
+            )}
+            {!activeCalendarBtn && (
+              <li className="mr-3">
+                <span className=" px-3 text-[12px] bg-[#E9F9FF] rounded-[4px]">
+                  دسته بندی شده با: وضعیت
+                </span>
+              </li>
+            )}
+            {activeCalendarBtn && (
+              <li>
+                <CalendarTitle />
+              </li>
+            )}
           </ul>
 
           {/* Dashboard Content stays here! */}
           <div className=" h-[75vh] text-2x1 font-semibold flex-1 top-9 relative ">
             {children}
-            
+
             {/* Elahe's New task button */}
             {/* <Button className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed" onClick={showNewTaskModal}>
               <span class=" text-[#FFFFFF] material-symbols-rounded">
@@ -231,14 +267,35 @@ const Layout = ({ children }) => {
         </div>
       </div>
       {false && <ShareWSModal />}
-      {showShareProject && <ShareProjectModal onClick={() => setShowShareProject(false)}/>}
-      {showFilter && <FilterModal onClick={() => setShowFilter(false)}></FilterModal>}
+      {showShareProject && (
+        <ShareProjectModal onClick={() => setShowShareProject(false)} />
+      )}
+      {showFilter && (
+        <FilterModal onClick={() => setShowFilter(false)}></FilterModal>
+      )}
       {false && <ModalProjectMenu></ModalProjectMenu>}
       {false && <ModalTaskMenu></ModalTaskMenu>}
-      {showNewWS && <ModalNewWorkSpace onClick={() => setShowNewWS(false)} buttonOnClick={() => setShowPickColor(true)}></ModalNewWorkSpace>}
-      {showPickColor && <ModalPickColor onClick={() => setShowPickColor(false)} buttonOnClick={() => setShowInfo(true)}></ModalPickColor>}
-      {showInfo && <InformationModal onClick={() => setShowInfo(false)} buttonOnClick={() => setShowInfo(false)}></InformationModal>}
-      {showNewTask && <MakeTaskModal onClick={() => setShowNewTask(false)}></MakeTaskModal>}
+      {showNewWS && (
+        <ModalNewWorkSpace
+          onClick={() => setShowNewWS(false)}
+          buttonOnClick={() => setShowPickColor(true)}
+        ></ModalNewWorkSpace>
+      )}
+      {showPickColor && (
+        <ModalPickColor
+          onClick={() => setShowPickColor(false)}
+          buttonOnClick={() => setShowInfo(true)}
+        ></ModalPickColor>
+      )}
+      {showInfo && (
+        <InformationModal
+          onClick={() => setShowInfo(false)}
+          buttonOnClick={() => setShowInfo(false)}
+        ></InformationModal>
+      )}
+      {showNewTask && (
+        <MakeTaskModal onClick={() => setShowNewTask(false)}></MakeTaskModal>
+      )}
       {false && <TaskDetails></TaskDetails>}
       {false && <PickDateModal></PickDateModal>}
     </>

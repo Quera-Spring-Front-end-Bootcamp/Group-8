@@ -3,6 +3,7 @@ import useInput from "../../../hooks/useInput";
 import "../../../styles/index.css";
 
 const ForgotPassword = () => {
+  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
   let formIsValid = false;
 
   let emailInputErrorMessage = "";
@@ -81,7 +82,7 @@ const ForgotPassword = () => {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full mt-1 px-4 py-2 mb-5 text-white bg-[#208D8E] rounded"
+              className="w-full mt-1 px-4 py-2 mb-5 text-white rounded"style={{backgroundColor:themeColor}}
             >
               ورود
             </button>

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import ColorPallete from "./ColorPallete";
 
 const Settings = () => {
-  const [selectedColor, setSelectedColor] = useState("#208D8E");
+  const [themeColor,setThemeColor]=useState(localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E");
   const [nightMode, setNightMode] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(themeColor ? themeColor:"#208D8E");
 
   const colors = [
     "#208D8E",
@@ -21,8 +22,12 @@ const Settings = () => {
   const handleColorClick = (color) => {
     setSelectedColor(color);
   };
+useEffect(()=>{
+  setThemeColor(localStorage.getItem('themeColor'));
+  console.log(themeColor);
+},[themeColor])
   const handleSubmit = (e) => {
-    e.preventDefault();
+    localStorage.setItem("themeColor",selectedColor);
     console.log(selectedColor);
     console.log(nightMode);
   };
@@ -55,7 +60,7 @@ const Settings = () => {
               <span
                 className="w-[21px] h-[21px] rounded-[20px] bottom-[0.5px] absolute transition duration-500"
                 style={{
-                  backgroundColor: nightMode ? "#208D8E" : "#8A8989",
+                  backgroundColor: nightMode ? themeColor : "#8A8989",
                   right: nightMode ? "1px" : "26px",
                   transitionProperty: "right",
                 }}
@@ -67,7 +72,7 @@ const Settings = () => {
           </div>
           <button
             type="submit"
-            className="flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] bg-[#208D8E] rounded-[6px] mt-[25px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] "
+            className={`flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] bg-[#208D8E] rounded-[6px] mt-[25px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] `} style={{backgroundColor:themeColor}}
           >
             ثبت تغییرات
           </button>

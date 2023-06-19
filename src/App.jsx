@@ -9,13 +9,31 @@ import Profile from './pages/profile'
 import ListView from './pages/listview'
 import ColumnView from './pages/columnview'
 import Calender from './pages/calenderview'
+import React, { createContext,useState,useEffect } from "react";
 
 import "./styles/App.css";
 
+export const ActiveButtonsContext = createContext();
+
+//for local
+export const baseUrl="http://localhost:3000/api";
 
 function App() {
+  const [activeListViewBtn, setActiveListViewBtn] = useState(false);
+  const [activeColumnViewBtn, setActiveColumnViewBtn] = useState(false);
+  const [activeCalendarBtn, setActiveCalendarBtn] = useState(false);
   return (
-    <>
+
+    <ActiveButtonsContext.Provider
+    value={{
+      activeListViewBtn,
+      setActiveListViewBtn,
+      activeColumnViewBtn,
+      setActiveColumnViewBtn,
+      activeCalendarBtn,
+      setActiveCalendarBtn
+    }}
+  >
       <Route exact path="/" component={Login} />
 
       <Route path="/login">
@@ -37,7 +55,7 @@ function App() {
         <Layout />
       </Route>
 
-      <Route path="/calender">
+      <Route path="/calendar">
         <Calender />
       </Route>
       <Route path="/profile">
@@ -50,7 +68,7 @@ function App() {
           <ColumnView/>
       </Route>
       
-    </>
+    </ActiveButtonsContext.Provider>
   );
 }
 
