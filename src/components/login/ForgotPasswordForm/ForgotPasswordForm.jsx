@@ -1,10 +1,17 @@
 import useInput from "../../../hooks/useInput";
+import axios from "axios";
+import { useHistory } from "react-router";
+import { useState, useEffect } from "react";
+import { baseUrl } from "../../../App";
 
 import "../../../styles/index.css";
 
 const ForgotPassword = () => {
-  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
-  let formIsValid = false;
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
+  const [formIsValid, setFormIsValid] = useState(false);
+  const history = useHistory();
 
   let emailInputErrorMessage = "";
 
@@ -20,7 +27,7 @@ const ForgotPassword = () => {
       emailInputErrorMessage = "لطفا پست الکترونیک خود را وارد نمایید";
       return false;
     } else {
-      if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(value)) {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
         return true;
       } else {
         emailInputErrorMessage = "پست الکترونیک واردشده معتبر نیست";
@@ -29,30 +36,43 @@ const ForgotPassword = () => {
     }
   });
 
-  if (emailIsValid) {
-    formIsValid = true;
-  }
-
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
-    if (emailInputHasError) {
-      formIsValid = false;
-      return;
-    }
-
-    if (!formIsValid) {
-      formIsValid = false;
-      return;
-    }
-
-    emailInputResetHandler();
+    setFormIsValid(true);
+    if (emailInputHasError || !emailIsValid) {
+      setFormIsValid(false);
+    } else setFormIsValid(true);
+    // emailInputResetHandler();
   };
 
   const emailInputClasses = emailInputHasError
     ? "border-2 border-[#D7284B]"
     : "border border-[#AAAAAA]";
+  ////////////////////////////////////////////////////////////
+  useEffect(() => {
+    if (formIsValid) {
+      const userData = {
+        email: email,
+      };
+      ForgetUserPassword(userData);
+    }
+  }, [formIsValid]);
 
+  const ForgetUserPassword = async (userData) => {
+    try {
+      const response = await axios.post(
+        `${baseUrl}/auth/forget-password`,
+        userData
+      );
+      console.log(response.data);
+      history.push("/sendpassword");
+    } catch (error) {
+      alert("حسابی با این ایمیل ایجاد نشده است.");
+      console.log(error);
+      setFormIsValid(false);
+    }
+  };
+  /////////////////////////////////////////////////////////////
   return (
     <div className="flex items-center justify-center h-[70vh]">
       <div
@@ -82,7 +102,8 @@ const ForgotPassword = () => {
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full mt-1 px-4 py-2 mb-5 text-white rounded"style={{backgroundColor:themeColor}}
+              className="w-full mt-1 px-4 py-2 mb-5 text-white rounded"
+              style={{ backgroundColor: themeColor }}
             >
               ورود
             </button>

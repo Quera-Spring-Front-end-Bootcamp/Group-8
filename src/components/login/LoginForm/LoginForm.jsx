@@ -5,9 +5,10 @@ import axios from "axios";
 import useInput from "../../../hooks/useInput";
 
 import "../../../styles/index.css";
-
 const Login = () => {
-  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
   const history = useHistory();
   const [formErrorMessage, setFormErrorMessage] = useState("");
 
@@ -63,6 +64,12 @@ const Login = () => {
     // emailInputResetHandler();
     // passwordInputResetHandler();
   };
+  useEffect(()=>{
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("tokenExpireDate");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
+  },[])
   //////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     if (formIsValid) {
@@ -71,22 +78,25 @@ const Login = () => {
         password: password,
       };
       loginUser(userData);
-      console.log("object");
     }
   }, [formIsValid]);
 
   const loginUser = async (userData) => {
     try {
       const response = await axios.post(`${baseUrl}/auth/login`, userData);
+      const currentDate = Date.now();
+      const tokenExpireDate = currentDate * 24 * 60 * 60 * 1000; //محاسبه 24 ساعت بعد از ایجاد توکن
       console.log(response.data);
-      localStorage.setItem("accessToken",response.data.data.accessToken);
-      localStorage.setItem("refreshToken",response.data.data.refreshToken);
-      localStorage.setItem("userId",response.data.data.toBeSendUserData._id);
+      localStorage.setItem("accessToken", response.data.data.accessToken);
+      localStorage.setItem("tokenExpireDate", tokenExpireDate);
+      localStorage.setItem("refreshToken", response.data.data.refreshToken);
+      localStorage.setItem("userId", response.data.data.toBeSendUserData._id);
       alert("ورود شما با موفقیت انجام شد.");
       history.push("/listview");
     } catch (error) {
       alert("ایمیل یا رمز عبور نا متعبر است.");
       console.log(error);
+      setFormIsValid(false);
     }
   };
   /////////////////////////////////////////////////////////////////////////////
@@ -151,19 +161,20 @@ const Login = () => {
               </p>
             )}
           </div>
-          <div className="mt-2 text-sm"style={{color:themeColor}}>
-            <Link to="/ForgotPassword">رمز عبور را فراموش کردی؟</Link>
+          <div className="mt-2 text-sm" style={{ color: themeColor }}>
+            <Link to="/forgotPassword">رمز عبور را فراموش کردی؟</Link>
           </div>
           <div className="mt-8">
             <button
               type="submit"
-              className="w-full px-4 py-2 mb-5 text-white rounded" style={{backgroundColor:themeColor}}
+              className="w-full px-4 py-2 mb-5 text-white rounded"
+              style={{ backgroundColor: themeColor }}
             >
               ورود
             </button>
             <div className="text-center">
               ثبت نام نکردی؟{" "}
-              <Link style={{color:themeColor}} to="/Register">
+              <Link style={{ color: themeColor }} to="/Register">
                 ثبت نام
               </Link>
             </div>

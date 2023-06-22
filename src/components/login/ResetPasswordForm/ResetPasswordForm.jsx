@@ -1,5 +1,7 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useHistory } from "react-router";
+import { baseUrl } from "../../../App";
 import useInput from "../../../hooks/useInput";
 
 import "../../../styles/index.css";
@@ -7,8 +9,8 @@ import "../../../styles/index.css";
 const ResetPassword = () => {
   const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
   const [formErrorMessage, setFormErrorMessage] = useState("");
-
-  let formIsValid = false;
+  const [formIsValid, setFormIsValid] = useState(false);
+  const history = useHistory();
 
   let passwordInputErrorMessage = "";
   let confirmPasswordInputErrorMessage = "";
@@ -22,7 +24,7 @@ const ResetPassword = () => {
     resetHandler: passwordInputResetHandler,
   } = useInput((value) => {
     if (value.trim() !== "") {
-      if (value.length >= 8) {
+      if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/.test(value)) {
         return true;
       } else {
         passwordInputErrorMessage =
@@ -57,28 +59,28 @@ const ResetPassword = () => {
     }
   });
 
-  if (passwordIsValid && confirmPasswordIsValid) {
-    formIsValid = true;
-  }
+
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
+  if (passwordIsValid && confirmPasswordIsValid) {
+    setFormIsValid(true);
+  }else
     if (passwordInputHasError || confirmPasswordInputHasError) {
-      formIsValid = false;
+      setFormIsValid(false);
       setFormErrorMessage("");
       return;
     }
-
+else
     if (!formIsValid) {
       setFormErrorMessage("لطفاً رمز عبور جدید و تاییدیه آن را وارد نمایید.");
-      formIsValid = false;
+      setFormIsValid(false);
       return;
     }
 
     setFormErrorMessage("");
-    passwordInputResetHandler();
-    confirmPasswordInputResetHandler();
+    // passwordInputResetHandler();
+    // confirmPasswordInputResetHandler();
   };
 
   const onChangeHandler = () => {
@@ -92,6 +94,33 @@ const ResetPassword = () => {
   const confirmPasswordInputClasses = confirmPasswordInputHasError
     ? "border-2 border-[#D7284B]"
     : "border border-[#AAAAAA]";
+  //////////////////////////////////////////////////////////////////
+  useEffect(() => {
+    if (formIsValid) {
+      const userData = {
+       // token: ,
+       password:password,
+      };
+      ResetUserPassword(userData);
+    }
+  }, [formIsValid]);
+
+  const ResetUserPassword = async (userData) => {
+    try {
+      const response = await axios.post(
+        `${baseUrl}/auth/reset-password`,
+        userData
+      );
+      console.log(response.data);
+      alert("رمز عبور با موفقیت تعویض گردید.");
+      history.push("/login");
+    } catch (error) {
+      setFormErrorMessage("لطفاً رمز عبور جدید و تاییدیه آن را وارد نمایید.");
+      console.log(error);
+      setFormIsValid(false);
+    }
+  };
+  //////////////////////////////////////////////////////////////////
 
   return (
     <div className="flex items-center justify-center h-[70vh]">

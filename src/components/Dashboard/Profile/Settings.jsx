@@ -1,10 +1,16 @@
-import { useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 import ColorPallete from "./ColorPallete";
 
 const Settings = () => {
-  const [themeColor,setThemeColor]=useState(localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E");
+  const [themeColor, setThemeColor] = useState(
+    localStorage.getItem("themeColor")
+      ? localStorage.getItem("themeColor")
+      : "#208D8E"
+  );
   const [nightMode, setNightMode] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(themeColor ? themeColor:"#208D8E");
+  const [selectedColor, setSelectedColor] = useState(
+    themeColor ? themeColor : "#208D8E"
+  );
 
   const colors = [
     "#208D8E",
@@ -22,12 +28,11 @@ const Settings = () => {
   const handleColorClick = (color) => {
     setSelectedColor(color);
   };
-useEffect(()=>{
-  setThemeColor(localStorage.getItem('themeColor'));
-  console.log(themeColor);
-},[themeColor])
+  useEffect(() => {
+    setThemeColor(localStorage.getItem("themeColor"));
+  }, [themeColor]);
   const handleSubmit = (e) => {
-    localStorage.setItem("themeColor",selectedColor);
+    localStorage.setItem("themeColor", selectedColor);
     console.log(selectedColor);
     console.log(nightMode);
   };
@@ -72,7 +77,8 @@ useEffect(()=>{
           </div>
           <button
             type="submit"
-            className={`flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] bg-[#208D8E] rounded-[6px] mt-[25px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] `} style={{backgroundColor:themeColor}}
+            className={`flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] bg-[#208D8E] rounded-[6px] mt-[25px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] `}
+            style={{ backgroundColor: themeColor }}
           >
             ثبت تغییرات
           </button>

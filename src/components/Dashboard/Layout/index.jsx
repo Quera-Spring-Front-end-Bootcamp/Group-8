@@ -18,6 +18,7 @@ import MakeTaskModal from "../../Modal/MakeTaskModal";
 import PickDateModal from "../../Modal/PickDateModal";
 import { ActiveButtonsContext } from "../../../App";
 import CalendarTitle from "../Task/CalendarView/CalendarTitle";
+import { Link } from "react-router-dom";
 import "../../../styles/Layout.css";
 
 const Layout = ({ children }) => {
@@ -134,10 +135,12 @@ const Layout = ({ children }) => {
               <a href="/profile" className=" no-underline">
                 <ProfileOption english="Zahra Moradi" persian="زهرا مرادی" />
               </a>
-              <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
-                <span className="material-symbols-rounded">door_open</span>
-                خروج
-              </li>
+              <Link to="/login">
+                <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
+                  <span className="material-symbols-rounded">door_open</span>
+                  خروج
+                </li>
+              </Link>
             </ul>
           </nav>
         </div>

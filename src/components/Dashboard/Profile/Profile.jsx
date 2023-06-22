@@ -2,6 +2,7 @@ import { useState } from "react";
 import PersonalInfoForm from "./PersonalInfoForm";
 import AccountInfoForm from "./AccoountInfoForm";
 import Settings from "./Settings";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [state, setState] = useState({
@@ -9,9 +10,11 @@ const Profile = () => {
     accountInfo: false,
     settings: false,
   });
-  
+
   const [profilePage, setProfilePage] = useState("personalInfo");
-  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
 
   return (
     <div className="flex flex-row">
@@ -19,14 +22,17 @@ const Profile = () => {
         <div className="font-extrabold bg-gradient-to-r from-[#118C80] from-0% to-[#4AB7D8] to-120% bg-clip-text text-[transparent] text-[32px] leading-[51px] text-right">
           <a href="#">کوئرا تسک منیجر</a>
         </div>
-
-        <button className="flex flex-row items-center gap-[8px] w-[110px] h-[39px] pt-[4px]  pr-[7.5px] text-[20px] text-[#FFFFFF] rounded-[8px] mt-[79px]"style={{backgroundColor:themeColor}}>
-          <span className="material-symbols-rounded w-[24px] h-[24px]">
-            arrow_forward
-          </span>
-          بازگشت
-        </button>
-
+        <Link to="/listView">
+          <button
+            className="flex flex-row items-center gap-[8px] w-[110px] h-[39px] pt-[4px]  pr-[7.5px] text-[20px] text-[#FFFFFF] rounded-[8px] mt-[79px]"
+            style={{ backgroundColor: themeColor }}
+          >
+            <span className="material-symbols-rounded w-[24px] h-[24px]">
+              arrow_forward
+            </span>
+            بازگشت
+          </button>
+        </Link>
         <div className="flex flex-col items-start gap-[36px] mt-[40px] text-[20px]">
           <div
             className="flex flex-row items-baseLine gap-[11px] w-[266px] h-[39px] rounded-[4px] pr-[7.5px] pt-[5px] cursor-pointer font-medium"
