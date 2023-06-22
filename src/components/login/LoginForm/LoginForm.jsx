@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import { Link, useHistory } from "react-router-dom";
 import { baseUrl } from "../../../App";
 import axios from "axios";
@@ -85,7 +85,7 @@ const Login = () => {
     try {
       const response = await axios.post(`${baseUrl}/auth/login`, userData);
       const currentDate = Date.now();
-      const tokenExpireDate = currentDate * 24 * 60 * 60 * 1000; //محاسبه 24 ساعت بعد از ایجاد توکن
+      const tokenExpireDate = currentDate + 24 * 60 * 60 * 1000; //محاسبه 24 ساعت بعد از ایجاد توکن
       console.log(response.data);
       localStorage.setItem("accessToken", response.data.data.accessToken);
       localStorage.setItem("tokenExpireDate", tokenExpireDate);
