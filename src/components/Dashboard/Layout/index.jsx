@@ -28,6 +28,14 @@ const Layout = ({ children }) => {
   const [showNewWS, setShowNewWS] = useState(false);
   const [showPickColor, setShowPickColor] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const[hover,setHover]=useState({
+    listView:false,
+    columnView:false,
+    calendarView:false,
+  })
+  const themeColor = localStorage.getItem("themeColor")
+  ? localStorage.getItem("themeColor")
+  : "#208D8E";
   const { activeListViewBtn, activeColumnViewBtn, activeCalendarBtn } =
     useContext(ActiveButtonsContext);
 
@@ -79,7 +87,7 @@ const Layout = ({ children }) => {
         <div className=" w-80 h-screen bg-[#FAFBFC] border border-[#AAAAAA] p-5 pt-8 relative">
           <div className="flex gap-x-4 items-center">
             <Caption className="text-3xl p-3 pt-1 font-bold origin-right duration-300">
-              کوئرا تسک منیجر
+            <a href="#">کوئرا تسک منیجر</a>
             </Caption>
           </div>
 
@@ -160,9 +168,10 @@ const Layout = ({ children }) => {
               <li className="mr-3">
                 <a
                   href="/listview"
-                  className={`flex hover:text-[#208D8E] pb-5 text-[16px] px-3 text-gray-700 ${
-                    activeListViewBtn ? "active" : ""
-                  }`}
+                  className="flex  pb-5 text-[16px] px-3 text-gray-700"
+                  style={{color:activeListViewBtn?themeColor:"",borderBottom:activeListViewBtn?`2px solid ${themeColor}`:"",color:hover.listView?themeColor:"",color:(!hover.listView&&!activeListViewBtn)?" rgb(55 65 81)":themeColor}}
+                  onMouseEnter={()=>setHover({listView:true})}
+                  onMouseLeave={()=>setHover({listView:false})}
                 >
                   <span className="material-symbols-rounded">list</span>
                   نمایش لیستی
@@ -174,9 +183,10 @@ const Layout = ({ children }) => {
               <li className="mr-3">
                 <a
                   href="/columnview"
-                  className={` flex pb-5 text-[16px] hover:text-[#208D8E] px-3  text-gray-700 ${
-                    activeColumnViewBtn ? "active" : ""
-                  }`}
+                  className=" flex pb-5 text-[16px] px-3  text-gray-700"
+                  style={{color:activeColumnViewBtn?themeColor:"",borderBottom:activeColumnViewBtn?`2px solid ${themeColor}`:"",color:hover.columnView?themeColor:"",color:(!hover.columnView&&!activeColumnViewBtn)?" rgb(55 65 81)":themeColor}}
+                  onMouseEnter={()=>setHover({columnView:true})}
+                  onMouseLeave={()=>setHover({columnView:false})}
                 >
                   <span className="material-symbols-rounded">view_week</span>
                   نمایش ستونی
@@ -188,9 +198,10 @@ const Layout = ({ children }) => {
               <li className="mr-3">
                 <a
                   href="/calendar"
-                  className={` flex hover:text-[#208D8E] text-[16px] px-3 pb-5 text-gray-700 ${
-                    activeCalendarBtn ? "active" : ""
-                  }`}
+                  className=" flex  text-[16px] px-3 pb-5 text-gray-700 "
+                  style={{color:activeCalendarBtn?themeColor:"",borderBottom:activeCalendarBtn?`2px solid ${themeColor}`:"",color:hover.calendarView?themeColor:"",color:(!hover.calendarView&&!activeCalendarBtn)?" rgb(55 65 81)":themeColor}}
+                  onMouseEnter={()=>setHover({calendarView:true})}
+                  onMouseLeave={()=>setHover({calendarView:false})}
                 >
                   <span className="material-symbols-rounded">
                     calendar_month
