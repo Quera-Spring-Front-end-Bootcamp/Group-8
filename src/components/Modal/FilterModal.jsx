@@ -8,6 +8,9 @@ const FilterModal = (props) => {
   //   "#900C3F",
   //   "#581845",
   // ];
+  const themeColor = localStorage.getItem("themeColor")
+  ? localStorage.getItem("themeColor")
+  : "#208D8E";
   const options = [
     { label: "Option 1", value: "1" , color: "#FF5733"},
     { label: "Option 2", value: "2" , color: "#DAF7A6"},
@@ -18,7 +21,7 @@ const FilterModal = (props) => {
 
   return (
     <div>
-      <div className="fixed left-[20%] top-[20%] w-[800px] h-[250px] border-[2px] rounded-md bg-white shadow-md">
+      <div className="fixed left-[20%] top-[20%] w-[800px] h-[250px] border-[2px] rounded-md bg-white shadow-md bg-[#FFFFFF] z-50">
         <header className="flex py-3 justify-between">
           <h1 className=" text-[30px] p-3"> فیلتر</h1>
           <span class=" px-3 py-3 material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>close</span>
@@ -47,7 +50,7 @@ const FilterModal = (props) => {
           </span>
           <span class=" px-5 material-symbols-rounded">delete</span>
         </div>
-        <button className=" px-4 py-8 text-[#208D8E]" onClick={props.onClick}>
+        <button className=" px-4 py-8"style={{color:themeColor}} onClick={props.onClick}>
           افزودن فیلتر جدید
         </button>
       </div>
