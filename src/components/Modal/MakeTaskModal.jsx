@@ -3,12 +3,14 @@ import { useState, useRef, useEffect } from "react";
 import Profile from "../../img/cute.png";
 import Priority from "./NewTaskModalComponents/Priority";
 import CreateTag from "./NewTaskModalComponents/CreateTag";
-import Button from "../Common/Button/Button"
+import Button from "../common/Button/Button";
 const MakeTaskModal = (props) => {
   const [isFlagOpen, setIsFlagOpen] = useState(false);
   const [isTagOpen, setIsTagOpen] = useState(false);
   const [flagColor, setFlagColor] = useState("")
-  
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
   const handleChoosePriority = (color) => {
        
     setFlagColor(color)
@@ -24,7 +26,7 @@ const MakeTaskModal = (props) => {
   }
   return (
     <div>
-      <div className=" fixed items-center justify-center bg-[#FFFFFF] left-[10%] top-[10%] w-[1166px] h-[576px] rounded-[12px] border shadow-md">
+      <div className=" fixed items-center justify-center bg-[#FFFFFF] left-[10%] top-[10%] w-[1166px] h-[576px] rounded-[12px] border shadow-md z-50"style={{ boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)" }}>
         <header className="flex p-5 justify-between w-[100%]">
           <div className="flex items-center justify-center">
             <div className="w-[16px] h-[16px] bg-[#D9D9D9] mx-2"></div>
@@ -96,7 +98,7 @@ const MakeTaskModal = (props) => {
             {/* <button className="flex absolute p-3 w-[135px] h-[32px] text-[12px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer">
               ساختن تسک
             </button> */}
-            <Button children={"ساختن تسک"} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E]"} />
+            <Button children={"ساختن تسک"} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E] rounded"} color={themeColor} />
           </span>
         </footer>
       </div>

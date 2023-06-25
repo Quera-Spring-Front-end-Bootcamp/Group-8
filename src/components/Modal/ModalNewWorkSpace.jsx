@@ -1,7 +1,10 @@
 const ModalNewWorkSpace = (props) => {
+  const themeColor = localStorage.getItem("themeColor")
+  ? localStorage.getItem("themeColor")
+  : "#208D8E";
   return (
     <div>
-      <div className=" fixed items-center justify-center left-[30%] top-[30%] w-[501px] h-[300px] rounded-[12px] border shadow-md">
+      <div className=" fixed items-center justify-center left-[30%] top-[30%] w-[501px] h-[300px] rounded-[12px] border shadow-md bg-[#FFFFFF] z-50"style={{ boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)" }}>
         <header className="flex p-5 justify-between w-[100%]">
           <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>
             close
@@ -22,7 +25,7 @@ const ModalNewWorkSpace = (props) => {
         </div>
 
         <footer className="flex w-[100%] items-center justify-center mt-10">
-          <button className="flex absolute p-3 bottom-4 w-[90%] h-[40px] text-[18px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer" onClick={props.buttonOnClick}>
+          <button className="flex absolute p-3 bottom-4 w-[90%] h-[40px] text-[18px] text-[#FFFFFF] items-center justify-center rounded-md text-center cursor-pointer"style={{backgroundColor:themeColor}} onClick={props.buttonOnClick}>
             ساختن ورک اسپیس
           </button>
         </footer>

@@ -28,14 +28,15 @@ const Layout = ({ children }) => {
   const [showNewWS, setShowNewWS] = useState(false);
   const [showPickColor, setShowPickColor] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const[hover,setHover]=useState({
-    listView:false,
-    columnView:false,
-    calendarView:false,
-  })
+  const [hover, setHover] = useState({
+    listView: false,
+    columnView: false,
+    calendarView: false,
+    filter:false,
+  });
   const themeColor = localStorage.getItem("themeColor")
-  ? localStorage.getItem("themeColor")
-  : "#208D8E";
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
   const { activeListViewBtn, activeColumnViewBtn, activeCalendarBtn } =
     useContext(ActiveButtonsContext);
 
@@ -87,7 +88,7 @@ const Layout = ({ children }) => {
         <div className=" w-80 h-screen bg-[#FAFBFC] border border-[#AAAAAA] p-5 pt-8 relative">
           <div className="flex gap-x-4 items-center">
             <Caption className="text-3xl p-3 pt-1 font-bold origin-right duration-300">
-            <a href="#">کوئرا تسک منیجر</a>
+              <a href="#">کوئرا تسک منیجر</a>
             </Caption>
           </div>
 
@@ -103,13 +104,13 @@ const Layout = ({ children }) => {
             <SideMenuInput
               Type="text"
               PlaceHolder="  جستجو کنید"
-              className="input bg-[#F6F7F9] h-[40px] w-full max-w-xs rounded"
+              className="input bg-[#F6F7F9] h-[40px] w-full max-w-xs rounded outline-none pr-3"
             />
           </div>
 
           <div className="menu pt-3">
             <Button
-              className=" flex h-[32px] w-[279px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-1"
+              className=" flex h-[32px] w-[279px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-3"
               onClick={showNewWSModal}
             >
               <span className="material-symbols-rounded">add_box</span>
@@ -169,9 +170,19 @@ const Layout = ({ children }) => {
                 <a
                   href="/listview"
                   className="flex  pb-5 text-[16px] px-3 text-gray-700"
-                  style={{color:activeListViewBtn?themeColor:"",borderBottom:activeListViewBtn?`2px solid ${themeColor}`:"",color:hover.listView?themeColor:"",color:(!hover.listView&&!activeListViewBtn)?" rgb(55 65 81)":themeColor}}
-                  onMouseEnter={()=>setHover({listView:true})}
-                  onMouseLeave={()=>setHover({listView:false})}
+                  style={{
+                    color: activeListViewBtn ? themeColor : "",
+                    borderBottom: activeListViewBtn
+                      ? `2px solid ${themeColor}`
+                      : "",
+                    color: hover.listView ? themeColor : "",
+                    color:
+                      !hover.listView && !activeListViewBtn
+                        ? " rgb(55 65 81)"
+                        : themeColor,
+                  }}
+                  onMouseEnter={() => setHover({ listView: true })}
+                  onMouseLeave={() => setHover({ listView: false })}
                 >
                   <span className="material-symbols-rounded">list</span>
                   نمایش لیستی
@@ -184,9 +195,19 @@ const Layout = ({ children }) => {
                 <a
                   href="/columnview"
                   className=" flex pb-5 text-[16px] px-3  text-gray-700"
-                  style={{color:activeColumnViewBtn?themeColor:"",borderBottom:activeColumnViewBtn?`2px solid ${themeColor}`:"",color:hover.columnView?themeColor:"",color:(!hover.columnView&&!activeColumnViewBtn)?" rgb(55 65 81)":themeColor}}
-                  onMouseEnter={()=>setHover({columnView:true})}
-                  onMouseLeave={()=>setHover({columnView:false})}
+                  style={{
+                    color: activeColumnViewBtn ? themeColor : "",
+                    borderBottom: activeColumnViewBtn
+                      ? `2px solid ${themeColor}`
+                      : "",
+                    color: hover.columnView ? themeColor : "",
+                    color:
+                      !hover.columnView && !activeColumnViewBtn
+                        ? " rgb(55 65 81)"
+                        : themeColor,
+                  }}
+                  onMouseEnter={() => setHover({ columnView: true })}
+                  onMouseLeave={() => setHover({ columnView: false })}
                 >
                   <span className="material-symbols-rounded">view_week</span>
                   نمایش ستونی
@@ -199,9 +220,19 @@ const Layout = ({ children }) => {
                 <a
                   href="/calendar"
                   className=" flex  text-[16px] px-3 pb-5 text-gray-700 "
-                  style={{color:activeCalendarBtn?themeColor:"",borderBottom:activeCalendarBtn?`2px solid ${themeColor}`:"",color:hover.calendarView?themeColor:"",color:(!hover.calendarView&&!activeCalendarBtn)?" rgb(55 65 81)":themeColor}}
-                  onMouseEnter={()=>setHover({calendarView:true})}
-                  onMouseLeave={()=>setHover({calendarView:false})}
+                  style={{
+                    color: activeCalendarBtn ? themeColor : "",
+                    borderBottom: activeCalendarBtn
+                      ? `2px solid ${themeColor}`
+                      : "",
+                    color: hover.calendarView ? themeColor : "",
+                    color:
+                      !hover.calendarView && !activeCalendarBtn
+                        ? " rgb(55 65 81)"
+                        : themeColor,
+                  }}
+                  onMouseEnter={() => setHover({ calendarView: true })}
+                  onMouseLeave={() => setHover({ calendarView: false })}
                 >
                   <span className="material-symbols-rounded">
                     calendar_month
@@ -235,15 +266,18 @@ const Layout = ({ children }) => {
               <input
                 type="text"
                 placeholder="جستجوی تسک ها"
-                className="input w-full max-w-xs border-gray-600 border-l-2"
+                className="input w-full max-w-xs border-gray-600 border-l-2 outline-none pr-3"
               />
             </li>
 
             {!activeCalendarBtn && (
-              <li className="mr-3">
+              <li className="mr-3"
+              onMouseEnter={() => setHover({ filter: true })}
+              onMouseLeave={() => setHover({ filter: false })}>
                 <Button
-                  className=" flex hover:text-[#208D8E] text-[14px] px-3 text-gray-700"
+                  className=" flex  text-[14px] px-3 text-gray-700"
                   onClick={showFilterModal}
+                  textColor={hover.filter?themeColor:""}
                 >
                   <span className=" px-2 material-symbols-rounded">
                     page_info
@@ -271,12 +305,16 @@ const Layout = ({ children }) => {
             {children}
 
             {/* Elahe's New task button */}
-            {/* <Button className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed" onClick={showNewTaskModal}>
+            <Button
+              className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md text-center p-3 fixed z-50"
+              onClick={showNewTaskModal}
+              color={themeColor}
+            >
               <span class=" text-[#FFFFFF] material-symbols-rounded">
                 add_box
               </span>
               تسک جدید
-            </Button> */}
+            </Button>
           </div>
         </div>
       </div>

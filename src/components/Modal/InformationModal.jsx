@@ -4,7 +4,7 @@ const InformationModal = (props) => {
   
     return (
       <div>
-        <div className=" fixed items-center justify-center left-[30%] top-[30%] w-[501px] h-[357px] rounded-[12px] border shadow-md">
+        <div className=" fixed items-center justify-center left-[30%] top-[30%] w-[501px] h-[357px] rounded-[12px] border shadow-md z-50 bg-[#FFFFFF]">
           <header className="flex p-5 justify-between w-[100%]">
             <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>close</span>
             <h2 className=" justify-center text-[24px] font-medium items-center text-center ">
