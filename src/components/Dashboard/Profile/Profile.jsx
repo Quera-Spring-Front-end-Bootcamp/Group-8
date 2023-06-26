@@ -11,7 +11,7 @@ const Profile = () => {
     accountInfo: false,
     settings: false,
   });
-
+ 
   const [profilePage, setProfilePage] = useState("personalInfo");
   const themeColor = localStorage.getItem("themeColor")
     ? localStorage.getItem("themeColor")
@@ -20,7 +20,7 @@ const Profile = () => {
     <div className="flex flex-row">
       <div className="flex flex-col w-[340px] h-[100vh] bg-[#FAFBFC] pr-[50px] pt-[40px] border-l-[0.5px] border-[#AAAAAA] pl-[24px]">
         <Caption className="font-extrabold  bg-clip-text text-[transparent] text-[32px] leading-[51px] text-right">
-          <a href="#">کوئرا تسک منیجر</a>
+          <a href="/listView">کوئرا تسک منیجر</a>
         </Caption>
         <Link to="/listView">
           <button

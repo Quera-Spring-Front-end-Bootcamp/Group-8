@@ -64,12 +64,6 @@ const Login = () => {
     // emailInputResetHandler();
     // passwordInputResetHandler();
   };
-  useEffect(()=>{
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("tokenExpireDate");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userId");
-  },[])
   //////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     if (formIsValid) {

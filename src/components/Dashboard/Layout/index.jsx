@@ -81,7 +81,12 @@ const Layout = ({ children }) => {
     { label: "Option 2", value: "2" },
     { label: "Option 3", value: "3" },
   ];
-
+const handleLogout=()=>{
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("tokenExpireDate");
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("userId");
+}
   return (
     <>
       <div className="flex">
@@ -145,7 +150,8 @@ const Layout = ({ children }) => {
                 <ProfileOption english="Zahra Moradi" persian="زهرا مرادی" />
               </a>
               <Link to="/login">
-                <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
+                <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
+                onClick={handleLogout}>
                   <span className="material-symbols-rounded">door_open</span>
                   خروج
                 </li>
