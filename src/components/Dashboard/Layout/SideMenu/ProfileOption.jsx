@@ -12,7 +12,7 @@ const ProfileOption = ({ persian, english }) => {
 
   return (
     <li className=" menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
-      <span class="flex justify-center w-6 h-6 rounded-full text-[12px] bg-orange-400">
+      <span class="flex justify-center w-7 h-7 rounded-full text-[12px] bg-orange-400 pt-1">
         {/* {firstLetters} */}
         {engName}
       </span>
