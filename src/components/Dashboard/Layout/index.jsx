@@ -316,7 +316,7 @@ const handleLogout=()=>{
               onClick={showNewTaskModal}
               color={themeColor}
             >
-              <span class=" text-[#FFFFFF] material-symbols-rounded">
+              <span className={"text-[#FFFFFF] material-symbols-rounded"}>
                 add_box
               </span>
               تسک جدید
