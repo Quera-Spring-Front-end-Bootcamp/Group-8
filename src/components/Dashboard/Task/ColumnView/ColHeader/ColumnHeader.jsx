@@ -7,7 +7,7 @@ import MakeTaskModal from '../../../../Modal/MakeTaskModal';
 
 
 
-const Column = ({ boardId, position, borderColor, columnText, handleDelete, handleBoardEdit, color, setColumns,parentRef }) => {
+const Column = ({ boardId, position, borderColor, columnText, handleDelete, handleBoardEdit, color, setColumns }) => {
   const [rowCount, setRowCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -15,35 +15,15 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
   const [columnEditID, setColumnEditID] = useState(null);
   const [columnId, setColumnId] = useState(null)
   const [columnEditText, setColumnEditText] = useState('')
-  // const [isEditing, setIsEditing] = useState(false);
   const [selectedTask, setSelectedTask] = useState()
   const [showPicker, setShowPicker] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [tasks, setTasks] = useState([]);
-  const [tags, setTags] = useState([])
-  // const parentRef = useRef(null);
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (parentRef.current && !parentRef.current.contains(event.target)) {
-  //       setIsSettingOpen(false);
-  //     }
-  //   };
-
-  //   document.addEventListener('mousedown', handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, []);
-
+  
   useEffect(() => {
     AXIOS.get(`/board/${boardId}/tasks`)
       .then((res) => {
-        console.log('task haee ke az board get kardam')
-        console.log(res.data.data)
         setTasks(res.data.data)
-        // setTags(res.data.data.taskTags)
       })
       .catch(error => console.log(error))
   }, [])
@@ -58,13 +38,11 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
   }
 
   const addRow = () => {
-    setRowCount(rowCount + 1);
-    // setIsSettingOpen(false);
+    setRowCount((preRowCount)=>preRowCount + 1);
   };
 
 
   const updateEditData = () => {
-    // setIsEditing(true);
     setColumnEditID(boardId);
     setColumnEditText(columnText);
     setIsSettingOpen(false);
@@ -83,7 +61,6 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
     setColumnEditID(null);
     setColumnEditText("");
     setIsSettingHovered(true);
-    // setIsEditing(false);
   }
 
   const handleKeyDown = (e) => {
@@ -114,7 +91,7 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
     setShowPicker(false);
   }
 
-  const onEditTask = (taskId, newTaskName, newDescription) => {
+  const onEditTask = (taskId) => {
 
     tags?.map((tag) => {
       AXIOS.post('/tags', {
@@ -124,42 +101,19 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
       }).then(res => console.log(res))
         .catch(err => console.log(err))
     })
-    // console.log("salam")
-    // AXIOS.put(`/task/${taskId}`,{
-    //   name: newTaskName,
-    //   description: newDescription,
-    //   deadline: "2023-05-16T12:52:24.483+00:00"
-    // }).then((res)=>{
-    //   const editedTask= res.data.data;
-    //   console.log(editedTask)
-    //   setTasks((prevTasks)=>{
-    //    return prevTasks.map((task)=>{
-    //       if(task._id === taskId){
-    //         return editedTask
-    //       }else{
-    //         return task
-    //       }
-    //     })
-    //   })
-    // })
-
-    // .catch(err=>console.log(err))
 
   }
 
   const handleTaskEdit = (id) => {
     const clickedTask = tasks.find((task) => task._id === id)
     setSelectedTask(clickedTask)
-
-
   }
 
 
   return (
 
-    <div  className='relative ml-8' >
+    <div className='relative ml-8' >
       <div
-
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{ borderTop: `1px solid ${borderColor}` }}
@@ -251,20 +205,21 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
 
 
       <div className='mt-4'>
-        {console.log(tasks)}
         {tasks?.map((task) => (
-          <ColTask
-            key={task._id}
-            taskTitle={task.name}
-            // tags={task.taskTags}
-            taskId={task._id}
-            boardId={ boardId}
-            onIncrement={addRow}
-            onEditTask={onEditTask}
-            handleTaskEdit={handleTaskEdit}
-            selectedTask={selectedTask}
-            update={update}
-          />
+          <>
+            <ColTask
+              key={task._id}
+              taskTitle={task.name}
+              taskId={task._id}
+              boardId={boardId}
+              onIncrement={addRow} 
+              onEditTask={onEditTask}
+              handleTaskEdit={handleTaskEdit}
+              selectedTask={selectedTask}
+              update={update}
+            />
+          </>
+
         ))}
 
       </div>

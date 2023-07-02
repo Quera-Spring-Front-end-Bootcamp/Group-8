@@ -24,7 +24,7 @@ import { useEffect } from "react";
 import AXIOS from "../Task/ColumnView/axios.configs";
 import ColumnMoreModal from "../../Modal/ColumnMoreModal";
 import { createContext } from "react";
-// import { bo } from "@fullcalendar/core/internal-common";
+import { bo } from "@fullcalendar/core/internal-common";
 
 const ProjectsContext = createContext();
 
@@ -69,14 +69,7 @@ const Layout = ({ children }) => {
         
       })
   }
-  // const getProjectsByWorkspaceId =(workspaceId)=>{
-
-  //   AXIOS.get(`/projects/workspaces/${workspaceId}`)
-  //   .then(res=>{
-  //     console.log(res.data.data)
-  //   setProjects(res.data.data)})
-  //   .catch(err=>console.log(err))
-  // }
+ 
 
   const showNewWSModal = () => {
     if (showNewWS) {
@@ -93,7 +86,7 @@ const Layout = ({ children }) => {
     } else {
       setShowNewTask(true);
     }
-    // console.log(showNewTask);
+
   };
 
   const showShareProjectModal = () => {
@@ -135,8 +128,7 @@ const Layout = ({ children }) => {
     const updatedBoards=  projectBoards?.map((board) => {
         const boardColor=  localStorage.getItem(board._id)
         return {...board, borderColor: boardColor}
-            // const newColumn={...board, borderColor: boardColor}
-            // setBoards((prevColumns)=>[...prevColumns, newColumn])
+            
             })
       setBoards(updatedBoards)
       setProjectId(id)

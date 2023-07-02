@@ -1,9 +1,9 @@
 import { useState, useContext } from "react";
-import Tag from "../ColTask/Tag";
 import MakeTaskModal from "../../../../Modal/MakeTaskModal"
 import AXIOS from "../axios.configs";
 import { useEffect } from "react";
 import TagStructure from "../../../../Modal/NewTaskModalComponents/TagStructure";
+import { ActiveButtonsContext } from "../../../../../App";
 
 const ColTask = ({
   taskId,
@@ -22,69 +22,36 @@ const ColTask = ({
   update,
 }) => {
   const [show, setShow] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-  const [isClicked1, setIsClicked1] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [tags1, setTags1] = useState([]);
-const [newTags,setNewTags] = useState([])
+  const [project,setProject] = useState({})
+  const {  projectId } =
+    useContext(ActiveButtonsContext);
+
+    useEffect(()=>{
+      AXIOS.get(`/projects/${projectId}`)
+      .then(res=>{
+        console.log(res.data.data)
+        setProject(res.data.data)
+      })
+    },[])
+    
   useEffect(() => {
-    console.log(taskId)
     AXIOS.get(`/board/${boardId}/tasks`)
       .then(res => {
-        console.log(res.data.data)
-        const boards=res.data.data
-        const desiredBoard=boards.find((board)=>board._id === taskId)
-        console.log(desiredBoard.taskTags)
+        console.log(res)
+        const boards = res.data.data
+        const desiredBoard = boards.find((board) => board._id === taskId)
         setTags1(desiredBoard.taskTags)
       })
-    console.log('taghayee ke az MakeTaskModal mian')
-    console.log(tags)
-    setNewTags((tags)=>tags.filter((tag)=>tags.includes(tag._id)))
     setTags1(tags)
   }, [])
 
-  // useEffect(()=>{
-  //   AXIOS.get(`/tags/task/${taskId}`)
-  //   .then(res=>{
-  //     console.log(res.data.data)
-  //   const existedTags= res.data.data.tags
-  //   console.log(existedTags)
-  //   // const newTags =tags1.map((tag)=> existedTags.includes(!tag._id))
-  //   // (tag, index) => ({ ...tag, name: tag.tagName, index }));
-
-  //   // console.log(newTags)
-  //   // console.log('man ino mikham')
-  //   // console.log(newTags)
-  //   // {console.log(newTags)}
-  //   newTags?.map((tag)=>{
-  //     AXIOS.post('/tags',{
-  //       name: tag.name,
-  //       taskId: tag.taskId,
-  //       color: tag.color
-  //     }).then(res=>{
-  //       // console.log(res)
-  //       setTags1((prevTags)=>[...prevTags, res.data.data])
-  //     })
-  //     .catch(err=>console.log(err))
-  //   })
-  //   })
-  //   .catch(err=>console.log(err))
-  //   // console.log('tag hayii ke az createTag mian')
-  //   // console.log(tags1)
-  
-  //  },[tags1])
-  
-
-  const updateTaskTags= (newTags)=>{
+  const updateTaskTags = (newTags) => {
     setTags1(newTags)
     update(newTags)
   }
 
-  const taskDone = () => {
-    setIsClicked(true);
-    setIsClicked1(false);
-
-  }
 
   const handleClickTask = () => {
     setShowModal(true)
@@ -113,7 +80,8 @@ const [newTags,setNewTags] = useState([])
         <div className="flex flex-row items-center justify-between">
           <span className="font-medium text-[10px] leading-[15px] text-right text-[#534D60]  self-start">
 
-            {(projectName = "پروژه اول")}
+          {(projectName = project.name)}
+
           </span>
           <span
             className="w-[23px] h-[23px] bg-[#EAF562] flex justify-center items-center rounded-full order-0 grow-0 text-[#000000] text-[8px] leading-[12px] teaxt-right transition duration-500 ease-in-out"
@@ -123,11 +91,10 @@ const [newTags,setNewTags] = useState([])
           </span>
         </div>
         <h4
-          // onClick={handleEditTask} 
           className="flex flex-row items-baseLine gap-[10px]">
           <div className="font-medium text-[12px] leading-[18px] text text-right	text-[#0E0E0E] w-full cursor-pointer ">{taskTitle} </div>
 
-          <span onClick={taskDone} className="material-symbols-rounded text-[#BDC0C6] w-[12px] h-[12px]" style={{ fontSize: "15px" }}>Done</span>
+          <span className="material-symbols-rounded text-[#BDC0C6] w-[12px] h-[12px]" style={{ fontSize: "15px" }}>Done</span>
         </h4>
         <div className="flex flex-row items-baseLine justify-start gap-[27px]">
           <div className="flex flex-row items-center gap-[1px]">
@@ -148,33 +115,25 @@ const [newTags,setNewTags] = useState([])
             </span>
           </div>
         </div>
-        {tags1?.map((tag) => ( 
-          <div  key={tag._id} className="flex gap-1">
-          <TagStructure 
-          key={tag._id}
-          id={tag._id}
-          tagName={tag.name}
-          color={tag.color}
-          // handleDelete={handleDelete}
-          // handleColorChange={handleColorChange}
-          // showSettings={true}
-          // handleCompleteDelete={handleCompleteDelete}
-          // handleEdit={handleEdit}
-          />
+        {tags1?.map((tag) => (
+          <div key={tag._id} className="flex gap-1">
+            <TagStructure
+              key={tag._id}
+              id={tag._id}
+              tagName={tag.name}
+              color={tag.color}
+            />
 
-        </div>
-        ))}
-          <div
-            className="flex flex-row items-center gap-[5px] transition duration-1100"
-            style={{
-              marginBottom: show === true ? "0" : "-30px",
-              transitionProperty: "margin",
-            }}
-          >
           </div>
-
-       
-
+        ))}
+        <div
+          className="flex flex-row items-center gap-[5px] transition duration-1100"
+          style={{
+            marginBottom: show === true ? "0" : "-30px",
+            transitionProperty: "margin",
+          }}
+        >
+        </div>
         <span
           className="border-b border-solid border-[#EFF0F0] transition duration-900"
           style={{
@@ -203,17 +162,19 @@ const [newTags,setNewTags] = useState([])
         </div>
 
       </div>
-      {showModal && <MakeTaskModal
-        onClick={() => setShowModal(false)}
-        onIncrement={onIncrement}
-        taskId={taskId}
-        selectedTask={selectedTask}
-        onEditTask={onEditTask}
-        setShowModal={setShowModal}
-        tags={tags1}
-        boardId={boardId}
-        updateTaskTags={updateTaskTags}
-      />}
+      {showModal &&
+        <MakeTaskModal
+          onClick={() => setShowModal(false)}
+          onIncrement={onIncrement}
+          taskId={taskId}
+          selectedTask={selectedTask}
+          onEditTask={onEditTask}
+          setShowModal={setShowModal}
+          tags={tags1}
+          boardId={boardId}
+          updateTaskTags={updateTaskTags}
+          project={project}
+        />}
     </>
 
 

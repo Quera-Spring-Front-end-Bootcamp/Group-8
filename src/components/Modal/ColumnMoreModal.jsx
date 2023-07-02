@@ -1,5 +1,5 @@
 import AXIOS from "../Dashboard/Task/ColumnView/axios.configs";
-import { useState, createContext, useContext  } from "react";
+import { useState, createContext, useContext } from "react";
 import CreateProject from "./CreateProject";
 import { useEffect } from "react";
 
@@ -19,16 +19,6 @@ const ColumnMoreModal = ({ id, onDeleteWorkspace, projects }) => {
             })
     }
 
-// useEffect(()=>{
-//     console.log(workspaceId)
-// AXIOS.get(`/projects/workspaces/${workspaceId}`)
-//         .then(res=>{
-//           console.log(res.data.data)
-//        projects=res.data.data
-//         })
-//         .catch(err=>console.log(err))
-// },[])
-    
 
     return (
         <div className="flex flex-col items-start bg-white w-80 rounded-[8px] shadow-[0_4px_16px_0px_rgba(0,0,0,0.15)] absolute right-0 bottom-[50px] z-[100] cursor-pointer">
@@ -69,7 +59,7 @@ const ColumnMoreModal = ({ id, onDeleteWorkspace, projects }) => {
                 <CreateProject
                     onClick={() => setShowProject(false)}
                     id={id}
-                    
+
                 />}
         </div>
     );

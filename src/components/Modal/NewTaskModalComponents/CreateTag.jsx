@@ -1,13 +1,7 @@
-
-
-
 import React, { useState, useEffect, useRef } from 'react'
 import TagStructure from './TagStructure';
 import TagSettings from './TagSettings';
 import AXIOS from '../../Dashboard/Task/ColumnView/axios.configs';
-import { useContext } from 'react';
-
-
 
 const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, boardId }) => {
     const [tag, setTag] = useState("")
@@ -28,26 +22,16 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
         console.log(boardId)
         console.log(taskId)
         AXIOS.get(`/board/${boardId}/tasks`)
-          .then(res => {
-            console.log(res.data.data)
-            const boards=res.data.data
-            const desiredBoard=boards.find((board)=>board._id === taskId)
-            console.log(desiredBoard.taskTags)
-            setTags(desiredBoard.taskTags)
-          })
-        },[])
+            .then(res => {
+                console.log(res.data.data)
+                const boards = res.data.data
+                const desiredBoard = boards.find((board) => board._id === taskId)
+                console.log(desiredBoard.taskTags)
+                setTags(desiredBoard.taskTags)
+            })
+    }, [])
 
     useEffect(() => {
-        // AXIOS.get(`/tags/task/${taskId}`)
-        // .then(res=>{
-        //     console.log(res.data.data.tags)
-        //     setTags(res.data.data.tags)
-        // })
-        // getTags();
-        // setTags(tags)
-    //    console.log(tags1)
-    //     setTags(tags1)
-        
         inputRef.current.focus();
         const handleClickOutside = (event) => {
             if (parentRef.current && !parentRef.current.contains(event.target)) {
@@ -62,78 +46,6 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
 
     }, []);
 
-// useEffect(()=>{
-// //     console.log(tags)
-// //     console.log(tags1)
-// //     const newTags = tags.filter(tag => !tags1.some(tag1 => tag1._id === tag._id));
-// // console.log(newTags);
-
-// //     updateTags(newTags)
-// handleSaveTags()
-
-// },[newTags])
-
-
-    // const onAddTag=()=>{
-    //     AXIOS.post('/tags', {
-    //                 name: updatedTextTag,
-    //                 taskId: taskId,
-    //                 color: getRandomColor(),
-    //             }).then(res => {
-    //                 console.log(res.data.data.tag)
-    //                 const newTag = res.data.data.tag
-    //                 setTagName(res.data.data.tag.name)
-    //                 setTags((prevTags) => [...prevTags, newTag]);
-    //                 setTagsState((prevTags) => [...prevTags, newTag])
-    //             })
-    //                 .catch(err => console.log(err))
-    // }
-
-
-    // useEffect(() => {
-    //     setShowText(tags.length === 0 && deletedTags.length === 0 && updatedDeletedTag.length === 0 ? "هیچ تگی وجود ندارد" : "");
-    //     // handlePostTags(tags)
-    // }, [tags, deletedTags]);
-
-    // useEffect(() => {
-    //     if (enterPressed) {
-    //         if (!isEditting) {
-    //             const newTag = {
-    //                 _id: Date.now(),
-    //                 name: updatedTextTag,
-    //                 color: getRandomColor(),
-    //             };
-    //             // console.log(taskId)
-    //             // AXIOS.post('/tags', {
-    //             //     name: updatedTextTag,
-    //             //     taskId: taskId,
-    //             //     color: getRandomColor(),
-    //             // }).then(res => {
-    //             //     console.log(res.data.data.tag)
-    //             //     const newTag = res.data.data.tag
-    //             //     setTagName(res.data.data.tag.name)
-    //             //     setTags((prevTags) => [...prevTags, newTag]);
-    //             //     setTagsState((prevTags) => [...prevTags, newTag])
-    //             // })
-    //             //     .catch(err => console.log(err))
-    //             setTags((prevTags) => [...prevTags, newTag]);
-    //             setTag("");
-    //             setShowText("");
-    //             setEnterPressed(false);
-    //         } else {
-    //             setTags((prevTags) => [...prevTags, updatedDeletedTag])
-    //             setTag("");
-    //             setShowText("");
-    //             setEnterPressed(false);
-    //             setIsEditting(false);
-    //         }
-
-    //     }
-
-    // }, [enterPressed, isEditting, updatedTextTag, deletedTags]);
-
-    //    console.log(tagsState)
-
     const handleTagChange = (e) => {
         setTagName(e.target.value);
         setUpdatedTextTag(e.target.value)
@@ -145,13 +57,13 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                 name: e.target.value,
             };
             setUpdatedTag(newTag);
-            
+
         }
     }
 
     useEffect(() => {
         updateTags(tags, newTags);
-      }, [tags, newTags]);
+    }, [tags, newTags]);
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -161,35 +73,25 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                     name: updatedTextTag,
                     color: getRandomColor(),
                 };
-                
-                    setNewTags((prevTags)=>[...prevTags, newTag])
-                    const updatedTags=[...tags, newTag]
-                    console.log(updatedTags)
-                    updateTags(updatedTags, newTags)
-                    
-               
+
+                setNewTags((prevTags) => [...prevTags, newTag])
+                const updatedTags = [...tags, newTag]
+                console.log(updatedTags)
+                updateTags(updatedTags, newTags)
+
+
                 setTags((prevTags) => [...prevTags, newTag]);
             } else {
                 setTags((prevTags) => [...prevTags, updatedTag])
             }
-            
+
             setTagName("");
             setShowText("");
             setIsEditting(false);
         }
-       
-    };
-    // const getTags = () => {
-    //     console.log(taskId)
-    //     AXIOS.get(`/tags/task/${taskId}`)
-    //         .then(res => {
-    //             console.log(res.data.data.tags)
-    //             setTags(res.data.data.tags)
-    //         })
-    // }
 
-    
-    
+    };
+
     const getRandomColor = () => {
         const colors = ['#068DA9', '#F79327', '#FFE569', '#2CD3E1', '#ADE4DB', '#9CA777', '#7AA874', '#B8621B', '#FFACAC', '#BE6DB7', '#898121', '#F7A4A4', '#94B49F'];
         const randomIndex = Math.floor(Math.random() * colors.length);
@@ -199,8 +101,6 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
     const handleDelete = (id) => {
 
         const deletedTag = tags.find((tag) => tag._id === id);
-        console.log(deletedTag)
-        // useDeletedTag(deletedTag)
         setTags((prevTags) => prevTags.filter((tag) => tag._id !== id));
         setDeletedTags((prevDeletedTags) => [...prevDeletedTags, deletedTag]);
 
@@ -212,8 +112,7 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                 console.log(res)
             })
             .catch(err => console.log(err))
-        const deletedTag= tags.filter((tag)=> tag._id !== id)
-        console.log(deletedTag)
+        const deletedTag = tags.filter((tag) => tag._id !== id)
         updateTags(deletedTag)
         setDeletedTags((prevTags) =>
             prevTags.filter((prevTag) => prevTag._id !== id))
@@ -240,7 +139,6 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
         setIsEditting(true)
         tags.map((tag) => {
             if (tag._id === _id) {
-
                 setTagName(tag.name)
                 const editTag = {
                     id: tag._id,
@@ -249,7 +147,7 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                 }
 
                 setUpdatedTag(editTag)
-                const newTags= tags.filter((tag)=> tag._id !== _id)
+                const newTags = tags.filter((tag) => tag._id !== _id)
                 setTags(newTags)
                 setTaskTags(newTags)
             }
@@ -263,16 +161,13 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                     tagName: deletedTag.name,
                 }
                 setUpdatedTag(editTag)
-                const newTags= deletedTags.filter((tag)=> tag._id !== _id)
+                const newTags = deletedTags.filter((tag) => tag._id !== _id)
                 setDeletedTags(newTags)
 
             }
         });
     }
 
-    function handleSaveTags() {
-        updateTags(tags);
-    };
 
     return (
 
@@ -330,7 +225,7 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                                 handleDelete={handleDelete}
                                 handleColorChange={handleColorChange}
                                 handleEdit={handleEdit}
-                                onClick={()=>setTags((prevTags)=>[...prevTags, deletedTag])}
+                                onClick={() => setTags((prevTags) => [...prevTags, deletedTag])}
                             />
                         </div>
 
@@ -359,13 +254,4 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
 }
 
 export default CreateTag
-
-export const CreateTagWithContext = (props) => {
-    const [tagsState, setTagsState] = useState([]);
-    return (
-        <TagsContext.Provider value={{ tagsState, setTagsState }}>
-            <CreateTag {...props} />
-        </TagsContext.Provider>
-    );
-};
 

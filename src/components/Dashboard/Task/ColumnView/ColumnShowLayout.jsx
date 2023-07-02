@@ -14,14 +14,11 @@ function ColumnShowLayout() {
         tasks: [],
         position: 0,
     });
-    
     const [color, setColor] = useState(null);
     const [showPicker, setShowPicker] = useState(true);
     const parentRef = useRef(null);
-    const [tasks, setTasks] = useState([])
-    const [columnId,setColumnId] = useState("")
     const { boards, projectId } =
-    useContext(ActiveButtonsContext);
+        useContext(ActiveButtonsContext);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -37,28 +34,9 @@ function ColumnShowLayout() {
         };
     }, []);
 
-useEffect(()=>{
-        
-   setColumns(boards)
-   console.log(boards)
- 
-},[boards])
-
-    // const fetchColumns = (projectId) => {
-    //     AXIOS.get(`/board/${projectId}`)
-    //         .then((res) => {
-    //             // setTasks(res.data.data.tasks)
-    //             const fetchedColumns = res.data.data.map((column) => (
-    //                 {
-    //                     ...column,
-    //                     borderColor: localStorage.getItem(column._id)
-    //                 }
-    //             ));
-    //             console.log(fetchedColumns)
-    //             setColumns(fetchedColumns)
-    //         })
-    //         .catch(error => console.log(error))
-    // }
+    useEffect(() => {
+        setColumns(boards)
+    }, [boards])
 
     const handleChangeColor = (newColor) => {
         setColor(newColor.hex);
@@ -83,11 +61,9 @@ useEffect(()=>{
                 name: column.name,
                 projectId: projectId
             }).then(res => {
+                console.log(res)
                 const retrievedColumn = res.data.data
-                setColumnId(res.data.data._id)
-                console.log(retrievedColumn)
                 const newColumn = { ...retrievedColumn, borderColor: color }
-                console.log(newColumn)
                 localStorage.setItem(newColumn._id, color);
                 setColumns((prevColumns) => [...prevColumns, newColumn])
 
@@ -103,106 +79,101 @@ useEffect(()=>{
 
     const handleDelete = (id) => {
         AXIOS.delete(`/board/${id}`)
-        // const newColumns = columns.filter((column) => column.id !== id);
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
         setColumns((prevColumns) => prevColumns.filter((column) => column._id !== id))
     }
 
-   
-    // const handleTaskEdit=(editedtaskId)=>{
-    //     const clickedTask= tasks.find((task)=>task._id === editedtaskId)
-    //     setSelectedTask(clickedTask)
-    //     }
-     
-         function handleBoardEdit(id, newcolumnText) {
-     
-             AXIOS.put(`/board/${id}`,
-                 {
-                     name: newcolumnText
-                 }
-     
-             ).then((res) => {
-                 const response = res.data.data
-                 const editedColumn = { ...response, borderColor: localStorage.getItem(response._id) }
-                 console.log(editedColumn)
-                 setColumns((prevColumns) => {
-                     return prevColumns.map((column) => {
-                         if (column._id === id) {
-                             return editedColumn
-                         }
-                         return column;
-     
-                     })
-                 })
-             })
-                 .catch(error => console.log(error));
-     
-         }
+    function handleBoardEdit(id, newcolumnText) {
+
+        AXIOS.put(`/board/${id}`,
+            {
+                name: newcolumnText
+            }
+
+        ).then((res) => {
+            console.log(res)
+            const response = res.data.data
+            const editedColumn = { ...response, borderColor: localStorage.getItem(response._id) }
+            setColumns((prevColumns) => {
+                return prevColumns.map((column) => {
+                    if (column._id === id) {
+                        return editedColumn
+                    }
+                    return column;
+
+                })
+            })
+        })
+            .catch(error => console.log(error));
+
+    }
 
     return (
-        
-            <div ref={parentRef} className='flex flex-row '>
 
-                <div className="flex">
-                    {columns.map(({ _id, borderColor, name, position }) => (
-                        <Column
-                            boardId={_id}
-                            key={_id}
-                            borderColor={borderColor}
-                            position={position}
-                            columnText={name}
-                            handleDelete={handleDelete}
-                            handleBoardEdit={handleBoardEdit}
-                            setColor={setColor}
-                            color={color}
-                            setColumns={setColumns}
-                            
-                            parentRef={parentRef}
-                        />
-                    ))}
-                </div>
+        <div ref={parentRef} className='flex flex-row '>
 
-                {isClicked1 &&
-                    (
-                        <div onClick={changeStatus} className={`flex gap-8 shadow-md flex-row justify-between items-center py-2 px-3 mb-4 w-[250px] h-[41px] bg-white text-[#1E1E1E]-500 border-t rounded cursor-pointer relative z-1`}>
+            <div className="flex">
+                {columns.map(({ _id, borderColor, name, position }) => (
+                    <Column
+                        boardId={_id}
+                        key={_id}
+                        borderColor={borderColor}
+                        position={position}
+                        columnText={name}
+                        handleDelete={handleDelete}
+                        handleBoardEdit={handleBoardEdit}
+                        setColor={setColor}
+                        color={color}
+                        setColumns={setColumns}
 
-                            <div>
-                                ساختن ستون جدید
-
-                            </div>
-                            <span className="material-symbols-rounded">
-                                add
-                            </span>
-                        </div>
-                    )
-                }
-                {isClicked &&
-                    (<>
-                        <div className='flex relative shadow-md flex-row justify-between items-center gap-1 py-2 px-2 mb-4 w-[250px] h-[41px] bg-white  border-t rounded cursor-pointer'>
-
-                            <div className='absolute top-[45px] z-10 bg-white'>
-
-                                {showPicker && (<CirclePicker color={color} onChange={handleChangeColor} />)}
-                                <div className='mt-2' style={{ color }}> رنگ مورد نظر خود را انتخاب کنید </div>
-                            </div>
-
-                            <input
-                                type="text"
-                                placeholder='یک نام وارد کنید'
-                                onChange={handleColumnTextChange}
-                                className='outline-none'
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        addColumn();
-                                    }
-                                }} />
-                            <span onClick={addColumn} className="material-symbols-rounded">
-                                add
-                            </span>
-                        </div>
-                    </>)
-                }
+                        parentRef={parentRef}
+                    />
+                ))}
             </div>
-        
+
+            {isClicked1 &&
+                (
+                    <div onClick={changeStatus} className={`flex gap-8 shadow-md flex-row justify-between items-center py-2 px-3 mb-4 w-[250px] h-[41px] bg-white text-[#1E1E1E]-500 border-t rounded cursor-pointer relative z-1`}>
+
+                        <div>
+                            ساختن ستون جدید
+
+                        </div>
+                        <span className="material-symbols-rounded">
+                            add
+                        </span>
+                    </div>
+                )
+            }
+            {isClicked &&
+                (<>
+                    <div className='flex relative shadow-md flex-row justify-between items-center gap-1 py-2 px-2 mb-4 w-[250px] h-[41px] bg-white  border-t rounded cursor-pointer'>
+
+                        <div className='absolute top-[45px] z-10 bg-white'>
+
+                            {showPicker && (<CirclePicker color={color} onChange={handleChangeColor} />)}
+                            <div className='mt-2' style={{ color }}> رنگ مورد نظر خود را انتخاب کنید </div>
+                        </div>
+
+                        <input
+                            type="text"
+                            placeholder='یک نام وارد کنید'
+                            onChange={handleColumnTextChange}
+                            className='outline-none'
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    addColumn();
+                                }
+                            }} />
+                        <span onClick={addColumn} className="material-symbols-rounded">
+                            add
+                        </span>
+                    </div>
+                </>)
+            }
+        </div>
+
     );
 };
 
