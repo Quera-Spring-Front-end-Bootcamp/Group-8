@@ -22,6 +22,8 @@ function App() {
   const [activeListViewBtn, setActiveListViewBtn] = useState(false);
   const [activeColumnViewBtn, setActiveColumnViewBtn] = useState(false);
   const [activeCalendarBtn, setActiveCalendarBtn] = useState(false);
+  const [boards, setBoards]=useState([])
+  const [projectId,setProjectId] = useState("")
   return (
 
     <ActiveButtonsContext.Provider
@@ -31,7 +33,11 @@ function App() {
       activeColumnViewBtn,
       setActiveColumnViewBtn,
       activeCalendarBtn,
-      setActiveCalendarBtn
+      setActiveCalendarBtn,
+      boards, 
+      setBoards,
+      projectId,
+      setProjectId
     }}
   >
       <Route exact path="/" component={Login} />

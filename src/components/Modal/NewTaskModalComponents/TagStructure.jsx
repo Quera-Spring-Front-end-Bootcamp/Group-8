@@ -1,42 +1,28 @@
 import React from 'react'
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import TagSettings from './TagSettings';
 
-const TagStructure = ({ id, isEditting, showSettings, deletedTagId, value, handleDelete, color, handleColorChange, handleCompleteDelete, handleEdit }) => {
+const TagStructure = ({ id, showSettings, tagName, color, handleDelete, handleColorChange, handleCompleteDelete, handleEdit }) => {
 
     const [showTagSetting, setShowTagSetting] = useState(false);
     const [showTagSettingWindow, setShowTagSettingWindow] = useState(false);
-    const [clickedTagId, setClickedtagId] = useState("");
-    const [editText, setEditText] = useState(value);
+    const parentRef=useRef(null);
 
-    const parentRef = useRef(null);
 
-    const handleTagMouseEnter = () => {
-        setShowTagSetting(true);
-    };
-
-    const handleTagMouseLeave = () => {
-        setShowTagSetting(false)
-    };
-
-    const handleClickSetting = (id) => {
-        setClickedtagId(id)
+    const handleClickSetting = () => {
         setShowTagSettingWindow(prev => !prev);
-        handleColorChange(id);
-        handleEdit(deletedTagId, clickedTagId, isEditting);
     };
 
     const handleDeleteTag = (id) => {
         handleDelete(id);
     }
 
-
     return (
         <>
-            <div
-                onMouseEnter={handleTagMouseEnter}
-                onMouseLeave={handleTagMouseLeave}
-                className='px-2 py-2 gap-1 rounded w-20 h-full relative z-10'
+            <div ref={parentRef}
+                onMouseEnter={() => setShowTagSetting(true)}
+                onMouseLeave={() => setShowTagSetting(false)}
+                className='flex items-center justify-center w-14 h-8 text-[10px] rounded-tl-[10px] rounded-bl-[10px]'
                 style={{
                     backgroundColor: color
                 }}>
@@ -45,35 +31,35 @@ const TagStructure = ({ id, isEditting, showSettings, deletedTagId, value, handl
                     (
                         <>
                             {!showTagSetting &&
-                                <div>{editText}</div>
-                                // <input ref={parentRef} onChange={handleEditText} onKeyDown={handleKeyDown} style={{ backgroundColor: color }} className='w-full' value={editText} />
+                                <div>{tagName}</div>
+
                             }
                             {showTagSetting &&
                                 <div className='flex justify-between '>
                                     <span onClick={() => handleDeleteTag(id)} className="material-symbols-rounded cursor-pointer">
                                         close
                                     </span>
-                                    <span onClick={() => handleClickSetting(id)} className="material-symbols-rounded cursor-pointer">
+                                    <span onClick={handleClickSetting} className="material-symbols-rounded cursor-pointer">
                                         more_horiz
                                     </span>
                                 </div>}
                         </>
 
-                    ) : (
-                        <div>{editText}</div>
-
-                        // <input ref={parentRef} onChange={handleEditText} onKeyDown={handleKeyDown} style={{ backgroundColor: color }} className='w-full' value={editText} />
-                    )}
-
-
+                    )
+                    : (
+                        <div>{tagName}</div>
+                    )
+                }
 
 
-
-
-
-                {showTagSettingWindow && <TagSettings value={editText} handleColorChange={handleColorChange} clickedTagId={clickedTagId} handleCompleteDelete={handleCompleteDelete} handleEdit={handleEdit} />}
             </div>
-
+            {showTagSettingWindow &&
+                <TagSettings
+                    id={id}
+                    handleColorChange={handleColorChange}
+                    handleCompleteDelete={handleCompleteDelete}
+                    handleEdit={handleEdit}
+                />}
 
         </>
 
