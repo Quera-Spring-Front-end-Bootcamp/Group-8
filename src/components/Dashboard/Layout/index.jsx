@@ -1,6 +1,5 @@
 import DropDown from "./SideMenu/DropDown";
 import Button from "../../Common/Button/Button";
-// import Button from "../../common/Button/Button";
 import Caption from "./SideMenu/SideMenuCaption/Caption";
 import SideMenuItem from "./SideMenu/SideMenuItem";
 import SideMenuInput from "./SideMenu/SideMenuInput";
@@ -25,6 +24,7 @@ import { useEffect } from "react";
 import AXIOS from "../Task/ColumnView/axios.configs";
 import ColumnMoreModal from "../../Modal/ColumnMoreModal";
 import { createContext } from "react";
+// import { bo } from "@fullcalendar/core/internal-common";
 
 const ProjectsContext = createContext();
 
@@ -128,9 +128,17 @@ const Layout = ({ children }) => {
   }
 
   const handleClickOnProject=(id)=>{
-    AXIOS.get(`/board/${id}`).then(res=>{
+    AXIOS.get(`/board/${id}`)
+    .then((res)=>{
       console.log(res.data.data)
-      setBoards(res.data.data)
+      const projectBoards= res.data.data
+    const updatedBoards=  projectBoards?.map((board) => {
+        const boardColor=  localStorage.getItem(board._id)
+        return {...board, borderColor: boardColor}
+            // const newColumn={...board, borderColor: boardColor}
+            // setBoards((prevColumns)=>[...prevColumns, newColumn])
+            })
+      setBoards(updatedBoards)
       setProjectId(id)
     })
     setShowModalProjectsMenu(true)

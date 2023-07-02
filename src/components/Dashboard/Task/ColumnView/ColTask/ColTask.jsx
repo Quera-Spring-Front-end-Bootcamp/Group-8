@@ -7,6 +7,7 @@ import TagStructure from "../../../../Modal/NewTaskModalComponents/TagStructure"
 
 const ColTask = ({
   taskId,
+  boardId,
   imgSrc,
   projectName,
   userName,
@@ -27,53 +28,55 @@ const ColTask = ({
   const [tags1, setTags1] = useState([]);
 const [newTags,setNewTags] = useState([])
   useEffect(() => {
-    // console.log(taskId)
-    // AXIOS.get(`/tags/task/${taskId}`)
-    //   .then(res => {
-    //     console.log(res.data.data.tags)
-    //     setTags1(res.data.data.tags)
-    //   })
+    console.log(taskId)
+    AXIOS.get(`/board/${boardId}/tasks`)
+      .then(res => {
+        console.log(res.data.data)
+        const boards=res.data.data
+        const desiredBoard=boards.find((board)=>board._id === taskId)
+        console.log(desiredBoard.taskTags)
+        setTags1(desiredBoard.taskTags)
+      })
     console.log('taghayee ke az MakeTaskModal mian')
     console.log(tags)
     setNewTags((tags)=>tags.filter((tag)=>tags.includes(tag._id)))
     setTags1(tags)
   }, [])
 
-  useEffect(()=>{
-    AXIOS.get(`/tags/task/${taskId}`)
-    .then(res=>{
-      console.log(res)
-    const existedTags= res.data.data.tags
-    console.log(existedTags)
-    // const newTags =tags1.map((tag)=> existedTags.includes(!tag._id)
-    // (tag, index) => ({ ...tag, name: tag.tagName, index }));
+  // useEffect(()=>{
+  //   AXIOS.get(`/tags/task/${taskId}`)
+  //   .then(res=>{
+  //     console.log(res.data.data)
+  //   const existedTags= res.data.data.tags
+  //   console.log(existedTags)
+  //   // const newTags =tags1.map((tag)=> existedTags.includes(!tag._id))
+  //   // (tag, index) => ({ ...tag, name: tag.tagName, index }));
 
-    // console.log(newTags)
-    console.log('man ino mikham')
-    console.log(newTags)
-    newTags?.map((tag)=>{
-      AXIOS.post('/tags',{
-        name: tag.name,
-        taskId: tag.taskId,
-        color: tag.color
-      }).then(res=>{
-        console.log(res)
-        setTags1((prevTags)=>[...prevTags, res.data.data])
-      })
-      .catch(err=>console.log(err))
-    })
-    })
-    .catch(err=>console.log(err))
-    console.log('tag hayii ke az createTag mian')
-    console.log(tags1)
+  //   // console.log(newTags)
+  //   // console.log('man ino mikham')
+  //   // console.log(newTags)
+  //   // {console.log(newTags)}
+  //   newTags?.map((tag)=>{
+  //     AXIOS.post('/tags',{
+  //       name: tag.name,
+  //       taskId: tag.taskId,
+  //       color: tag.color
+  //     }).then(res=>{
+  //       // console.log(res)
+  //       setTags1((prevTags)=>[...prevTags, res.data.data])
+  //     })
+  //     .catch(err=>console.log(err))
+  //   })
+  //   })
+  //   .catch(err=>console.log(err))
+  //   // console.log('tag hayii ke az createTag mian')
+  //   // console.log(tags1)
   
-   },[tags1])
+  //  },[tags1])
   
 
   const updateTaskTags= (newTags)=>{
     setTags1(newTags)
-    console.log('tag haee ke az createTag mian')
-    console.log(newTags)
     update(newTags)
   }
 
@@ -154,7 +157,7 @@ const [newTags,setNewTags] = useState([])
           color={tag.color}
           // handleDelete={handleDelete}
           // handleColorChange={handleColorChange}
-          showSettings={true}
+          // showSettings={true}
           // handleCompleteDelete={handleCompleteDelete}
           // handleEdit={handleEdit}
           />
@@ -207,7 +210,8 @@ const [newTags,setNewTags] = useState([])
         selectedTask={selectedTask}
         onEditTask={onEditTask}
         setShowModal={setShowModal}
-        tags={tags}
+        tags={tags1}
+        boardId={boardId}
         updateTaskTags={updateTaskTags}
       />}
     </>

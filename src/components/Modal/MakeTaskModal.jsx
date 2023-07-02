@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Profile from "../../img/cute.png";
 import Priority from "./NewTaskModalComponents/Priority";
 import CreateTag from "../Modal/NewTaskModalComponents/CreateTag";
@@ -8,7 +8,7 @@ import AXIOS from "../Dashboard/Task/ColumnView/axios.configs";
 import "../../styles/modal.css"
 import Tag from '../Dashboard/Task/ColumnView/ColTask/Tag'
 import TagStructure from "./NewTaskModalComponents/TagStructure";
-
+import { ActiveButtonsContext } from "../../App";
 const MakeTaskModal = (props) => {
   const [isFlagOpen, setIsFlagOpen] = useState(false);
   const [isTagOpen, setIsTagOpen] = useState(false);
@@ -19,29 +19,46 @@ const MakeTaskModal = (props) => {
   const [updatedDescription, setUpdatedDescription] = useState(props.selectedTask ? props.selectedTask.description : '')
 const [postTags,setPostTags] = useState([])
   const [taskTags, setTaskTags] = useState([])
+  const [project,setProject] = useState({})
+  const {  projectId } =
+    useContext(ActiveButtonsContext);
+
  useEffect(()=>{
- AXIOS.get(`tags/task/${props.taskId}`).then(res=>{
-  console.log(res.data.data.tags)
-  const getTags= res.data.data.tags
-  const newGetTags = getTags.map(tag => ({ ...tag, name: tag.tagName }));
-  setTaskTags(newGetTags)
-})
- .catch(err=>console.log(err))
+  AXIOS.get(`/projects/${projectId}`)
+  .then(res=>{
+    console.log(res.data.data)
+    setProject(res.data.data)
+  })
+//  AXIOS.get(`tags/task/${props.taskId}`).then(res=>{
+//   console.log(res.data.data.tags)
+//   const getTags= res.data.data.tags
+//   const newGetTags = getTags.map(tag => ({ ...tag, name: tag.tagName }));
+//   setTaskTags(newGetTags)
+// })
+//  .catch(err=>console.log(err))
+setTaskTags(props.tags)
  },[])
  
-const updateTags = (newTags) => {
-  console.log(newTags)
-  setPostTags(newTags)
-  console.log(taskTags)
+const updateTags = (newTags, postTags) => {
+  setTaskTags(newTags)
+  setPostTags(postTags)
+//   console.log("salam")
+//   console.log(newTags)
+//   console.log(postTags)
+//  const desiredTags=newTags.filter(tag => !taskTags.find(existingTag => existingTag._id === tag._id));
+// //  setPostTags([...postTags, desiredTags])
+//   console.log(desiredTags)
+//   console.log(taskTags)
+  
   // const editedTags = taskTags.map(tag => {
     
-  const correspondingTag = taskTags.find(tag => {
-    console.log('tag._id:', tag._id);
-    console.log('newTags:', newTags);
-    return newTags.some(newTag => newTag._id === tag._id);
-  });
+  // const correspondingTag = taskTags.find(tag => {
+  //   console.log('tag._id:', tag._id);
+  //   console.log('newTags:', newTags);
+  //   return newTags?.some(newTag => newTag._id === tag._id);
+  // });
   
-  console.log('correspondingTag:', correspondingTag);
+  // console.log('correspondingTag:', correspondingTag);
   
     //   // return correspondingTag ? { ...newTag, ...correspondingTag } : newTag;
   // });
@@ -51,7 +68,7 @@ const updateTags = (newTags) => {
 //   setTaskTags(editedTags)
 //   return
 //  }
-    setTaskTags((preTaskTags)=>[...preTaskTags, ...newTags]);
+    // setTaskTags((preTaskTags)=>[...preTaskTags, ...newTags]);
   };
 
   // const { tagsState, setTagsState } = useContext(TagsContext)
@@ -147,7 +164,9 @@ const updateTags = (newTags) => {
       description: updatedDescription ,
       deadline: "2023-05-16T12:52:24.483+00:00"
     }).then(res=>{
-      console.log(res.data.data)
+      console.log(res.data.data)})
+      .catch(err=>console.log(err))
+      console.log(postTags)
       postTags.map((tag) => {
         AXIOS.post('/tags', {
           name:tag.name,
@@ -156,8 +175,8 @@ const updateTags = (newTags) => {
         }).then(res=>console.log(res))
         .catch(err=>console.log(err))
       })
-    })
-    .catch(err=>console.log(err))
+    
+    
     AXIOS.get(`tags/task/${props.taskId}`).then((res)=>{
       console.log(res.data.data)
       setTaskTags(res.data.data)})
@@ -265,7 +284,7 @@ const updateTags = (newTags) => {
             </span>
             <div onClick={handleTagClick} class="relative flex flex-col items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
               <span class=" text-[35px] material-symbols-rounded cursor-pointer">sell</span>
-              {isTagOpen && (<CreateTag taskId={props.taskId} setIsTagOpen={setIsTagOpen} updateTags={updateTags} tags1={taskTags} />)}
+              {isTagOpen && (<CreateTag taskId={props.taskId} setIsTagOpen={setIsTagOpen} updateTags={updateTags} tags1={taskTags} boardId={props.boardId} />)}
             </div>
             {console.log(taskTags)}
             {taskTags?.map((tag) => (
@@ -283,6 +302,7 @@ const updateTags = (newTags) => {
             {/* <button className="flex absolute p-3 w-[135px] h-[32px] text-[12px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer">
               ساختن تسک
             </button> */}
+            {console.log(props.selectedTask)}
             <Button children={"ساختن تسک"} onClick={props.selectedTask ? handleEditTask : onAddTask} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E]"} />
           </span>
         </footer>

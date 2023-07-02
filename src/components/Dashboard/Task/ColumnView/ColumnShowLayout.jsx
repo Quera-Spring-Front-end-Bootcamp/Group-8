@@ -3,7 +3,6 @@ import Column from './../../../Dashboard/Task/ColumnView/ColHeader/ColumnHeader'
 import { CirclePicker } from 'react-color';
 import AXIOS from './axios.configs';
 import { ActiveButtonsContext } from '../../../../App';
-// import {createProject, createWorkspace} from './axios.configs'
 
 function ColumnShowLayout() {
     const [isClicked, setIsClicked] = useState(false);
@@ -15,16 +14,15 @@ function ColumnShowLayout() {
         tasks: [],
         position: 0,
     });
-    // const [borderColor, setBorderColor] = useState('#000000');
-    // const [columnText, setColumnText] = useState('');
+    
     const [color, setColor] = useState(null);
     const [showPicker, setShowPicker] = useState(true);
     const parentRef = useRef(null);
     const [tasks, setTasks] = useState([])
-    // const [projectId, setProjectId] = useState(null);
     const [columnId,setColumnId] = useState("")
     const { boards, projectId } =
     useContext(ActiveButtonsContext);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (parentRef.current && !parentRef.current.contains(event.target)) {
@@ -39,59 +37,11 @@ function ColumnShowLayout() {
         };
     }, []);
 
-
-    // useEffect( () => {
-    //     const workspaceId= localStorage.getItem("workspaceId")
-    //     console.log(workspaceId)
-    //     AXIOS.get(`/workspace/${workspaceId}`)
-    //     .then(res=>{
-    //         console.log(res.data.data)
-    //         AXIOS.post('/projects',{
-    //             name: "Project Name3",
-    //             workspaceId:res.data.data._id
-    //         }).then(res=>{
-    //             console.log(res.data.data)
-    //             localStorage.setItem("projectId",res.data.data._id)
-    //                 // fetchColumns(res.data.data._id)
-    //         })
-    //     })
-
-
-        // AXIOS.post('/workspace/create', {
-        //     name: "testWorkspace9"
-        // })
-        //     .then(res => {
-        //         const workspaceId = res.data.data._id
-        //         console.log(workspaceId)
-        //         AXIOS.post('/projects', {
-        //             name: 'Project Name3',
-        //             workspaceId: workspaceId
-        //         }).then(res => {
-        //             const projectId = res.data.data._id
-        //             console.log(projectId)
-        //             setProjectId(projectId)
-        //             fetchColumns(projectId)
-        //         })
-        //     })
-    // }, [])
 useEffect(()=>{
-// const projectId= localStorage.getItem("پروژه من")
-// setProjectId(projectId)
-// console.log(projectId)
-// AXIOS.get(`/board/${projectId}`)
-//             .then((res) => {    
-//                 const fetchedColumns = res.data.data.map((column) => (
-//                     {
-//                         ...column,
-//                         borderColor: localStorage.getItem(column._id)
-//                     }
-//                 ));
-//                 console.log('borad haye get shode')
-//                 console.log(fetchedColumns)
-//                 setColumns(fetchedColumns)
-//             })
-//             .catch(error => console.log(error))
-setColumns(boards)
+        
+   setColumns(boards)
+   console.log(boards)
+ 
 },[boards])
 
     // const fetchColumns = (projectId) => {
@@ -193,7 +143,6 @@ setColumns(boards)
             <div ref={parentRef} className='flex flex-row '>
 
                 <div className="flex">
-
                     {columns.map(({ _id, borderColor, name, position }) => (
                         <Column
                             boardId={_id}
@@ -206,8 +155,8 @@ setColumns(boards)
                             setColor={setColor}
                             color={color}
                             setColumns={setColumns}
-                            tasks={tasks}
                             
+                            parentRef={parentRef}
                         />
                     ))}
                 </div>

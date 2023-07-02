@@ -9,7 +9,7 @@ import { useContext } from 'react';
 
 
 
-const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1 }) => {
+const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, boardId }) => {
     const [tag, setTag] = useState("")
     const [tags, setTags] = useState([]);
     const [showText, setShowText] = useState("هیچ تگی وجود ندارد");
@@ -19,12 +19,23 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1 }) 
     const [updatedTextTag, setUpdatedTextTag] = useState('');
     const [isEditting, setIsEditting] = useState(false);
     const [updatedTag, setUpdatedTag] = useState({});
-    const [showTags, setShowTags] = useState(false)
+    const [newTags, setNewTags] = useState([])
     const [tagName, setTagName] = useState("")
     const parentRef = useRef();
     const inputRef = useRef(null);
 
-
+    useEffect(() => {
+        console.log(boardId)
+        console.log(taskId)
+        AXIOS.get(`/board/${boardId}/tasks`)
+          .then(res => {
+            console.log(res.data.data)
+            const boards=res.data.data
+            const desiredBoard=boards.find((board)=>board._id === taskId)
+            console.log(desiredBoard.taskTags)
+            setTags(desiredBoard.taskTags)
+          })
+        },[])
 
     useEffect(() => {
         // AXIOS.get(`/tags/task/${taskId}`)
@@ -34,8 +45,8 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1 }) 
         // })
         // getTags();
         // setTags(tags)
-       console.log(tags1)
-        setTags(tags1)
+    //    console.log(tags1)
+    //     setTags(tags1)
         
         inputRef.current.focus();
         const handleClickOutside = (event) => {
@@ -51,14 +62,18 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1 }) 
 
     }, []);
 
-useEffect(()=>{
-    console.log(tags)
-    console.log(tags1)
-    const newTags = tags.filter(tag => !tags1.some(tag1 => tag1._id === tag._id));
-console.log(newTags);
+// useEffect(()=>{
+// //     console.log(tags)
+// //     console.log(tags1)
+// //     const newTags = tags.filter(tag => !tags1.some(tag1 => tag1._id === tag._id));
+// // console.log(newTags);
 
-    updateTags(newTags)
-},[tags, setTags])
+// //     updateTags(newTags)
+// handleSaveTags()
+
+// },[newTags])
+
+
     // const onAddTag=()=>{
     //     AXIOS.post('/tags', {
     //                 name: updatedTextTag,
@@ -134,6 +149,9 @@ console.log(newTags);
         }
     }
 
+    useEffect(() => {
+        updateTags(tags, newTags);
+      }, [tags, newTags]);
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -143,15 +161,23 @@ console.log(newTags);
                     name: updatedTextTag,
                     color: getRandomColor(),
                 };
+                
+                    setNewTags((prevTags)=>[...prevTags, newTag])
+                    const updatedTags=[...tags, newTag]
+                    console.log(updatedTags)
+                    updateTags(updatedTags, newTags)
+                    
+               
                 setTags((prevTags) => [...prevTags, newTag]);
             } else {
                 setTags((prevTags) => [...prevTags, updatedTag])
             }
+            
             setTagName("");
             setShowText("");
             setIsEditting(false);
         }
-
+       
     };
     // const getTags = () => {
     //     console.log(taskId)
@@ -186,7 +212,9 @@ console.log(newTags);
                 console.log(res)
             })
             .catch(err => console.log(err))
-        // getTags()
+        const deletedTag= tags.filter((tag)=> tag._id !== id)
+        console.log(deletedTag)
+        updateTags(deletedTag)
         setDeletedTags((prevTags) =>
             prevTags.filter((prevTag) => prevTag._id !== id))
         setTags((prevTags) =>
@@ -242,9 +270,9 @@ console.log(newTags);
         });
     }
 
-    // function handleSaveTags() {
-    //     updateTags(tags);
-    // };
+    function handleSaveTags() {
+        updateTags(tags);
+    };
 
     return (
 

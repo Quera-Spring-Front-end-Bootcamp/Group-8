@@ -7,7 +7,7 @@ import MakeTaskModal from '../../../../Modal/MakeTaskModal';
 
 
 
-const Column = ({boardId, position, borderColor, columnText, handleDelete, handleBoardEdit, color, setColor, setColumns }) => {
+const Column = ({ boardId, position, borderColor, columnText, handleDelete, handleBoardEdit, color, setColumns,parentRef }) => {
   const [rowCount, setRowCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -16,43 +16,43 @@ const Column = ({boardId, position, borderColor, columnText, handleDelete, handl
   const [columnId, setColumnId] = useState(null)
   const [columnEditText, setColumnEditText] = useState('')
   // const [isEditing, setIsEditing] = useState(false);
-  const [selectedTask,setSelectedTask] = useState()
+  const [selectedTask, setSelectedTask] = useState()
   const [showPicker, setShowPicker] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [tasks, setTasks] = useState([]);
-  const [tags,setTags] = useState([])
-  const parentRef = useRef(null);
+  const [tags, setTags] = useState([])
+  // const parentRef = useRef(null);
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (parentRef.current && !parentRef.current.contains(event.target)) {
+  //       setIsSettingOpen(false);
+  //     }
+  //   };
+
+  //   document.addEventListener('mousedown', handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (parentRef.current && !parentRef.current.contains(event.target)) {
-        setIsSettingOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-useEffect(()=>{
-AXIOS.get(`/board/${boardId}/tasks`)
-.then((res)=>{
-  console.log('task haee ke get shodan')
-  console.log(res.data.data)
-  setTasks(res.data.data)
-  setTags(res.data.data.taskTags)
-})
-.catch(error => console.log(error))
-},[])
+    AXIOS.get(`/board/${boardId}/tasks`)
+      .then((res) => {
+        console.log('task haee ke az board get kardam')
+        console.log(res.data.data)
+        setTasks(res.data.data)
+        // setTags(res.data.data.taskTags)
+      })
+      .catch(error => console.log(error))
+  }, [])
 
 
-const update= (newTags)=>{
-  console.log('tag hayee ke az ColTask mian')
-  console.log(newTags)
-}
+  const update = (newTags) => {
+    console.log('tag hayee ke az ColTask mian')
+    console.log(newTags)
+  }
   const handleEvent = () => {
     setIsSettingOpen(false);
   }
@@ -114,15 +114,15 @@ const update= (newTags)=>{
     setShowPicker(false);
   }
 
-  const onEditTask= (taskId, newTaskName, newDescription)=>{
-    
+  const onEditTask = (taskId, newTaskName, newDescription) => {
+
     tags?.map((tag) => {
       AXIOS.post('/tags', {
-        name:tag.name,
+        name: tag.name,
         taskId: taskId,
         color: tag.color
-      }).then(res=>console.log(res))
-      .catch(err=>console.log(err))
+      }).then(res => console.log(res))
+        .catch(err => console.log(err))
     })
     // console.log("salam")
     // AXIOS.put(`/task/${taskId}`,{
@@ -142,22 +142,22 @@ const update= (newTags)=>{
     //     })
     //   })
     // })
-    
+
     // .catch(err=>console.log(err))
-    
+
   }
 
-const handleTaskEdit=(id)=>{
-   const clickedTask= tasks.find((task)=>task._id ===id)
-   setSelectedTask(clickedTask)
-   
-   
-   }
+  const handleTaskEdit = (id) => {
+    const clickedTask = tasks.find((task) => task._id === id)
+    setSelectedTask(clickedTask)
 
-    
+
+  }
+
+
   return (
 
-    <div ref={parentRef} className='relative ml-8' >
+    <div  className='relative ml-8' >
       <div
 
         onMouseEnter={() => setIsHovered(true)}
@@ -224,15 +224,15 @@ const handleTaskEdit=(id)=>{
                 </span>
                 <p>آرشیو تمام تسک‌ها</p>
               </div>
-              <div onClick={() => handleDelete(id)} className='flex items-center gap-2'>
+              <div onClick={() => handleDelete(boardId)} className='flex items-center gap-2'>
                 <span className="material-symbols-rounded">
                   delete
                 </span>
                 <p>حذف ستون</p>
               </div>
-              <div onClick={() => onChangeColor(id)} className='flex items-center gap-2'>
-                <span className="material-symbols-rounded">
-                  delete
+              <div onClick={() => onChangeColor(boardId)} className='flex items-center gap-2'>
+                <span className="material-symbols-outlined">
+                  palette
                 </span>
                 <p>ویرایش رنگ ستون</p>
               </div>
@@ -251,17 +251,19 @@ const handleTaskEdit=(id)=>{
 
 
       <div className='mt-4'>
+        {console.log(tasks)}
         {tasks?.map((task) => (
-          <ColTask 
-          key={task._id} 
-          taskTitle={task.name} 
-          tags={task.taskTags} 
-          taskId={task._id} 
-          onIncrement={addRow} 
-          onEditTask={onEditTask} 
-          handleTaskEdit={handleTaskEdit} 
-          selectedTask={selectedTask} 
-          update={update}
+          <ColTask
+            key={task._id}
+            taskTitle={task.name}
+            // tags={task.taskTags}
+            taskId={task._id}
+            boardId={ boardId}
+            onIncrement={addRow}
+            onEditTask={onEditTask}
+            handleTaskEdit={handleTaskEdit}
+            selectedTask={selectedTask}
+            update={update}
           />
         ))}
 
