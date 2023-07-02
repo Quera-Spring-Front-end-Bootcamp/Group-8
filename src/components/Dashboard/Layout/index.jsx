@@ -147,7 +147,7 @@ const handleLogout=()=>{
             </ul>
             <ul className="menu pt-6">
               <a href="/profile" className=" no-underline">
-                <ProfileOption english="Zahra Moradi" persian="زهرا مرادی" />
+                <ProfileOption />
               </a>
               <Link to="/login">
                 <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
