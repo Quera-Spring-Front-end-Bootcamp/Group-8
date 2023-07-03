@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Profile from "../../img/cute.png";
 import Priority from "./NewTaskModalComponents/Priority";
 import CreateTag from "../Modal/NewTaskModalComponents/CreateTag";
-import Button from "../common/Button/Button";
+import Button from "../Common/Button/Button";
 import AXIOS from "../Dashboard/Task/ColumnView/axios.configs";
 import "../../styles/modal.css"
 import Tag from '../Dashboard/Task/ColumnView/ColTask/Tag'
@@ -13,8 +13,8 @@ const MakeTaskModal = (props) => {
   const [isTagOpen, setIsTagOpen] = useState(false);
   const [flagColor, setFlagColor] = useState("")
   const themeColor = localStorage.getItem("themeColor")
-    ? localStorage.getItem("themeColor")
-    const [taskName, setTaskName] = useState("");
+    ? localStorage.getItem("themeColor"):"";
+  const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [updatedTaskName, setUpdatedTaskName] = useState(props.selectedTask ? props.selectedTask.name : '')
   const [updatedDescription, setUpdatedDescription] = useState(props.selectedTask ? props.selectedTask.description : '')
