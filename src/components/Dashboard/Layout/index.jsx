@@ -24,7 +24,7 @@ import { useEffect } from "react";
 import AXIOS from "../Task/ColumnView/axios.configs";
 import ColumnMoreModal from "../../Modal/ColumnMoreModal";
 import { createContext } from "react";
-import { bo } from "@fullcalendar/core/internal-common";
+// import { bo } from "@fullcalendar/core/internal-common";
 
 const ProjectsContext = createContext();
 
