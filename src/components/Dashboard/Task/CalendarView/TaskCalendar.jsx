@@ -29,6 +29,9 @@ const TaskCalendar = () => {
   const [task, setTask] = useState("");
   const [priorityColor, setPriorityColor] = useState("salam");
   const [openPriority, setOpenPriority] = useState(false); 
+  const themeColor = localStorage.getItem("themeColor")
+  ? localStorage.getItem("themeColor")
+  : "#208D8E";
 
   const handleDateClick = (date) => {
     if (showModal) {
@@ -110,8 +113,8 @@ const TaskCalendar = () => {
             <div className="w-full flex flex-col justify-between h-full ">
               <div className="mt-auto flex justify-between w-full h-full relative -z-5">
                 <button
-                  className="flex justify-center items-center bg-[#208d8e] rounded-[3px] opacity-0 invisible group-hover:opacity-100 group-hover:visible w-[25px] h-[25px] p-[5px] absolute top-[73px] left-[2px] "
-                  style={{ zIndex: "100" }}
+                  className="flex justify-center items-center rounded-[3px] opacity-0 invisible group-hover:opacity-100 group-hover:visible w-[25px] h-[25px] p-[5px] absolute top-[73px] left-[2px] "
+                  style={{ zIndex: "100",backgroundColor:themeColor }}
                   onClick={() => {
                     setShowModal(true);
                     setPriorityColor("#C1C1C1");
@@ -164,11 +167,11 @@ const TaskCalendar = () => {
                     flag
                   </span>
                   {openPriority &&(<div><Dropdown /></div>)}
-                  <span className="mt-[5px] text-[#208D8E] text-[20px]">
+                  <span className="mt-[5px] text-[20px]"style={{color:themeColor}}>
                     {modalDate}
                   </span>
                 </div>
-                <button className="flex justify-center items-center ml-[20px] w-[125px] h-[32px] bg-[#208D8E] rounded-[4px] text-[#FFFFFF] text-[12px] text-right font-medium">
+                <button className="flex justify-center items-center ml-[20px] w-[125px] h-[32px] rounded-[4px] text-[#FFFFFF] text-[12px] text-right font-medium"style={{backgroundColor:themeColor}}>
                   ساختن تسک
                 </button>
               </div>

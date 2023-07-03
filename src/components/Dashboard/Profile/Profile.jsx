@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState} from "react";
 import PersonalInfoForm from "./PersonalInfoForm";
 import AccountInfoForm from "./AccoountInfoForm";
 import Settings from "./Settings";
+import Caption from "../Layout/SideMenu/SideMenuCaption/Caption";
 import { Link } from "react-router-dom";
 
 const Profile = () => {
@@ -10,18 +11,17 @@ const Profile = () => {
     accountInfo: false,
     settings: false,
   });
-
+ 
   const [profilePage, setProfilePage] = useState("personalInfo");
   const themeColor = localStorage.getItem("themeColor")
     ? localStorage.getItem("themeColor")
     : "#208D8E";
-
   return (
     <div className="flex flex-row">
       <div className="flex flex-col w-[340px] h-[100vh] bg-[#FAFBFC] pr-[50px] pt-[40px] border-l-[0.5px] border-[#AAAAAA] pl-[24px]">
-        <div className="font-extrabold bg-gradient-to-r from-[#118C80] from-0% to-[#4AB7D8] to-120% bg-clip-text text-[transparent] text-[32px] leading-[51px] text-right">
-          <a href="#">کوئرا تسک منیجر</a>
-        </div>
+        <Caption className="font-extrabold  bg-clip-text text-[transparent] text-[32px] leading-[51px] text-right">
+          <a href="/listView">کوئرا تسک منیجر</a>
+        </Caption>
         <Link to="/listView">
           <button
             className="flex flex-row items-center gap-[8px] w-[110px] h-[39px] pt-[4px]  pr-[7.5px] text-[20px] text-[#FFFFFF] rounded-[8px] mt-[79px]"

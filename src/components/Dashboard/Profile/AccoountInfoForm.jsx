@@ -1,36 +1,105 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import axios from "axios";
+import { baseUrl } from "../../../App";
 
+////////////////////////////////////////////////////////////////////
+const checkToken = (token, expireDate) => {
+  const date = Date.now();
+  if (date > expireDate && localStorage.getItem("refreshToken")) {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const token = refreshTokenFunction(refreshToken);
+    return token;
+  }
+  return token;
+};
+
+const refreshTokenFunction = async (refreshToken) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/auth/refreshtoken`,
+      refreshToken
+    );
+    localStorage.setItem("accessToken", response.data.data.accessToken);
+    localStorage.removeItem("tokenExpireDate");
+    return response.data.data.accessToken;
+  } catch (error) {
+    console.log(error);
+  }
+};
+//////////////////////////////////////////////////////////////////////
 const AccountInfoForm = () => {
-  const themeColor=localStorage.getItem('themeColor')?localStorage.getItem('themeColor'):"#208D8E";
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     trigger,
+    setValue,
   } = useForm();
 
-  const [passwordType,setPasswordType]=useState("password");
-
-  const onSubmit = (data) => {
+  const [passwordType, setPasswordType] = useState("password");
+  ////////////////////////////////////////////
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const token = localStorage.getItem("accessToken");
+      const jwtExpireDate = localStorage.getItem("tokenExpireDate");
+      const jwtToken = await checkToken(token, jwtExpireDate);
+      const userId = localStorage.getItem("userId");
+      const userData = {
+        email: data.email,
+        username: data.userName,
+      };
+      const response = await axios.put(`${baseUrl}/users/${userId}`, userData, {
+        headers: {
+          "x-auth-token": jwtToken,
+        },
+      });
+      console.log(response);
+      try {
+        const password = {
+          token: jwtToken,
+          password: data.password,
+        };
+        const result = await axios.post(
+          `${baseUrl}/auth/reset-password`,
+          password
+        );
+        console.log(result);
+        alert("اطلاعات حساب شما با موفقیت ثبت گردید.( به جز رمزعبورت)");
+      } catch (error) {
+        console.log(error);
+        alert("اطلاعات حساب شما با موفقیت ثبت گردید.( به جز رمزعبورت)");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("در ثبت اطلاعات مشکلی به وجود آمده است.");
+    }
+    setValue("email", "");
+    setValue("password", "");
+    setValue("userName", "");
   };
+  ////////////////////////////////////////////
 
   const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-  const passwordPattern =/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,}$/;
-  const userNamePattern = /^[a-zA-Z0-9_]+$/;
+  const passwordPattern =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,}$/;
+  const userNamePattern = /^[a-zA-Z0-9_.]+$/;
 
   const handleBlur = (fieldName) => {
     trigger(fieldName);
   };
 
-  const togglePassword=()=>{
-    if(passwordType==="password")
-    {
-     setPasswordType("text")
-     return;
+  const togglePassword = () => {
+    if (passwordType === "password") {
+      setPasswordType("text");
+      return;
     }
-    setPasswordType("password")
+    setPasswordType("password");
   };
 
   return (
@@ -97,14 +166,22 @@ const AccountInfoForm = () => {
                 borderColor: errors.password ? "red" : "",
               }}
             />
-            {passwordType==="password" &&(
-                <span className="material-symbols-rounded absolute top-[36px] right-[320px] text-[#BDC0C6] cursor-pointer" onClick={togglePassword}>visibility_off</span>
-            )
-            }
-            {passwordType==="text" &&(
-                <span className="material-symbols-rounded absolute top-[36px] right-[320px] text-[#BDC0C6] cursor-pointer" onClick={togglePassword}>visibility</span>
-            )
-            }
+            {passwordType === "password" && (
+              <span
+                className="material-symbols-rounded absolute top-[36px] right-[320px] text-[#BDC0C6] cursor-pointer"
+                onClick={togglePassword}
+              >
+                visibility_off
+              </span>
+            )}
+            {passwordType === "text" && (
+              <span
+                className="material-symbols-rounded absolute top-[36px] right-[320px] text-[#BDC0C6] cursor-pointer"
+                onClick={togglePassword}
+              >
+                visibility
+              </span>
+            )}
             {errors.password && (
               <span className="ml-[3px] text-[10px] text-[#D7284B] text-left">
                 رمزعبور باید شامل حداقل ۸ کاراکتر ،حروف کوچک وبزرگ، اعداد و نماد
@@ -138,15 +215,15 @@ const AccountInfoForm = () => {
             />
             {errors.userName && (
               <span className="ml-[3px] text-[10px] text-[#D7284B] text-left">
-                رمزعبور باید شامل حداقل ۸ کاراکتر ،حروف کوچک وبزرگ، اعداد و نماد
-                باشد.
+                نام کاربری شامل حروف بزرگ و کوچک انگلیسی و ( . و _ ) می باشد.
               </span>
             )}
           </div>
 
           <button
             type="submit"
-            className="flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] rounded-[6px] mt-[23px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] "style={{backgroundColor:themeColor}}
+            className="flex items-center justify-center w-[354px] h-[38px] pr-[12px] pl-[12px] pb-[8px] pt-[8px] rounded-[6px] mt-[23px] font-bold text-[14px] leading-[22px] text-right text-[#FFFFFF] "
+            style={{ backgroundColor: themeColor }}
           >
             ثبت تغییرات
           </button>

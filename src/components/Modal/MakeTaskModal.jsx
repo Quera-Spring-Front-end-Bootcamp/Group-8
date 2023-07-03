@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Profile from "../../img/cute.png";
 import Priority from "./NewTaskModalComponents/Priority";
 import CreateTag from "../Modal/NewTaskModalComponents/CreateTag";
-import Button from "../Common/Button/Button"
+import Button from "../common/Button/Button";
 import AXIOS from "../Dashboard/Task/ColumnView/axios.configs";
 import "../../styles/modal.css"
 import Tag from '../Dashboard/Task/ColumnView/ColTask/Tag'
@@ -11,8 +11,10 @@ import Tag from '../Dashboard/Task/ColumnView/ColTask/Tag'
 const MakeTaskModal = (props) => {
   const [isFlagOpen, setIsFlagOpen] = useState(false);
   const [isTagOpen, setIsTagOpen] = useState(false);
-  const [flagColor, setFlagColor] = useState("");
-  const [taskName, setTaskName] = useState("");
+  const [flagColor, setFlagColor] = useState("")
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [updatedTaskName, setUpdatedTaskName] = useState(props.selectedTask ? props.selectedTask.name : '')
   const [updatedDescription, setUpdatedDescription] = useState(props.selectedTask ? props.selectedTask.description : '')
@@ -27,7 +29,6 @@ const MakeTaskModal = (props) => {
     setTaskTags(newTags)
     setPostTags(postTags)
   };
-
   const handleChoosePriority = (color) => {
     setFlagColor(color)
   };
@@ -197,7 +198,7 @@ const MakeTaskModal = (props) => {
             </span>
           </div>
           <span>
-            <Button children={"ساختن تسک"} onClick={props.selectedTask ? handleEditTask : onAddTask} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E]"} />
+            <Button children={"ساختن تسک"} onClick={props.selectedTask ? handleEditTask : onAddTask} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E] rounded"} color={themeColor} />
           </span>
         </footer>
       </div>

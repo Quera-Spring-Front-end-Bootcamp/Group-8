@@ -2,6 +2,9 @@ import Profile from "../../img/cute.png";
 import ShareDropDown from "../Dashboard/Layout/Share/ShareDropDown";
 
 function ShareProjectModal(props) {
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
   const options = [
     {
       label: "دسترسی کامل",
@@ -36,31 +39,31 @@ function ShareProjectModal(props) {
     <div>
       <div className=" fixed left-[30%] top-[30%] w-[550px] h-[378px] rounded-[12px] border shadow-sm">
         <header className="flex justify-between w-[100%]">
-          <span class=" p-5 material-symbols-rounded" onClick={props.onClick}>close</span>
+          <span className=" p-5 material-symbols-rounded" onClick={props.onClick}>close</span>
           <h2 className=" py-3 justify-center items-center text-[20px] text-center font-medium">
             اشتراک گذاری ورک اسپیس
           </h2>
-          <span class=" text-[#FFFFFF] p-5 material-symbols-rounded">
+          <span className=" text-[#FFFFFF] p-5 material-symbols-rounded">
             arrow_back
           </span>
         </header>
 
         <div className="flex w-[100%] items-center justify-center m-5">
-          <div class="flex pl-10 w-[100%]">
+          <div className="flex pl-10 w-[100%]">
             <input
               type="email"
               id="website-admin"
-              class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="دعوت با ایمیل"
             />
-            <span class="inline-flex items-center px-3 text-sm text-[#FFFFFF] bg-[#208D8E] border border-r-0 border-gray-300 rounded-l-md cursor-pointer">
+            <span className="inline-flex items-center px-3 text-sm text-[#FFFFFF] border border-r-0 border-gray-300 rounded-l-md cursor-pointer"style={{backgroundColor:themeColor}}>
               ارسال
             </span>
           </div>
         </div>
         <div className="flex justify-between w-[100%]">
           <div className=" flex p-5 text-[14px]">
-            <span class=" pl-2 material-symbols-rounded">link</span>
+            <span className=" pl-2 material-symbols-rounded">link</span>
             لینک خصوصی
           </div>
           <div className=" py-3 ml-5">
@@ -75,7 +78,7 @@ function ShareProjectModal(props) {
         {/* Owner */}
         <div className="flex justify-between items-center w-[100%]">
           <div className=" flex items-center justify-center p-5 text-[14px]">
-            <span class=" flex pl-2 ">
+            <span className=" flex pl-2 ">
               <img
                 className=" w-[34px] h-[34px] rounded-full"
                 src={Profile}
@@ -95,7 +98,7 @@ function ShareProjectModal(props) {
 
         <div className="flex justify-between items-center w-[100%]">
           <div className=" flex items-center justify-center p-5 text-[14px]">
-            <span class=" flex pl-2 ">
+            <span className=" flex pl-2 ">
               <img
                 className=" w-[34px] h-[34px] rounded-full"
                 src={Profile}

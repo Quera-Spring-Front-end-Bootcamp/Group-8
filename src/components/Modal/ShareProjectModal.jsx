@@ -2,6 +2,9 @@ import Profile from "../../img/cute.png";
 import ShareDropDown from "../Dashboard/Layout/Share/ShareDropDown";
 
 function ShareProjectModal(props) {
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
   const options = [
     {
       label: "دسترسی کامل",
@@ -29,7 +32,7 @@ function ShareProjectModal(props) {
 
   return (
     <div>
-      <div className=" fixed left-[30%] top-[30%] w-[550px] h-[378px] rounded-[12px] border shadow-sm">
+      <div className=" fixed left-[30%] top-[30%] w-[550px] h-[378px] rounded-[12px] border shadow-sm bg-[#FFFFFF] z-50"style={{ boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)" }}>
         <header className="flex justify-between w-[100%]">
           <span class=" p-5 material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>close</span>
           <h2 className=" py-3 justify-center items-center text-[20px] text-center font-medium">
@@ -48,7 +51,7 @@ function ShareProjectModal(props) {
               class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="دعوت با ایمیل"
             />
-            <span class="inline-flex items-center px-3 text-sm text-[#FFFFFF] bg-[#208D8E] border border-r-0 border-gray-300 rounded-l-md cursor-pointer">
+            <span class="inline-flex items-center px-3 text-sm text-[#FFFFFF] bg-[#208D8E] border border-r-0 border-gray-300 rounded-l-md cursor-pointer"style={{backgroundColor:themeColor}}>
               ارسال
             </span>
           </div>
