@@ -14,10 +14,9 @@ getUser(userId);
       const response = await axios.get(
         `${baseUrl}/users/${userId}`
       );
-      console.log(response);
       const firstName=response.data.data.firstname;
       const lastname=response.data.data.lastname;
-      setCombineName(`${firstName[0]+lastname[0]}`);
+      setCombineName(`${firstName[0].toUpperCase()+lastname[0].toUpperCase()}`);
       setName(`${firstName} ${lastname}`)
     } catch (error) {
       console.log(error);
