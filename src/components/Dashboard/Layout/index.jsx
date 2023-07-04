@@ -463,7 +463,7 @@ const Layout = ({ children }) => {
             {children}
 
             {/* Elahe's New task button */}
-            <Button className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed" onClick={showNewTaskModal}>
+            <Button className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed z-10" onClick={showNewTaskModal}>
               <span class=" text-[#FFFFFF] material-symbols-rounded">
                 add_box
               </span>

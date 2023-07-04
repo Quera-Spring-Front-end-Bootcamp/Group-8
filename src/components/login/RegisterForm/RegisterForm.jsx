@@ -145,6 +145,7 @@ const RegisterForm = () => {
     // for terms
     dispatch({ type: e.target.name.toUpperCase(), payload: e.target.checked });
   };
+  
   const handleSubmit = (e) => {
     //for form
     e.preventDefault();

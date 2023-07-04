@@ -1,5 +1,5 @@
 import React from 'react'
-import DropdownItem from '../../Common/Dropdown/DropdownItem';
+import DropdownItem from '../../common/Dropdown/DropdownItem';
 
 const Priority = ({handleChoosePriority}) => {
     
@@ -15,4 +15,4 @@ const Priority = ({handleChoosePriority}) => {
     );
 }
 
-export default Priority
+export default Priority;
