@@ -164,7 +164,7 @@ const TaskCalendar = () => {
         title: task.name,
         start: task.deadline,
         allDay: true,
-        // color: priorityColor,
+        color: themeColor,
       });
     });
     console.log(tasks);
