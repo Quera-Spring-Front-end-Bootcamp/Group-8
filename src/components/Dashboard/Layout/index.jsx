@@ -45,12 +45,11 @@ const Layout = ({ children }) => {
   const [showProject, setShowProject] = useState(false);
   const [workspaceId, setWorkspaceId] = useState("");
   const parentRef = useRef(null);
-  const [projectId, setProjectId] = useState("");
   const {
     activeListViewBtn,
     activeColumnViewBtn,
     activeCalendarBtn,
-    setBoards,
+    setBoards,projectId, setProjectId
   } = useContext(ActiveButtonsContext);
   const [hover, setHover] = useState({
     listView: false,
@@ -238,7 +237,7 @@ const Layout = ({ children }) => {
                       <li
                         onClick={() => {
                           handleClickOnProject(project._id);
-                          setProjectId(project._id);
+                          
                         }}
                         className="flex justify-between cursor-pointer"
                         key={project._id}
