@@ -163,7 +163,7 @@ import Button from "../Common/Button/Button";
 
 const ModalNewWorkSpace = (props) => {
   
-  const [updateWorkspaceName,setUpdateWorkspaceName] = useState(props.workspaceName);
+  // const [updateWorkspaceName,setUpdateWorkspaceName] = useState(props.workspaceName);
   const [showError,setShowError] = useState(false)
 useEffect(()=>{
   AXIOS.get('/workspace/get-all').then(res=>{
@@ -186,12 +186,10 @@ useEffect(()=>{
   // }
 
  const handleShowColorPicker= ()=>{
-  if(props.workspaceName){
+ 
     props.buttonOnClick()
     props.onClick()
-  }else{
-    setShowError(true)
-  }
+  
  }
 
   return (
@@ -216,9 +214,8 @@ useEffect(()=>{
             <label htmlFor="input" className="text-[16px] font-normal py-2">نام ورک اسپیس</label>
             <input 
             type="text" 
-            value={updateWorkspaceName} 
             className="w-[435px] h-[40px] border rounded-[6px] my-2 outline-none p-2" 
-            onChange={(e)=>setUpdateWorkspaceName(e.target.value)} />
+            onChange={(e)=>props.setWorkspaceName(e.target.value)} />
           </div>
         </div>
 
