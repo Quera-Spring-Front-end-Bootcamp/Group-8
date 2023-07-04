@@ -120,6 +120,73 @@ const MakeTaskModal = (props) => {
   }
 
 
+
+  const handleChangeTaskName = (e) => {
+    if (props.selectedTask?.name) {
+      setUpdatedTaskName(e.target.value)
+    } else {
+      setTaskName(e.target.value)
+    }
+  }
+
+  const handleChangeTaskDescription = (e) => {
+    if (props.selectedTask?.description) {
+      setUpdatedDescription(e.target.value)
+    } else {
+      setDescription(e.target.value)
+    }
+  }
+
+  const onAddTask = () => {
+    if (taskName) {
+      AXIOS.post('/task', {
+        name: taskName,
+        description: description,
+        boardId: props.boardId
+      }).then(res => {
+        console.log(res)
+        const newTask = res.data.data;
+        props.setTasks((prevTasks) => [...prevTasks, newTask])
+        props.onIncrement();
+      })
+        .catch(err => console.log(err))
+      console.log(taskName)
+      props.setShowModal(false)
+    }
+  }
+
+  const handleEditTask = () => {
+    console.log("tooye edit task hastam daram put mikonam")
+    AXIOS.put(`task/${props.taskId}`, {
+      name: updatedTaskName,
+      description: updatedDescription,
+      deadline: "2023-05-16T12:52:24.483+00:00"
+    }).then(res => {
+      console.log(res.data.data)
+    })
+      .catch(err => console.log(err))
+    console.log(postTags)
+    postTags.map((tag) => {
+      AXIOS.post('/tags', {
+        name: tag.name,
+        taskId: props.taskId,
+        color: tag.color
+      }).then(res => console.log(res))
+        .catch(err => console.log(err))
+    })
+
+
+    AXIOS.get(`tags/task/${props.taskId}`).then((res) => {
+      console.log(res)
+      setTaskTags(res.data.data)
+    })
+
+    props.onEditTask(props.selectedTask._id, updatedTaskName, updatedDescription)
+    props.setShowModal(false)
+    props.updateTaskTags(taskTags)
+  }
+
+
   return (
 
     <div className="modal w-[1166px] h-[576px]">
@@ -128,6 +195,16 @@ const MakeTaskModal = (props) => {
         <header className="flex p-5 justify-between w-[100%]">
           <div className="flex items-center justify-center">
             <div className="w-[16px] h-[16px] bg-[#D9D9D9] mx-2"></div>
+            <div className=" justify-center text-[24px] font-medium items-center text-center ">
+              <input
+                type="text"
+                placeholder="عنوان تسک را وارد کنید"
+                value={props.selectedTask ? updatedTaskName : taskName}
+                onChange={handleChangeTaskName}
+                className="outline-none"
+                autoFocus
+              />
+            </div>
             <div className=" justify-center text-[24px] font-medium items-center text-center ">
               <input
                 type="text"
@@ -206,6 +283,7 @@ const MakeTaskModal = (props) => {
             </span>
           </div>
           <span>
+            <Button children={"ساختن تسک"} onClick={props.selectedTask ? handleEditTask : onAddTask} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E] rounded"} color={themeColor} />
             <Button children={"ساختن تسک"} onClick={props.selectedTask ? handleEditTask : onAddTask} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E] rounded"} color={themeColor} />
           </span>
         </footer>

@@ -177,3 +177,4 @@ const ColumnMoreModal = ({ id,getAllWorkspaces, onDeleteWorkspace, onClickSettin
 }
 
 export default ColumnMoreModal;
+export default ColumnMoreModal;
