@@ -1,47 +1,51 @@
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext, createContext } from 'react';
 import Column from './../../../Dashboard/Task/ColumnView/ColHeader/ColumnHeader';
 import { CirclePicker } from 'react-color';
+import AXIOS from './axios.configs';
+import { ActiveButtonsContext } from '../../../../App';
 
 function ColumnShowLayout() {
     const [isClicked, setIsClicked] = useState(false);
     const [isClicked1, setIsClicked1] = useState(true);
     const [columns, setColumns] = useState([]);
-    const [borderColor, setBorderColor] = useState('#000000');
-    const [columnText, setColumnText] = useState('');
+    const [column, setColumn] = useState({
+        name: "",
+        borderColor: "",
+        tasks: [],
+        position: 0,
+    });
     const [color, setColor] = useState(null);
     const [showPicker, setShowPicker] = useState(true);
     const parentRef = useRef(null);
-    
+    const { boards, projectId } =
+        useContext(ActiveButtonsContext);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-          if (parentRef.current && !parentRef.current.contains(event.target)) {
-            setShowPicker(false);
-            setIsClicked(false);
-            setIsClicked1(true)
-          }
+            if (parentRef.current && !parentRef.current.contains(event.target)) {
+                setShowPicker(false);
+                setIsClicked(false);
+                setIsClicked1(true)
+            }
         };
-    
         document.addEventListener('mousedown', handleClickOutside);
-    
         return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
-      }, []);
+    }, []);
 
+    useEffect(() => {
+        setColumns(boards)
+    }, [boards])
 
     const handleChangeColor = (newColor) => {
-
         setColor(newColor.hex);
-
-    };
-    const handleBorderColorChange = () => {
-        setBorderColor(color);
         setShowPicker(false)
     };
 
+
     const handleColumnTextChange = (event) => {
-        setColumnText(event.target.value);
+        setColumn({ ...column, name: event.target.value });
     };
 
     const changeStatus = () => {
@@ -52,61 +56,85 @@ function ColumnShowLayout() {
     }
 
     const addColumn = () => {
-        if (columnText.trim() !== ""){
+        if (column.name) {
+            AXIOS.post('/board', {
+                name: column.name,
+                projectId: projectId
+            }).then(res => {
+                console.log(res)
+                const retrievedColumn = res.data.data
+                const newColumn = { ...retrievedColumn, borderColor: color }
+                localStorage.setItem(newColumn._id, color);
+                setColumns((prevColumns) => [...prevColumns, newColumn])
+
+            }).catch(error => console.log(error))
+
             setShowPicker(false)
-        setColumns((prevColumns) => [
-            ...prevColumns,
-            { id: Date.now(), borderColor: color, columnText },
-        ]);
-        setIsClicked(false)
-        setIsClicked1(true)
-        setColumnText("")
+            setIsClicked(false)
+            setIsClicked1(true)
+
         }
-        
+
     };
 
     const handleDelete = (id) => {
-        const newColumns = columns.filter((column) => column.id !== id);
-        setColumns(newColumns)
+        AXIOS.delete(`/board/${id}`)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+        setColumns((prevColumns) => prevColumns.filter((column) => column._id !== id))
     }
 
-    const handleInputClick = () => {
-        if (!color) {
-          setShowPicker(true);
-        }
-      };
+    function handleBoardEdit(id, newcolumnText) {
 
-    function handleClickEdit(id, newcolumnEditText) {
-        let updatedColumn = columns.map((column) => {
-            if (column.id === id) {
-                return { ...column, columnText: newcolumnEditText };
+        AXIOS.put(`/board/${id}`,
+            {
+                name: newcolumnText
             }
-            return column
-        })
 
-        setColumns(updatedColumn);
+        ).then((res) => {
+            console.log(res)
+            const response = res.data.data
+            const editedColumn = { ...response, borderColor: localStorage.getItem(response._id) }
+            setColumns((prevColumns) => {
+                return prevColumns.map((column) => {
+                    if (column._id === id) {
+                        return editedColumn
+                    }
+                    return column;
+
+                })
+            })
+        })
+            .catch(error => console.log(error));
+
     }
 
     return (
+
         <div ref={parentRef} className='flex flex-row '>
-            
+
             <div className="flex">
-                
-                {columns.map(({ id, borderColor, columnText }) => (
+                {columns.map(({ _id, borderColor, name, position }) => (
                     <Column
-                        id={id}
-                        key={id}
+                        boardId={_id}
+                        key={_id}
                         borderColor={borderColor}
-                        columnText={columnText}
+                        position={position}
+                        columnText={name}
                         handleDelete={handleDelete}
-                        handleClickEdit={handleClickEdit}
+                        handleBoardEdit={handleBoardEdit}
+                        setColor={setColor}
+                        color={color}
+                        setColumns={setColumns}
+
+                        parentRef={parentRef}
                     />
                 ))}
             </div>
 
             {isClicked1 &&
                 (
-                    <div onClick={changeStatus} className={`flex gap-8 shadow-md flex-row justify-between items-center py-2 px-3 mb-4 w-[250px] h-[41px] bg-white text-[#1E1E1E]-500 border-t rounded cursor-pointer relative`}>
+                    <div onClick={changeStatus} className={`flex gap-8 shadow-md flex-row justify-between items-center py-2 px-3 mb-4 w-[250px] h-[41px] bg-white text-[#1E1E1E]-500 border-t rounded cursor-pointer relative z-1`}>
 
                         <div>
                             ساختن ستون جدید
@@ -122,24 +150,22 @@ function ColumnShowLayout() {
                 (<>
                     <div className='flex relative shadow-md flex-row justify-between items-center gap-1 py-2 px-2 mb-4 w-[250px] h-[41px] bg-white  border-t rounded cursor-pointer'>
 
-                        {/* <input type="color"  id={Math.random()} onChange={handleBorderColorChange} className='w-4 text-xs' /> */}
+                        <div className='absolute top-[45px] z-10 bg-white'>
 
-                        <div onClick={handleBorderColorChange} className='absolute top-[45px] z-10 bg-white'>
-
-                            {showPicker && (<CirclePicker color={color} onChange={handleChangeColor}  />)}
+                            {showPicker && (<CirclePicker color={color} onChange={handleChangeColor} />)}
                             <div className='mt-2' style={{ color }}> رنگ مورد نظر خود را انتخاب کنید </div>
                         </div>
 
-                        <input onClick={handleInputClick} 
-                                type="text" placeholder='یک نام وارد کنید' 
-                                id={Math.random()} 
-                                onChange={handleColumnTextChange} 
-                                className='outline-none'
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      addColumn();
-                                    }
-                                  }} />
+                        <input
+                            type="text"
+                            placeholder='یک نام وارد کنید'
+                            onChange={handleColumnTextChange}
+                            className='outline-none'
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    addColumn();
+                                }
+                            }} />
                         <span onClick={addColumn} className="material-symbols-rounded">
                             add
                         </span>

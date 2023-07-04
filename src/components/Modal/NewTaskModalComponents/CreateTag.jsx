@@ -1,13 +1,9 @@
-
-
 import React, { useState, useEffect, useRef } from 'react'
 import TagStructure from './TagStructure';
 import TagSettings from './TagSettings';
+import AXIOS from '../../Dashboard/Task/ColumnView/axios.configs';
 
-
-
-
-const CreateTag = () => {
+const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, boardId }) => {
     const [tag, setTag] = useState("")
     const [tags, setTags] = useState([]);
     const [showText, setShowText] = useState("هیچ تگی وجود ندارد");
@@ -16,61 +12,85 @@ const CreateTag = () => {
     const [selectedTagId, setSelectedTagId] = useState(null);
     const [updatedTextTag, setUpdatedTextTag] = useState('');
     const [isEditting, setIsEditting] = useState(false);
-    const [enterPressed, setEnterPressed] = useState(false);
-    const [updatedDeletedTag, setUpdatedDeletedTag] = useState({});
-
-
-
-    useEffect(() => {
-        setShowText(tags.length === 0 && deletedTags.length === 0 && updatedDeletedTag.lenght === 0 ? "هیچ تگی وجود ندارد" : "");
-    }, [tags, deletedTags]);
+    const [updatedTag, setUpdatedTag] = useState({});
+    const [newTags, setNewTags] = useState([])
+    const [tagName, setTagName] = useState("")
+    const parentRef = useRef();
+    const inputRef = useRef(null);
 
     useEffect(() => {
-        if (enterPressed) {
-            if (!isEditting) {
-                const newTag = {
-                    id: Date.now(),
-                    value: updatedTextTag,
-                    color: getRandomColor(),
-                };
-                setTags((prevTags) => [...prevTags, newTag]);
-                setTag("");
-                setShowText("");
-                setEnterPressed(false);
-            } else {
-                setTags((prevTags) => [...prevTags, updatedDeletedTag])
-                setTag("");
-                setShowText("");
-                setEnterPressed(false);
-                setIsEditting(false);
+        console.log(boardId)
+        console.log(taskId)
+        AXIOS.get(`/board/${boardId}/tasks`)
+            .then(res => {
+                console.log(res.data.data)
+                const boards = res.data.data
+                const desiredBoard = boards.find((board) => board._id === taskId)
+                console.log(desiredBoard.taskTags)
+                setTags(desiredBoard.taskTags)
+            })
+    }, [])
+
+    useEffect(() => {
+        inputRef.current.focus();
+        const handleClickOutside = (event) => {
+            if (parentRef.current && !parentRef.current.contains(event.target)) {
+                setIsTagOpen(false);
             }
-        }
-    }, [enterPressed, isEditting, updatedTextTag, deletedTags]);
+        };
 
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
 
-
+    }, []);
 
     const handleTagChange = (e) => {
-        setTag(e.target.value);
+        setTagName(e.target.value);
         setUpdatedTextTag(e.target.value)
         setShowText("برای ساختن تگ جدید اینتر بزنید")
 
-        if (updatedDeletedTag) {
-            const updatedTag = {
-                ...updatedDeletedTag,
-                value: e.target.value,
+        if (updatedTag) {
+            const newTag = {
+                ...updatedTag,
+                name: e.target.value,
             };
-            setUpdatedDeletedTag(updatedTag);
+            setUpdatedTag(newTag);
+
         }
     }
 
+    useEffect(() => {
+        updateTags(tags, newTags);
+    }, [tags, newTags]);
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            setEnterPressed(true);
-        }
-    };
+            if (!isEditting) {
+                const newTag = {
+                    _id: Date.now(),
+                    name: updatedTextTag,
+                    color: getRandomColor(),
+                };
 
+                setNewTags((prevTags) => [...prevTags, newTag])
+                const updatedTags = [...tags, newTag]
+                console.log(updatedTags)
+                updateTags(updatedTags, newTags)
+
+
+                setTags((prevTags) => [...prevTags, newTag]);
+            } else {
+                setTags((prevTags) => [...prevTags, updatedTag])
+            }
+
+            setTagName("");
+            setShowText("");
+            setIsEditting(false);
+        }
+
+    };
 
     const getRandomColor = () => {
         const colors = ['#068DA9', '#F79327', '#FFE569', '#2CD3E1', '#ADE4DB', '#9CA777', '#7AA874', '#B8621B', '#FFACAC', '#BE6DB7', '#898121', '#F7A4A4', '#94B49F'];
@@ -79,80 +99,86 @@ const CreateTag = () => {
     };
 
     const handleDelete = (id) => {
-        const deletedTag = tags.find((tag) => tag.id === id);
-        setTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
+
+        const deletedTag = tags.find((tag) => tag._id === id);
+        setTags((prevTags) => prevTags.filter((tag) => tag._id !== id));
         setDeletedTags((prevDeletedTags) => [...prevDeletedTags, deletedTag]);
+
     };
-    const handleCompleteDelete = (id, clickedTagId) => {
+    const handleCompleteDelete = (id) => {
+        console.log(id)
+        AXIOS.delete(`/tags/${id}`)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => console.log(err))
+        const deletedTag = tags.filter((tag) => tag._id !== id)
+        updateTags(deletedTag)
         setDeletedTags((prevTags) =>
-            prevTags.filter((prevTag) => prevTag.id !== id))
+            prevTags.filter((prevTag) => prevTag._id !== id))
         setTags((prevTags) =>
-            prevTags.filter((prevTag) => prevTag.id !== clickedTagId))
+            prevTags.filter((prevTag) => prevTag._id !== id))
     }
 
-    const handleClickSetting = (tagId) => {
-        setSelectedTagId(tagId);
-        setShowTagSettings(prev => !prev)
+    const handleClickSetting = (id) => {
+        setSelectedTagId(id);
+        setShowTagSettings(pre => !pre)
     };
 
-    const handleColorChange = (newColor, tagId, clickedTagId) => {
+    const handleColorChange = (newColor, id) => {
         setDeletedTags((prevTags) =>
-            prevTags.map((tag) =>
-                tag.id === tagId || tag.id === clickedTagId ? { ...tag, color: newColor } : tag
-            )
+            prevTags.map((tag) => tag._id === id ? { ...tag, color: newColor } : tag)
         );
         setTags((prevTags) =>
-            prevTags.map((tag) => tag.id === clickedTagId ? { ...tag, color: newColor } : tag))
+            prevTags.map((tag) => tag._id === id ? { ...tag, color: newColor } : tag))
     };
 
 
-    const handleEdit = (deletedTagId, clickedTagId, isEditting) => {
+    const handleEdit = (_id) => {
 
         setIsEditting(true)
         tags.map((tag) => {
-            if (tag.id === clickedTagId) {
-
-                setTag(tag.value)
+            if (tag._id === _id) {
+                setTagName(tag.name)
                 const editTag = {
-                    id: tag.id,
+                    id: tag._id,
                     color: tag.color,
-                    value: tag.value,
+                    name: tag.name,
                 }
 
-                setUpdatedDeletedTag(editTag)
-                const updatedTags = tags.filter((tag) => tag.id !== clickedTagId)
-
-                setTags(updatedTags)
+                setUpdatedTag(editTag)
+                const newTags = tags.filter((tag) => tag._id !== _id)
+                setTags(newTags)
+                setTaskTags(newTags)
             }
-
         });
-
-
         deletedTags.map((deletedTag) => {
-            if (deletedTag.id === deletedTagId) {
-                setTag(deletedTag.value);
+            if (deletedTag._id === _id) {
+                setTagName(deletedTag.name);
                 const editTag = {
-                    id: deletedTag.id,
+                    id: deletedTag._id,
                     color: deletedTag.color,
-                    value: deletedTag.value,
+                    tagName: deletedTag.name,
                 }
-                setUpdatedDeletedTag(editTag)
-                const updatedDeletedTags = deletedTags.filter((deletedTag) => deletedTag.id !== deletedTagId)
-                setDeletedTags(updatedDeletedTags)
-                return updatedDeletedTag
+                setUpdatedTag(editTag)
+                const newTags = deletedTags.filter((tag) => tag._id !== _id)
+                setDeletedTags(newTags)
+
             }
         });
     }
 
+
     return (
-        <div className="flex flex-col items-start bg-white w-80 rounded-[8px] shadow-[0_4px_16px_0px_rgba(0,0,0,0.15)] absolute right-0 bottom-[50px] z-[100]">
+
+        <div ref={parentRef} className="flex flex-col items-start bg-white w-80 rounded-[8px] shadow-[0_4px_16px_0px_rgba(0,0,0,0.15)] absolute right-0 bottom-[50px] z-[100]">
             <div className='flex flex-wrap gap-1 m-4 text-gray-600'>
-                {(tags.map((tag) =>
+                {tags?.map((tag) =>
 
                     <TagStructure
-                        key={tag.id}
-                        id={tag.id}
-                        value={tag.value}
+                        key={tag._id}
+                        id={tag._id}
+                        tagName={tag.name}
                         color={tag.color}
                         handleDelete={handleDelete}
                         handleColorChange={handleColorChange}
@@ -161,7 +187,8 @@ const CreateTag = () => {
                         handleEdit={handleEdit}
 
                     />
-                ))
+
+                )
                 }
             </div>
 
@@ -172,34 +199,48 @@ const CreateTag = () => {
                             search
                         </span>
                     </div>
-                    <input autoFocus value={tag} onChange={handleTagChange} onKeyDown={handleKeyPress} type="text" className="outline-none block w-full p-4 pr-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50" placeholder='جستجو یا ساختن تگ' />
+                    <input
+                        ref={inputRef}
+                        value={tagName}
+                        type="text"
+                        className="outline-none block w-full p-4 pr-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
+                        placeholder='جستجو یا ساختن تگ'
+                        onChange={handleTagChange}
+                        onKeyDown={handleKeyPress}
+                    />
                 </div>
             </div>
 
-            <div className='px-4 py-2 w-full m-auto min-h-[125px]'>{showText}
+            <div className='px-4 py-2 w-full m-auto min-h-[125px]'>
+                {showText}
                 {deletedTags.map((deletedTag) => (
 
-                    <div key={deletedTag.id} className='flex justify-between items-center w-full text-gray-600'>
-
+                    <div key={deletedTag._id} className='flex justify-between items-center w-full text-gray-600'>
                         <div className='mb-2'>
                             <TagStructure
                                 showSettings={false}
-                                id={deletedTag.id}
-                                value={deletedTag.value}
+                                id={deletedTag._id}
+                                tagName={deletedTag.name}
                                 color={deletedTag.color}
                                 handleDelete={handleDelete}
                                 handleColorChange={handleColorChange}
                                 handleEdit={handleEdit}
+                                onClick={() => setTags((prevTags) => [...prevTags, deletedTag])}
                             />
                         </div>
 
 
                         <div className='relative'>
-                            <span onClick={() => handleClickSetting(deletedTag.id)} className="material-symbols-rounded cursor-pointer">
+                            <span onClick={() => handleClickSetting(deletedTag._id)} className="material-symbols-rounded cursor-pointer">
                                 more_horiz
-
                             </span>
-                            {selectedTagId === deletedTag.id && showTagSettings && (<TagSettings deletedTagId={deletedTag.id} value={deletedTag.value} handleColorChange={handleColorChange} handleCompleteDelete={handleCompleteDelete} handleEdit={handleEdit} />)}
+                            {selectedTagId === deletedTag._id && showTagSettings && (
+                                <TagSettings
+                                    id={deletedTag._id}
+                                    handleColorChange={handleColorChange}
+                                    handleCompleteDelete={handleCompleteDelete}
+                                    handleEdit={handleEdit}
+                                />)}
                         </div>
 
                     </div>
@@ -213,3 +254,4 @@ const CreateTag = () => {
 }
 
 export default CreateTag
+

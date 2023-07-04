@@ -1,18 +1,35 @@
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Profile from "../../img/cute.png";
 import Priority from "./NewTaskModalComponents/Priority";
-import CreateTag from "./NewTaskModalComponents/CreateTag";
-import Button from "../common/Button/Button";
+import CreateTag from "../Modal/NewTaskModalComponents/CreateTag";
+import Button from "../Common/Button/Button";
+import AXIOS from "../Dashboard/Task/ColumnView/axios.configs";
+import "../../styles/modal.css"
+import Tag from '../Dashboard/Task/ColumnView/ColTask/Tag'
+
 const MakeTaskModal = (props) => {
   const [isFlagOpen, setIsFlagOpen] = useState(false);
   const [isTagOpen, setIsTagOpen] = useState(false);
   const [flagColor, setFlagColor] = useState("")
   const themeColor = localStorage.getItem("themeColor")
-    ? localStorage.getItem("themeColor")
-    : "#208D8E";
+    ? localStorage.getItem("themeColor"):"";
+  const [taskName, setTaskName] = useState("");
+  const [description, setDescription] = useState("");
+  const [updatedTaskName, setUpdatedTaskName] = useState(props.selectedTask ? props.selectedTask.name : '')
+  const [updatedDescription, setUpdatedDescription] = useState(props.selectedTask ? props.selectedTask.description : '')
+  const [postTags, setPostTags] = useState([])
+  const [taskTags, setTaskTags] = useState([])
+
+  useEffect(() => {
+    setTaskTags(props.tags)
+  }, [])
+
+  const updateTags = (newTags, postTags) => {
+    setTaskTags(newTags)
+    setPostTags(postTags)
+  };
   const handleChoosePriority = (color) => {
-       
     setFlagColor(color)
   };
 
@@ -24,15 +41,91 @@ const MakeTaskModal = (props) => {
   const handleTagClick = () => {
     setIsTagOpen(true)
   }
+
+  const handleChangeTaskName = (e) => {
+    if (props.selectedTask?.name) {
+      setUpdatedTaskName(e.target.value)
+    } else {
+      setTaskName(e.target.value)
+    }
+  }
+
+  const handleChangeTaskDescription = (e) => {
+    if (props.selectedTask?.description) {
+      setUpdatedDescription(e.target.value)
+    } else {
+      setDescription(e.target.value)
+    }
+  }
+
+  const onAddTask = () => {
+    if (taskName) {
+      AXIOS.post('/task', {
+        name: taskName,
+        description: description,
+        boardId: props.boardId
+      }).then(res => {
+        console.log(res)
+        const newTask = res.data.data;
+        props.setTasks((prevTasks) => [...prevTasks, newTask])
+        props.onIncrement();
+      })
+        .catch(err => console.log(err))
+      console.log(taskName)
+      props.setShowModal(false)
+    }
+  }
+
+  const handleEditTask = () => {
+    console.log("tooye edit task hastam daram put mikonam")
+    AXIOS.put(`task/${props.taskId}`, {
+      name: updatedTaskName,
+      description: updatedDescription,
+      deadline: "2023-05-16T12:52:24.483+00:00"
+    }).then(res => {
+      console.log(res.data.data)
+    })
+      .catch(err => console.log(err))
+    console.log(postTags)
+    postTags.map((tag) => {
+      AXIOS.post('/tags', {
+        name: tag.name,
+        taskId: props.taskId,
+        color: tag.color
+      }).then(res => console.log(res))
+        .catch(err => console.log(err))
+    })
+
+
+    AXIOS.get(`tags/task/${props.taskId}`).then((res) => {
+      console.log(res)
+      setTaskTags(res.data.data)
+    })
+
+    props.onEditTask(props.selectedTask._id, updatedTaskName, updatedDescription)
+    props.setShowModal(false)
+    props.updateTaskTags(taskTags)
+  }
+
+
   return (
-    <div>
-      <div className=" fixed items-center justify-center bg-[#FFFFFF] left-[10%] top-[10%] w-[1166px] h-[576px] rounded-[12px] border shadow-md z-50"style={{ boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)" }}>
+
+    <div className="modal">
+      <div
+      >
         <header className="flex p-5 justify-between w-[100%]">
           <div className="flex items-center justify-center">
             <div className="w-[16px] h-[16px] bg-[#D9D9D9] mx-2"></div>
-            <h2 className=" justify-center text-[24px] font-medium items-center text-center ">
-              عنوان تسک
-            </h2>
+            <div className=" justify-center text-[24px] font-medium items-center text-center ">
+              <input
+                type="text"
+                placeholder="عنوان تسک را وارد کنید"
+                value={props.selectedTask ? updatedTaskName : taskName}
+                onChange={handleChangeTaskName}
+                className="outline-none"
+                autoFocus
+              />
+            </div>
           </div>
           <span class="material-symbols-rounded text-slate-500 hover:text-black cursor-pointer" onClick={props.onClick}>
             close
@@ -44,7 +137,7 @@ const MakeTaskModal = (props) => {
           <span>
             <input
               type="text"
-              placeholder="پروژه اول"
+              placeholder={props.project? props.project.name: "پروژه 1"}
               className="w-[158px] h-[33px] border-2 rounded-sm mx-2"
             />
           </span>
@@ -60,6 +153,8 @@ const MakeTaskModal = (props) => {
             type="text"
             placeholder="توضیحاتی درمورد این تسک بنویسید."
             className="w-[90%] h-[212px] pt-5 mx-5 border-2 mt-5"
+            value={props.selectedTask ? updatedDescription : description}
+            onChange={handleChangeTaskDescription}
           />
         </div>
 
@@ -87,22 +182,28 @@ const MakeTaskModal = (props) => {
             </span>
             <div onClick={handleTagClick} class="relative flex flex-col items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
               <span class=" text-[35px] material-symbols-rounded cursor-pointer">sell</span>
-              {isTagOpen && (<CreateTag />)}
+              {isTagOpen && (<CreateTag taskId={props.taskId} setIsTagOpen={setIsTagOpen} updateTags={updateTags} tags1={taskTags} boardId={props.boardId} />)}
             </div>
-            
+            {taskTags?.map((tag) => (
+              <>
+                <div key={tag._id} className="flex items-center gap-2">
+                  <Tag tagName={tag.name} tagColor={tag.color} />  
+                </div>
+                
+              </>
+              
+            ))}
             <span class=" flex items-center justify-center w-[50px] h-[50px] text-center  text-[#C1C1C1]  ">
               <span class=" text-[35px] material-symbols-rounded">visibility</span>
             </span>
           </div>
           <span>
-            {/* <button className="flex absolute p-3 w-[135px] h-[32px] text-[12px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer">
-              ساختن تسک
-            </button> */}
-            <Button children={"ساختن تسک"} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E] rounded"} color={themeColor} />
+            <Button children={"ساختن تسک"} onClick={props.selectedTask ? handleEditTask : onAddTask} className={"absolute p-3 w-[135px] h-[32px] text-[14px] text-[#FFFFFF] bg-[#208D8E] rounded"} color={themeColor} />
           </span>
         </footer>
       </div>
     </div>
+
   );
 };
 

@@ -1,5 +1,5 @@
 import DropDown from "./SideMenu/DropDown";
-import Button from "../../common/Button/Button";
+import Button from "../../Common/Button/Button";
 import Caption from "./SideMenu/SideMenuCaption/Caption";
 import SideMenuItem from "./SideMenu/SideMenuItem";
 import SideMenuInput from "./SideMenu/SideMenuInput";
@@ -20,6 +20,13 @@ import { ActiveButtonsContext } from "../../../App";
 import CalendarTitle from "../Task/CalendarView/CalendarTitle";
 import { Link } from "react-router-dom";
 import "../../../styles/Layout.css";
+import { useEffect } from "react";
+import AXIOS from "../Task/ColumnView/axios.configs";
+import ColumnMoreModal from "../../Modal/ColumnMoreModal";
+import { createContext } from "react";
+// import { bo } from "@fullcalendar/core/internal-common";
+
+const ProjectsContext = createContext();
 
 const Layout = ({ children }) => {
   const [showFilter, setShowFilter] = useState(false);
@@ -28,6 +35,10 @@ const Layout = ({ children }) => {
   const [showNewWS, setShowNewWS] = useState(false);
   const [showPickColor, setShowPickColor] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [workspaces, setWorkspaces] = useState([]);
+  const [showSettings, setShowSettings] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [showModalProjectsMenu,setShowModalProjectsMenu] = useState(false)
   const [hover, setHover] = useState({
     listView: false,
     columnView: false,
@@ -39,6 +50,35 @@ const Layout = ({ children }) => {
     : "#208D8E";
   const { activeListViewBtn, activeColumnViewBtn, activeCalendarBtn } =
     useContext(ActiveButtonsContext);
+
+  useEffect(() => {
+    getAllWorkspaces();
+    
+  }, [])
+
+
+
+  useEffect(() => {
+    workspaces?.forEach((workspace) => {
+      AXIOS.get(`projects/workspaces/${workspace._id}`)
+        .then((res) => {
+          const workspaceProjects = res.data.data;
+          console.log(workspaceProjects)
+          setProjects(workspaceProjects);
+        })
+        .catch((err) => console.log(err));
+    });
+  }, [workspaces]);
+  
+  const getAllWorkspaces = () => {
+    AXIOS.get('/workspace/get-all')
+      .then(res => {
+        console.log(res.data.data)
+        setWorkspaces(res.data.data)
+        
+      })
+  }
+ 
 
   const showNewWSModal = () => {
     if (showNewWS) {
@@ -55,7 +95,7 @@ const Layout = ({ children }) => {
     } else {
       setShowNewTask(true);
     }
-    // console.log(showNewTask);
+
   };
 
   const showShareProjectModal = () => {
@@ -76,7 +116,7 @@ const Layout = ({ children }) => {
     // console.log(showFilter);
   };
 
-  const options = [
+  const options1 = [
     { label: "Option 1", value: "1" },
     { label: "Option 2", value: "2" },
     { label: "Option 3", value: "3" },
@@ -87,8 +127,30 @@ const handleLogout=()=>{
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("userId");
 }
+  const onDeleteWorkspace = (id) => {
+    setWorkspaces((prevWorkspaces) => {
+      prevWorkspaces?.filter((workspace) => workspace._id !== id)
+      getAllWorkspaces();
+    })
+  }
+
+  const handleClickOnProject=(id)=>{
+    AXIOS.get(`/board/${id}`)
+    .then((res)=>{
+      console.log(res.data.data)
+      const projectBoards= res.data.data
+    const updatedBoards=  projectBoards?.map((board) => {
+        const boardColor=  localStorage.getItem(board._id)
+        return {...board, borderColor: boardColor}
+            
+            })
+      setBoards(updatedBoards)
+      setProjectId(id)
+    })
+    setShowModalProjectsMenu(true)
+  }
   return (
-    <>
+    <ProjectsContext.Provider value={projects}>
       <div className="flex">
         <div className=" w-80 h-screen bg-[#FAFBFC] border border-[#AAAAAA] p-5 pt-8 relative">
           <div className="flex gap-x-4 items-center">
@@ -100,7 +162,7 @@ const handleLogout=()=>{
           <div className="menu pt-3">
             <DropDown
               label="ورک اسپیس ها"
-              Options={options}
+              Options={options1}
               className=" select h-9 w-[278px] items-center rounded-md bg-[#FAFBFC]  p-1 cursor-pointer"
             />
           </div>
@@ -122,9 +184,42 @@ const handleLogout=()=>{
               ساختن اسپیس جدید
             </Button>
           </div>
-          <nav className=" h-[68%] flex flex-col justify-between">
-            <ul className=" menu pt-6">
-              <SideMenuItem
+          <nav className="flex flex-col justify-between">
+            {/* <ul className=" menu pt-6"> */}
+            {workspaces?.map((workspace) => (
+              <>
+                <div key={workspace._id} className="flex justify-between align-center">
+                  <SideMenuItem
+                    className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
+                    itemClassName=" bg-[#71FDA9]"
+                    item={workspace.name}
+                    id={workspace._id}
+                    projects={projects}
+
+                  />
+                  <span onClick={() => setShowSettings(pre => !pre)} className="material-symbols-rounded cursor-pointer">
+                    more_horiz
+                  </span>
+                 
+
+                  {showSettings && <ColumnMoreModal id={workspace._id} onDeleteWorkspace={onDeleteWorkspace} projects={projects} />}
+                </div>
+                {projects?.map((project)=>(
+                  <div className="cursor-pointer" onClick={()=>handleClickOnProject(project._id)} key={project._id}>{project.name}</div>
+                 ))}
+                {/* {projects.map((project)=>(
+                <SideMenuItem className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
+                itemClassName=" bg-[#71FDA9]"
+                item={project.name}
+                key={project._id}/>
+              ))} */}
+              </>
+
+
+            ))}
+
+            {/* </ul> */}
+            {/* <SideMenuItem
                 className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
                 itemClassName=" bg-[#71FDA9]"
                 item="درس مدیریت پروژه"
@@ -143,8 +238,9 @@ const handleLogout=()=>{
                 className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
                 itemClassName=" bg-[#92FF07]"
                 item="درس طراحی الگوریتم"
-              ></SideMenuItem>
-            </ul>
+              ></SideMenuItem> */}
+
+
             <ul className="menu pt-6">
               <a href="/profile" className=" no-underline">
                 <ProfileOption />
@@ -176,8 +272,7 @@ const handleLogout=()=>{
                 <a
                   href="/listview"
                   className="flex  pb-5 text-[16px] px-3 text-gray-700"
-                  style={{
-                    color: activeListViewBtn ? themeColor : "",
+                  style={{color: activeListViewBtn ? themeColor : "",
                     borderBottom: activeListViewBtn
                       ? `2px solid ${themeColor}`
                       : "",
@@ -186,7 +281,7 @@ const handleLogout=()=>{
                       !hover.listView && !activeListViewBtn
                         ? " rgb(55 65 81)"
                         : themeColor,
-                  }}
+                    }}
                   onMouseEnter={() => setHover({ listView: true })}
                   onMouseLeave={() => setHover({ listView: false })}
                 >
@@ -201,8 +296,7 @@ const handleLogout=()=>{
                 <a
                   href="/columnview"
                   className=" flex pb-5 text-[16px] px-3  text-gray-700"
-                  style={{
-                    color: activeColumnViewBtn ? themeColor : "",
+                  style={{color: activeColumnViewBtn ? themeColor : "",
                     borderBottom: activeColumnViewBtn
                       ? `2px solid ${themeColor}`
                       : "",
@@ -211,7 +305,7 @@ const handleLogout=()=>{
                       !hover.columnView && !activeColumnViewBtn
                         ? " rgb(55 65 81)"
                         : themeColor,
-                  }}
+                    }}
                   onMouseEnter={() => setHover({ columnView: true })}
                   onMouseLeave={() => setHover({ columnView: false })}
                 >
@@ -226,8 +320,7 @@ const handleLogout=()=>{
                 <a
                   href="/calendar"
                   className=" flex  text-[16px] px-3 pb-5 text-gray-700 "
-                  style={{
-                    color: activeCalendarBtn ? themeColor : "",
+                  style={{color: activeCalendarBtn ? themeColor : "",
                     borderBottom: activeCalendarBtn
                       ? `2px solid ${themeColor}`
                       : "",
@@ -236,7 +329,7 @@ const handleLogout=()=>{
                       !hover.calendarView && !activeCalendarBtn
                         ? " rgb(55 65 81)"
                         : themeColor,
-                  }}
+                    }}
                   onMouseEnter={() => setHover({ calendarView: true })}
                   onMouseLeave={() => setHover({ calendarView: false })}
                 >
@@ -331,12 +424,14 @@ const handleLogout=()=>{
       {showFilter && (
         <FilterModal onClick={() => setShowFilter(false)}></FilterModal>
       )}
-      {false && <ModalProjectMenu></ModalProjectMenu>}
+      {showModalProjectsMenu && <ModalProjectMenu />}
       {false && <ModalTaskMenu></ModalTaskMenu>}
       {showNewWS && (
         <ModalNewWorkSpace
           onClick={() => setShowNewWS(false)}
           buttonOnClick={() => setShowPickColor(true)}
+          getAllWorkspaces={getAllWorkspaces}
+
         ></ModalNewWorkSpace>
       )}
       {showPickColor && (
@@ -356,7 +451,7 @@ const handleLogout=()=>{
       )}
       {false && <TaskDetails></TaskDetails>}
       {false && <PickDateModal></PickDateModal>}
-    </>
+    </ProjectsContext.Provider>
   );
 };
 
