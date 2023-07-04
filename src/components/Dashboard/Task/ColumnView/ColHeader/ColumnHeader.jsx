@@ -4,21 +4,15 @@ import Counter from './../../ColumnView/Counter/Counter';
 import AXIOS from '../axios.configs';
 import { CirclePicker } from 'react-color';
 import MakeTaskModal from '../../../../Modal/MakeTaskModal';
-import AXIOS from '../axios.configs';
-import { CirclePicker } from 'react-color';
-import MakeTaskModal from '../../../../Modal/MakeTaskModal';
 
 
 
-const Column = ({ boardId, position, borderColor, columnText, handleDelete, handleBoardEdit, color, setColumns }) => {
 const Column = ({ boardId, position, borderColor, columnText, handleDelete, handleBoardEdit, color, setColumns }) => {
   const [rowCount, setRowCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isSettingHovered, setIsSettingHovered] = useState(true)
-  const [isSettingHovered, setIsSettingHovered] = useState(true)
   const [columnEditID, setColumnEditID] = useState(null);
-  const [columnId, setColumnId] = useState(null)
   const [columnId, setColumnId] = useState(null)
   const [columnEditText, setColumnEditText] = useState('')
   const [selectedTask, setSelectedTask] = useState()
@@ -60,9 +54,6 @@ const getTasks= ()=>{
   }
 
 
-
-  const changeEditText = (e) => {
-    const newColumnEditText = e.target.value;
   const changeEditText = (e) => {
     const newColumnEditText = e.target.value;
     setColumnEditText(newColumnEditText)
@@ -71,16 +62,10 @@ const getTasks= ()=>{
   const handleClickDone = () => {
 
     handleBoardEdit(columnEditID, columnEditText)
-  const handleClickDone = () => {
-
-    handleBoardEdit(columnEditID, columnEditText)
     setColumnEditID(null);
     setColumnEditText("");
     setIsSettingHovered(true);
   }
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -132,11 +117,7 @@ const getTasks= ()=>{
   return (
 
     <div className='relative ml-8' >
-
-    <div className='relative ml-8' >
       <div
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{ borderTop: `1px solid ${borderColor}` }}
@@ -159,33 +140,11 @@ const getTasks= ()=>{
           </div>)}
 
 
-        {columnEditID === boardId ?
-          (
-            <>
-
-              <input type='text' autoFocus onKeyDown={handleKeyDown} onChange={changeEditText} value={columnEditText} className='outline-none' />
-              <span onClick={handleClickDone} className="material-symbols-rounded cursor-pointer">
-                done
-              </span>
-            </>)
-          :
-          (<div className="flex gap-2 items-center">
-            <div >{columnText}</div>
-            <Counter value={rowCount} />
-          </div>)}
-
-
         {isHovered && isSettingHovered && (
           <div className="flex ">
             <span onClick={() => setIsSettingOpen(true)} className="material-symbols-rounded cursor-pointer">
-            <span onClick={() => setIsSettingOpen(true)} className="material-symbols-rounded cursor-pointer">
               more_horiz
             </span>
-            <span onClick={() => {
-              setShowModal(true)
-              setIsSettingOpen(false)
-            }}
-              className="material-symbols-rounded cursor-pointer">
             <span onClick={() => {
               setShowModal(true)
               setIsSettingOpen(false)
@@ -198,22 +157,15 @@ const getTasks= ()=>{
         {isSettingOpen && (
           <div className='absolute top-0 left-0 shadow-md p-4 rounded mt-2 z-10 bg-white border-t cursor-pointer'>
             <span onClick={() => setIsSettingOpen(false)} className="material-symbols-rounded">
-            <span onClick={() => setIsSettingOpen(false)} className="material-symbols-rounded">
               close
             </span>
             <div className='flex flex-col gap-4 text-gray-800 '>
-              <div onClick={updateEditData} className='flex items-center gap-2 cursor-pointer'>
               <div onClick={updateEditData} className='flex items-center gap-2 cursor-pointer'>
                 <span className="material-symbols-rounded">
                   edit_square
                 </span>
                 <p>ویرایش نام ستون</p>
               </div>
-              <div onClick={() => {
-                setShowModal(true)
-                setIsSettingOpen(false)
-              }}
-                className='flex items-center gap-2'>
               <div onClick={() => {
                 setShowModal(true)
                 setIsSettingOpen(false)
@@ -229,9 +181,7 @@ const getTasks= ()=>{
                   move_to_inbox
                 </span>
                 <p>آرشیو تمام تسک‌ها</p>
-                <p>آرشیو تمام تسک‌ها</p>
               </div>
-              <div onClick={() => handleDelete(boardId)} className='flex items-center gap-2'>
               <div onClick={() => handleDelete(boardId)} className='flex items-center gap-2'>
                 <span className="material-symbols-rounded">
                   delete
@@ -244,15 +194,8 @@ const getTasks= ()=>{
                 </span>
                 <p>ویرایش رنگ ستون</p>
               </div>
-              <div onClick={() => onChangeColor(boardId)} className='flex items-center gap-2'>
-                <span className="material-symbols-outlined">
-                  palette
-                </span>
-                <p>ویرایش رنگ ستون</p>
-              </div>
             </div>
           </div>
-
 
         )}
 
