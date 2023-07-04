@@ -162,6 +162,10 @@ import Button from "../Common/Button/Button";
 
 
 const ModalNewWorkSpace = (props) => {
+
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
   
   // const [updateWorkspaceName,setUpdateWorkspaceName] = useState(props.workspaceName);
   const [showError,setShowError] = useState(false)
@@ -227,7 +231,7 @@ useEffect(()=>{
           </button> */}
           <Button
           onClick={handleShowColorPicker} 
-          className={'bg-[#208D8E] text-center w-[90%] h-[40px] text-[#FFFFFF]'} >ادامه</Button>
+          className={'text-center w-[90%] h-[40px] text-[#FFFFFF] rounded-[5px]'} color={themeColor}>ادامه</Button>
            
         </footer>
        {showError && <p className="text-center pt-5 text-red-500">یک نام برای ورک اسپیس انتخاب کنید</p>}

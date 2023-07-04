@@ -16,7 +16,6 @@ getUser(userId);
       );
       const firstName=response.data.data.firstname;
       const lastname=response.data.data.lastname;
-      setCombineName(`${firstName[0]+" "+lastname[0]}`);
       setCombineName(`${firstName[0].toUpperCase()+lastname[0].toUpperCase()}`);
       setName(`${firstName} ${lastname}`)
     } catch (error) {
@@ -26,7 +25,7 @@ getUser(userId);
 
   return (
     <li className=" menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
-      <span style={workspaceColor ? { backgroundColor: workspaceColor } : { backgroundColor: "#208D8E"}} class="flex justify-center items-center w-7 h-7 rounded-full text-[13px]">
+      <span style={workspaceColor ? { backgroundColor: workspaceColor } : { backgroundColor: "#208D8E"}} class="flex justify-center items-center w-7 h-7 rounded-full text-[13px] pt-1">
         {combineName}
       </span>
 {name}

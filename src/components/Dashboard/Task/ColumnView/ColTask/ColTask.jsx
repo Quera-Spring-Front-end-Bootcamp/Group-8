@@ -4,13 +4,14 @@ import AXIOS from "../axios.configs";
 import { useEffect } from "react";
 import TagStructure from "../../../../Modal/NewTaskModalComponents/TagStructure";
 import { ActiveButtonsContext } from "../../../../../App";
+import axios from "axios";
+import { baseUrl } from "../../../../../App";
 
 const ColTask = ({
   taskId,
   boardId,
   imgSrc,
   projectName,
-  userName,
   taskTitle,
   dayCount,
   date,
@@ -28,6 +29,8 @@ const ColTask = ({
   const {  projectId } =
     useContext(ActiveButtonsContext);
 
+    const userId=localStorage.getItem("userId");
+    const [combineName,setCombineName]=useState("");
     // useEffect(()=>{
     //   AXIOS.get(`/projects/${projectId}`)
     //   .then(res=>{
@@ -45,8 +48,23 @@ const ColTask = ({
         console.log(desiredTask)
         setTags1(desiredTask.taskTags)
       })
-    // setTags1(tags)
+    // setTags1(tags);
+    getUser(userId);
   }, [])
+
+  const getUser = async (userId) => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/users/${userId}`
+      );
+      const firstName=response.data.data.firstname;
+      const lastname=response.data.data.lastname;
+      setCombineName(`${firstName[0].toUpperCase()+lastname[0].toUpperCase()}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const updateTaskTags = (newTags) => {
     setTags1((prevTags)=>[...prevTags, newTags])
@@ -74,12 +92,12 @@ const deleteTaskTags=(newTags)=>{
         onMouseLeave={() => setShow(false)}
         onClick={handleClickTask}
       >
-        <img
+        {/* <img
           className="w-[230px] h-[134px] rounded-[3px] order-0 self-stretch grow-0"
           src={(imgSrc = "./")}
           style={{ display: imgSrc ? "block" : "none" }}
           alt="task"
-        />
+        /> */}
         <div className="flex flex-row items-center justify-between">
           <span className="font-medium text-[10px] leading-[15px] text-right text-[#534D60]  self-start">
 
@@ -90,7 +108,7 @@ const deleteTaskTags=(newTags)=>{
             className="w-[23px] h-[23px] bg-[#EAF562] flex justify-center items-center rounded-full order-0 grow-0 text-[#000000] text-[8px] leading-[12px] teaxt-right transition duration-500 ease-in-out"
             style={{ opacity: show === true ? "100%" : "0%" }}
           >
-            {(userName = "NM")}
+            {combineName}
           </span>
         </div>
         <h4

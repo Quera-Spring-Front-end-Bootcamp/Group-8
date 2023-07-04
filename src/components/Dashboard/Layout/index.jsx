@@ -29,7 +29,6 @@ import CreateProject from "../../Modal/CreateProject";
 // const ProjectsContext = createContext();
 
 const Layout = ({ children }) => {
-
   const [showFilter, setShowFilter] = useState(false);
   const [showShareProject, setShowShareProject] = useState(false);
   const [showNewTask, setShowNewTask] = useState(false);
@@ -42,13 +41,17 @@ const Layout = ({ children }) => {
   const [showModalProjectsMenu, setShowModalProjectsMenu] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
   const [color, setColor] = useState("");
-  const [workspaceColor, setWorkspaceColor] = useState('');
+  const [workspaceColor, setWorkspaceColor] = useState("");
   const [showProject, setShowProject] = useState(false);
-  const [workspaceId, setWorkspaceId] = useState("")
-  const parentRef = useRef(null)
-  const [projectId,setProjectId] = useState("")
-  const { activeListViewBtn, activeColumnViewBtn, activeCalendarBtn, setBoards } =
-    useContext(ActiveButtonsContext);
+  const [workspaceId, setWorkspaceId] = useState("");
+  const parentRef = useRef(null);
+  const [projectId, setProjectId] = useState("");
+  const {
+    activeListViewBtn,
+    activeColumnViewBtn,
+    activeCalendarBtn,
+    setBoards,
+  } = useContext(ActiveButtonsContext);
   const [hover, setHover] = useState({
     listView: false,
     columnView: false,
@@ -60,28 +63,27 @@ const Layout = ({ children }) => {
     : "#208D8E";
 
   useEffect(() => {
-    getAllWorkspaces()
+    getAllWorkspaces();
 
     const handleClickOutside = (event) => {
       if (parentRef.current && !parentRef.current.contains(event.target)) {
-        setShowSettings(false)
+        setShowSettings(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-
-  }, [])
+  }, []);
 
   useEffect(() => {
     workspaces?.forEach((workspace) => {
       AXIOS.get(`projects/workspaces/${workspace._id}`)
         .then((res) => {
           const workspaceProjects = res.data.data;
-          console.log(workspaceProjects)
+          console.log(workspaceProjects);
           setProjects(workspaceProjects);
-          handleShowRelatedWorkspace(workspace._id)
+          handleShowRelatedWorkspace(workspace._id);
         })
         .catch((err) => console.log(err));
     });
@@ -92,28 +94,23 @@ const Layout = ({ children }) => {
     localStorage.removeItem("tokenExpireDate");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userId");
-  }
-
+  };
 
   const handleShowRelatedWorkspace = (id) => {
-    AXIOS.get(`/workspace/${id}`)
-      .then(res => {
-        console.log(res.data.data)
-        setWorkspaceColor(() => localStorage.getItem(id))
-        const workspaceProjects = res.data.data.projects
-        setProjects(workspaceProjects)
-      })
-  }
-
+    AXIOS.get(`/workspace/${id}`).then((res) => {
+      console.log(res.data.data);
+      setWorkspaceColor(() => localStorage.getItem(id));
+      const workspaceProjects = res.data.data.projects;
+      setProjects(workspaceProjects);
+    });
+  };
 
   const getAllWorkspaces = () => {
-    AXIOS.get('/workspace/get-all')
-      .then(res => {
-        console.log(res.data.data)
-        setWorkspaces(res.data.data)
-      })
-  }
-
+    AXIOS.get("/workspace/get-all").then((res) => {
+      console.log(res.data.data);
+      setWorkspaces(res.data.data);
+    });
+  };
 
   const showNewWSModal = () => {
     if (showNewWS) {
@@ -130,7 +127,6 @@ const Layout = ({ children }) => {
     } else {
       setShowNewTask(true);
     }
-
   };
 
   const showShareProjectModal = () => {
@@ -159,26 +155,23 @@ const Layout = ({ children }) => {
 
   const onDeleteWorkspace = (id) => {
     setWorkspaces((prevWorkspaces) => {
-      prevWorkspaces?.filter((workspace) => workspace._id !== id)
+      prevWorkspaces?.filter((workspace) => workspace._id !== id);
       getAllWorkspaces();
-    })
-  }
+    });
+  };
 
   const handleClickOnProject = (id) => {
-    AXIOS.get(`/board/${id}`)
-      .then((res) => {
-        console.log(res.data.data)
-        const projectBoards = res.data.data
-        const updatedBoards = projectBoards?.map((board) => {
-          const boardColor = localStorage.getItem(board._id)
-          return { ...board, borderColor: boardColor }
-
-        })
-        setBoards(updatedBoards)
-        setProjectId(id)
-      })
-
-  }
+    AXIOS.get(`/board/${id}`).then((res) => {
+      console.log(res.data.data);
+      const projectBoards = res.data.data;
+      const updatedBoards = projectBoards?.map((board) => {
+        const boardColor = localStorage.getItem(board._id);
+        return { ...board, borderColor: boardColor };
+      });
+      setBoards(updatedBoards);
+      setProjectId(id);
+    });
+  };
   return (
     <>
       <div className="flex">
@@ -193,7 +186,7 @@ const Layout = ({ children }) => {
             <DropDown
               label="ورک اسپیس ها"
               Options={options1}
-              className=" select h-9 w-[278px] items-center rounded-md bg-[#FAFBFC]  p-1 cursor-pointer"
+              className=" select h-9 w-[278px] items-center rounded-md bg-[#FAFBFC]  p-1 cursor-pointer outline-none"
             />
           </div>
 
@@ -201,7 +194,7 @@ const Layout = ({ children }) => {
             <SideMenuInput
               Type="text"
               PlaceHolder="  جستجو کنید"
-              className="input bg-[#F6F7F9] h-[40px] w-full max-w-xs rounded"
+              className="input bg-[#F6F7F9] h-[40px] w-full max-w-xs rounded outline-none pr-1"
             />
           </div>
 
@@ -218,8 +211,11 @@ const Layout = ({ children }) => {
             <ul className=" menu pt-6 relative">
               {workspaces?.map((workspace) => (
                 <>
-
-                  <li onClick={() => setWorkspaceId(workspace._id)} key={workspace._id} className="flex justify-between items-start">
+                  <li
+                    onClick={() => setWorkspaceId(workspace._id)}
+                    key={workspace._id}
+                    className="flex justify-between items-start"
+                  >
                     <SideMenuItem
                       className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer"
                       item={workspace.name}
@@ -229,48 +225,53 @@ const Layout = ({ children }) => {
                       onClick={() => handleShowRelatedWorkspace(workspace._id)}
                     />
 
-                    <span onClick={() => setShowSettings(pre => !pre)} className="material-symbols-rounded cursor-pointer">
+                    <span
+                      onClick={() => setShowSettings((pre) => !pre)}
+                      className="material-symbols-rounded cursor-pointer"
+                    >
                       more_horiz
                     </span>
-
                   </li>
 
                   {workspace.projects.map((project) => (
-                    
                     <ul>
-                      <li 
-                      onClick={() => {
-                        handleClickOnProject(project._id)
-                        setProjectId(project._id)
-                        }} 
-                        className="flex justify-between cursor-pointer" 
-                        key={project._id}
-                        >
-                          {console.log(project._id)}
-                        <p>{project.name}</p>
-                        <span onClick={() => {
-                          setShowModalProjectsMenu(pre => !pre)
+                      <li
+                        onClick={() => {
+                          handleClickOnProject(project._id);
+                          setProjectId(project._id);
                         }}
-                          className="material-symbols-rounded cursor-pointer">
+                        className="flex justify-between cursor-pointer"
+                        key={project._id}
+                      >
+                        {console.log(project._id)}
+                        <p>{project.name}</p>
+                        <span
+                          onClick={() => {
+                            setShowModalProjectsMenu((pre) => !pre);
+                          }}
+                          className="material-symbols-rounded cursor-pointer"
+                        >
                           more_horiz
                         </span>
                       </li>
-                      {showModalProjectsMenu &&
+                      {showModalProjectsMenu && (
                         <ModalProjectMenu
                           id={projectId}
                           onClick={() => setShowModalProjectsMenu(false)}
                           getAllWorkspaces={getAllWorkspaces}
-                        />}
+                        />
+                      )}
                     </ul>
                   ))}
-                  {showSettings &&
+                  {showSettings && (
                     <ColumnMoreModal
                       id={workspaceId}
                       onDeleteWorkspace={onDeleteWorkspace}
                       onClickSettings={() => setShowSettings(false)}
                       setShowNewWS={setShowNewWS}
                       getAllWorkspaces={getAllWorkspaces}
-                    />}
+                    />
+                  )}
 
                   {/* {showProject && (
                     <CreateProject
@@ -291,10 +292,7 @@ const Layout = ({ children }) => {
           key={project._id}/>
         ))} */}
                 </>
-
-
               ))}
-
             </ul>
 
             <ul className="menu pt-6 flex flex-col justify-end absolute bottom-2.5">
@@ -349,7 +347,6 @@ const Layout = ({ children }) => {
                 <hr className="inline-block liney" />
               </li>
               <li className="mr-3">
-
                 <a
                   href="/columnview"
                   className=" flex pb-5 text-[16px] px-3  text-gray-700"
@@ -429,9 +426,11 @@ const Layout = ({ children }) => {
             </li>
 
             {!activeCalendarBtn && (
-              <li className="mr-3"
+              <li
+                className="mr-3"
                 onMouseEnter={() => setHover({ filter: true })}
-                onMouseLeave={() => setHover({ filter: false })}>
+                onMouseLeave={() => setHover({ filter: false })}
+              >
                 <Button
                   className=" flex text-[14px] px-3 text-gray-700"
                   onClick={showFilterModal}
@@ -463,7 +462,11 @@ const Layout = ({ children }) => {
             {children}
 
             {/* Elahe's New task button */}
-            <Button className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed z-10" onClick={showNewTaskModal}>
+            <Button
+              className=" flex w-[120px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed z-10"
+              onClick={showNewTaskModal}
+              color={themeColor}
+            >
               <span class=" text-[#FFFFFF] material-symbols-rounded">
                 add_box
               </span>
@@ -473,64 +476,52 @@ const Layout = ({ children }) => {
         </div>
       </div>
       {false && <ShareWSModal />}
-      {
-        showShareProject && (
-          <ShareProjectModal onClick={() => setShowShareProject(false)} />
-        )
-      }
-      {
-        showFilter && (
-          <FilterModal onClick={() => setShowFilter(false)}></FilterModal>
-        )
-      }
+      {showShareProject && (
+        <ShareProjectModal onClick={() => setShowShareProject(false)} />
+      )}
+      {showFilter && (
+        <FilterModal onClick={() => setShowFilter(false)}></FilterModal>
+      )}
       {showModalProjectsMenu && <ModalProjectMenu />}
       {false && <ModalTaskMenu></ModalTaskMenu>}
-      {
-        showNewWS && (
-          <ModalNewWorkSpace
-            onClick={() => setShowNewWS(false)}
-            buttonOnClick={() => setShowPickColor(true)}
-            getAllWorkspaces={getAllWorkspaces}
-            setShowNewWS={setShowNewWS}
-            setShowSettings={setShowSettings}
-            showNewWS={showNewWS}
-            workspaceName={workspaceName}
-            setWorkspaceName={setWorkspaceName}
-          ></ModalNewWorkSpace>
-        )
-      }
-      {
-        showPickColor && (
-          <ModalPickColor
-            onClick={() => setShowPickColor(false)}
-            buttonOnClick={() => setShowInfo(true)}
-            workspaceName={workspaceName}
-            color={color}
-            setColor={setColor}
-            showPickColor={showPickColor}
-            setShowPickColor={setShowPickColor}
-          ></ModalPickColor>
-        )
-      }
-      {
-        showInfo && (
-          <InformationModal
-            onClick={() => setShowInfo(false)}
-            buttonOnClick={() => setShowInfo(false)}
-            workspaceName={workspaceName}
-            workspaceColor={color}
-            setColor={setColor}
-            setWorkspaceName={setWorkspaceName}
-            getAllWorkspaces={getAllWorkspaces}
-          ></InformationModal>
-        )
-      }
+      {showNewWS && (
+        <ModalNewWorkSpace
+          onClick={() => setShowNewWS(false)}
+          buttonOnClick={() => setShowPickColor(true)}
+          getAllWorkspaces={getAllWorkspaces}
+          setShowNewWS={setShowNewWS}
+          setShowSettings={setShowSettings}
+          showNewWS={showNewWS}
+          workspaceName={workspaceName}
+          setWorkspaceName={setWorkspaceName}
+        ></ModalNewWorkSpace>
+      )}
+      {showPickColor && (
+        <ModalPickColor
+          onClick={() => setShowPickColor(false)}
+          buttonOnClick={() => setShowInfo(true)}
+          workspaceName={workspaceName}
+          color={color}
+          setColor={setColor}
+          showPickColor={showPickColor}
+          setShowPickColor={setShowPickColor}
+        ></ModalPickColor>
+      )}
+      {showInfo && (
+        <InformationModal
+          onClick={() => setShowInfo(false)}
+          buttonOnClick={() => setShowInfo(false)}
+          workspaceName={workspaceName}
+          workspaceColor={color}
+          setColor={setColor}
+          setWorkspaceName={setWorkspaceName}
+          getAllWorkspaces={getAllWorkspaces}
+        ></InformationModal>
+      )}
 
-      {
-        showNewTask && (
-          <MakeTaskModal onClick={() => setShowNewTask(false)}></MakeTaskModal>
-        )
-      }
+      {showNewTask && (
+        <MakeTaskModal onClick={() => setShowNewTask(false)}></MakeTaskModal>
+      )}
       {false && <TaskDetails></TaskDetails>}
       {false && <PickDateModal></PickDateModal>}
     </>
@@ -538,4 +529,3 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
-

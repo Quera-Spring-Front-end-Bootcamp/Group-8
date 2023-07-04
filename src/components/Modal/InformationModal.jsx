@@ -51,6 +51,9 @@ import { useState } from "react";
 import AXIOS from "../Dashboard/Task/ColumnView/axios.configs";
 
 const InformationModal = (props) => {
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
 const [showError,setShowError] = useState(false);
 
   const handleCreateWorkspace=()=>{
@@ -115,7 +118,7 @@ const [showError,setShowError] = useState(false);
           </div>
   
           <footer className="flex w-[100%] items-center justify-center mt-10">
-            <button onClick={handleCreateWorkspace} className="flex absolute p-3 bottom-4 w-[90%] h-[40px] text-[18px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer" >
+            <button onClick={handleCreateWorkspace} className="flex absolute p-3 bottom-4 w-[90%] h-[40px] text-[18px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center cursor-pointer"style={{backgroundColor:themeColor}} >
               ساختن ورک اسپیس
             </button>
           </footer>

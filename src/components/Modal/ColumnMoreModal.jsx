@@ -92,7 +92,7 @@ const ColumnMoreModal = ({ id,getAllWorkspaces, onDeleteWorkspace, onClickSettin
 
 
     return (
-        <div className="flex flex-col items-start bg-white w-80 rounded-[8px] shadow-[0_4px_16px_0px_rgba(0,0,0,0.15)] z-[100] py-5 cursor-pointer absolute top-[53px]">
+        <div className="flex flex-col items-start bg-white w-80 rounded-[8px] shadow-[0_4px_16px_0px_rgba(0,0,0,0.15)] z-[100] py-5 cursor-pointer absolute top-[53px] right-[300px]">
             <ul>
                 <li
                     onClick={() => {

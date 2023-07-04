@@ -69,6 +69,9 @@ import Button from "../Common/Button/Button";
 const CreateProject = (props) => {
     const [projectName,setProjectName] = useState("")
   const [projectsId,setProjectsId] = useState('')
+  const themeColor = localStorage.getItem("themeColor")
+    ? localStorage.getItem("themeColor")
+    : "#208D8E";
 
     const handleCreateProject= (id)=>{
       console.log(id)
@@ -119,7 +122,7 @@ const CreateProject = (props) => {
         
                 <footer className="flex w-[100%] items-center justify-center mt-10">
                   <Button 
-                  className=" w-[90%] h-[40px] text-[18px] text-[#FFFFFF] rounded-md bg-[#208D8E] text-center cursor-pointer" 
+                  className=" w-[90%] h-[40px] text-[18px] text-[#FFFFFF] rounded-md text-center cursor-pointer"color={themeColor} 
                   onClick={()=>handleCreateProject(props.id)}>
                     ساختن پروژه
                   </Button>
