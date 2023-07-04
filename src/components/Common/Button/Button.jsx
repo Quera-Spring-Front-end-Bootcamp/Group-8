@@ -1,7 +1,7 @@
 const Button = (props) => {
   return (
     <div
-      className={`cursor-pointer w-max flex items-center justify-center gap-[8px] ${props.className}`}
+      className={`cursor-pointer flex items-center justify-center gap-[8px] ${props.className}`}
       style={{backgroundColor:props.color,color:props.textColor}}
       onClick={props.onClick}
     >

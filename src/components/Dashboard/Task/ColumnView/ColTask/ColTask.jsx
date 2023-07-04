@@ -23,35 +23,38 @@ const ColTask = ({
 }) => {
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [tags1, setTags1] = useState([]);
+  const [tags1, setTags1] = useState(tags);
   const [project,setProject] = useState({})
   const {  projectId } =
     useContext(ActiveButtonsContext);
 
-    useEffect(()=>{
-      AXIOS.get(`/projects/${projectId}`)
-      .then(res=>{
-        console.log(res.data.data)
-        setProject(res.data.data)
-      })
-    },[])
+    // useEffect(()=>{
+    //   AXIOS.get(`/projects/${projectId}`)
+    //   .then(res=>{
+    //     console.log(res.data.data)
+    //     setProject(res.data.data)
+    //   })
+    // },[])
     
   useEffect(() => {
     AXIOS.get(`/board/${boardId}/tasks`)
       .then(res => {
-        console.log(res)
-        const boards = res.data.data
-        const desiredBoard = boards.find((board) => board._id === taskId)
-        setTags1(desiredBoard.taskTags)
+        console.log(res.data.data)
+        const tasks = res.data.data
+        const desiredTask = tasks.find((task) => task._id === taskId)
+        console.log(desiredTask)
+        setTags1(desiredTask.taskTags)
       })
-    setTags1(tags)
+    // setTags1(tags)
   }, [])
 
   const updateTaskTags = (newTags) => {
-    setTags1(newTags)
-    update(newTags)
+    setTags1((prevTags)=>[...prevTags, newTags])
+    // update(newTags)
   }
-
+const deleteTaskTags=(newTags)=>{
+  setTags1(newTags)
+}
 
   const handleClickTask = () => {
     setShowModal(true)
@@ -115,17 +118,20 @@ const ColTask = ({
             </span>
           </div>
         </div>
-        {tags1?.map((tag) => (
-          <div key={tag._id} className="flex gap-1">
+         <div className="flex gap-1">
+          {tags1?.map((tag) => (
+           
+          
             <TagStructure
               key={tag._id}
               id={tag._id}
               tagName={tag.name}
               color={tag.color}
             />
-
-          </div>
+          
         ))}
+        </div>
+        
         <div
           className="flex flex-row items-center gap-[5px] transition duration-1100"
           style={{
@@ -173,6 +179,7 @@ const ColTask = ({
           tags={tags1}
           boardId={boardId}
           updateTaskTags={updateTaskTags}
+          deleteTaskTags={deleteTaskTags}
           project={project}
         />}
     </>

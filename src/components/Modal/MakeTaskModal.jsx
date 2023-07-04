@@ -13,7 +13,7 @@ const MakeTaskModal = (props) => {
   const [isTagOpen, setIsTagOpen] = useState(false);
   const [flagColor, setFlagColor] = useState("")
   const themeColor = localStorage.getItem("themeColor")
-    ? localStorage.getItem("themeColor"):"";
+    ? localStorage.getItem("themeColor") : "";
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [updatedTaskName, setUpdatedTaskName] = useState(props.selectedTask ? props.selectedTask.name : '')
@@ -26,9 +26,13 @@ const MakeTaskModal = (props) => {
   }, [])
 
   const updateTags = (newTags, postTags) => {
+    console.log(newTags)
     setTaskTags(newTags)
     setPostTags(postTags)
   };
+  // const deleteTags=(newTags)=>{
+  //   props.deleteTaskTags(newTags)
+  // }
   const handleChoosePriority = (color) => {
     setFlagColor(color)
   };
@@ -77,8 +81,8 @@ const MakeTaskModal = (props) => {
   }
 
   const handleEditTask = () => {
-    console.log("tooye edit task hastam daram put mikonam")
-    AXIOS.put(`task/${props.taskId}`, {
+   
+      AXIOS.put(`task/${props.taskId}`, {
       name: updatedTaskName,
       description: updatedDescription,
       deadline: "2023-05-16T12:52:24.483+00:00"
@@ -86,31 +90,39 @@ const MakeTaskModal = (props) => {
       console.log(res.data.data)
     })
       .catch(err => console.log(err))
+    
+    
     console.log(postTags)
     postTags.map((tag) => {
       AXIOS.post('/tags', {
         name: tag.name,
         taskId: props.taskId,
         color: tag.color
-      }).then(res => console.log(res))
+      }).then(res => {
+        console.log(res.data.data)
+        props.updateTaskTags(res.data.data.tag)
+      })
         .catch(err => console.log(err))
     })
 
 
-    AXIOS.get(`tags/task/${props.taskId}`).then((res) => {
-      console.log(res)
-      setTaskTags(res.data.data)
-    })
+    // AXIOS.get(`/board/${props.boardId}/tasks`)
+    //   .then(res => console.log(res.data.data))
+    // const tasks = res.data.data
+    // const desiredTask = tasks.find((task) => task._id === props.taskId)
+    // console.log(desiredTask)
+    // setTaskTags(desiredTask.taskTags)
 
-    props.onEditTask(props.selectedTask._id, updatedTaskName, updatedDescription)
+
+    // onEditTask(selectedTask._id, updatedTaskName, updatedDescription)
     props.setShowModal(false)
-    props.updateTaskTags(taskTags)
+    // props.updateTaskTags(taskTags)
   }
 
 
   return (
 
-    <div className="modal">
+    <div className="modal w-[1166px] h-[576px]">
       <div
       >
         <header className="flex p-5 justify-between w-[100%]">
@@ -137,7 +149,7 @@ const MakeTaskModal = (props) => {
           <span>
             <input
               type="text"
-              placeholder={props.project? props.project.name: "پروژه 1"}
+              placeholder={props.project ? props.project.name : "پروژه 1"}
               className="w-[158px] h-[33px] border-2 rounded-sm mx-2"
             />
           </span>
@@ -182,17 +194,13 @@ const MakeTaskModal = (props) => {
             </span>
             <div onClick={handleTagClick} class="relative flex flex-col items-center justify-center w-[50px] h-[50px] border-2 border-[#C1C1C1] text-center border-dashed rounded-full text-[#C1C1C1]  ">
               <span class=" text-[35px] material-symbols-rounded cursor-pointer">sell</span>
-              {isTagOpen && (<CreateTag taskId={props.taskId} setIsTagOpen={setIsTagOpen} updateTags={updateTags} tags1={taskTags} boardId={props.boardId} />)}
+              {isTagOpen && (<CreateTag taskId={props.taskId} setIsTagOpen={setIsTagOpen} updateTags={updateTags} deleteTaskTags={props.deleteTaskTags} tags1={taskTags} boardId={props.boardId} />)}
             </div>
-            {taskTags?.map((tag) => (
-              <>
-                <div key={tag._id} className="flex items-center gap-2">
-                  <Tag tagName={tag.name} tagColor={tag.color} />  
-                </div>
-                
-              </>
-              
-            ))}
+            <div  className="flex items-center gap-2">
+              {taskTags?.map((tag) => (
+                  <Tag key={tag._id} tagName={tag.name} tagColor={tag.color} />
+              ))}
+            </div>
             <span class=" flex items-center justify-center w-[50px] h-[50px] text-center  text-[#C1C1C1]  ">
               <span class=" text-[35px] material-symbols-rounded">visibility</span>
             </span>

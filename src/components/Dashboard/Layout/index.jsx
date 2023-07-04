@@ -13,22 +13,23 @@ import ShareProjectModal from "../../Modal/ShareProjectModal";
 import ShareWSModal from "../../Modal/ShareWSModal";
 import InformationModal from "../../Modal/InformationModal";
 import TaskDetails from "../../Modal/TaskDetails";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import MakeTaskModal from "../../Modal/MakeTaskModal";
 import PickDateModal from "../../Modal/PickDateModal";
 import { ActiveButtonsContext } from "../../../App";
 import CalendarTitle from "../Task/CalendarView/CalendarTitle";
 import { Link } from "react-router-dom";
 import "../../../styles/Layout.css";
-import { useEffect } from "react";
 import AXIOS from "../Task/ColumnView/axios.configs";
 import ColumnMoreModal from "../../Modal/ColumnMoreModal";
 import { createContext } from "react";
+import CreateProject from "../../Modal/CreateProject";
 // import { bo } from "@fullcalendar/core/internal-common";
 
-const ProjectsContext = createContext();
+// const ProjectsContext = createContext();
 
 const Layout = ({ children }) => {
+
   const [showFilter, setShowFilter] = useState(false);
   const [showShareProject, setShowShareProject] = useState(false);
   const [showNewTask, setShowNewTask] = useState(false);
@@ -38,25 +39,40 @@ const Layout = ({ children }) => {
   const [workspaces, setWorkspaces] = useState([]);
   const [showSettings, setShowSettings] = useState(false);
   const [projects, setProjects] = useState([]);
-  const [showModalProjectsMenu,setShowModalProjectsMenu] = useState(false)
+  const [showModalProjectsMenu, setShowModalProjectsMenu] = useState(false);
+  const [workspaceName, setWorkspaceName] = useState("");
+  const [color, setColor] = useState("");
+  const [workspaceColor, setWorkspaceColor] = useState('');
+  const [showProject, setShowProject] = useState(false);
+  const [workspaceId, setWorkspaceId] = useState("")
+  const parentRef = useRef(null)
+  const [projectId,setProjectId] = useState("")
+  const { activeListViewBtn, activeColumnViewBtn, activeCalendarBtn, setBoards } =
+    useContext(ActiveButtonsContext);
   const [hover, setHover] = useState({
     listView: false,
     columnView: false,
     calendarView: false,
-    filter:false,
+    filter: false,
   });
   const themeColor = localStorage.getItem("themeColor")
     ? localStorage.getItem("themeColor")
     : "#208D8E";
-  const { activeListViewBtn, activeColumnViewBtn, activeCalendarBtn } =
-    useContext(ActiveButtonsContext);
 
   useEffect(() => {
-    getAllWorkspaces();
-    
+    getAllWorkspaces()
+
+    const handleClickOutside = (event) => {
+      if (parentRef.current && !parentRef.current.contains(event.target)) {
+        setShowSettings(false)
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+
   }, [])
-
-
 
   useEffect(() => {
     workspaces?.forEach((workspace) => {
@@ -65,20 +81,39 @@ const Layout = ({ children }) => {
           const workspaceProjects = res.data.data;
           console.log(workspaceProjects)
           setProjects(workspaceProjects);
+          handleShowRelatedWorkspace(workspace._id)
         })
         .catch((err) => console.log(err));
     });
   }, [workspaces]);
-  
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("tokenExpireDate");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
+  }
+
+
+  const handleShowRelatedWorkspace = (id) => {
+    AXIOS.get(`/workspace/${id}`)
+      .then(res => {
+        console.log(res.data.data)
+        setWorkspaceColor(() => localStorage.getItem(id))
+        const workspaceProjects = res.data.data.projects
+        setProjects(workspaceProjects)
+      })
+  }
+
+
   const getAllWorkspaces = () => {
     AXIOS.get('/workspace/get-all')
       .then(res => {
         console.log(res.data.data)
         setWorkspaces(res.data.data)
-        
       })
   }
- 
+
 
   const showNewWSModal = () => {
     if (showNewWS) {
@@ -121,12 +156,7 @@ const Layout = ({ children }) => {
     { label: "Option 2", value: "2" },
     { label: "Option 3", value: "3" },
   ];
-const handleLogout=()=>{
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("tokenExpireDate");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("userId");
-}
+
   const onDeleteWorkspace = (id) => {
     setWorkspaces((prevWorkspaces) => {
       prevWorkspaces?.filter((workspace) => workspace._id !== id)
@@ -134,28 +164,28 @@ const handleLogout=()=>{
     })
   }
 
-  const handleClickOnProject=(id)=>{
+  const handleClickOnProject = (id) => {
     AXIOS.get(`/board/${id}`)
-    .then((res)=>{
-      console.log(res.data.data)
-      const projectBoards= res.data.data
-    const updatedBoards=  projectBoards?.map((board) => {
-        const boardColor=  localStorage.getItem(board._id)
-        return {...board, borderColor: boardColor}
-            
-            })
-      setBoards(updatedBoards)
-      setProjectId(id)
-    })
-    setShowModalProjectsMenu(true)
+      .then((res) => {
+        console.log(res.data.data)
+        const projectBoards = res.data.data
+        const updatedBoards = projectBoards?.map((board) => {
+          const boardColor = localStorage.getItem(board._id)
+          return { ...board, borderColor: boardColor }
+
+        })
+        setBoards(updatedBoards)
+        setProjectId(id)
+      })
+
   }
   return (
-    <ProjectsContext.Provider value={projects}>
+    <>
       <div className="flex">
         <div className=" w-80 h-screen bg-[#FAFBFC] border border-[#AAAAAA] p-5 pt-8 relative">
           <div className="flex gap-x-4 items-center">
             <Caption className="text-3xl p-3 pt-1 font-bold origin-right duration-300">
-              <a href="#">کوئرا تسک منیجر</a>
+              کوئرا تسک منیجر
             </Caption>
           </div>
 
@@ -171,13 +201,13 @@ const handleLogout=()=>{
             <SideMenuInput
               Type="text"
               PlaceHolder="  جستجو کنید"
-              className="input bg-[#F6F7F9] h-[40px] w-full max-w-xs rounded outline-none pr-3"
+              className="input bg-[#F6F7F9] h-[40px] w-full max-w-xs rounded"
             />
           </div>
 
           <div className="menu pt-3">
             <Button
-              className=" flex h-[32px] w-[279px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-3"
+              className=" flex h-[32px] w-[279px] items-center justify-center rounded-md bg-[#D3D3D3] text-center p-1"
               onClick={showNewWSModal}
             >
               <span className="material-symbols-rounded">add_box</span>
@@ -185,69 +215,94 @@ const handleLogout=()=>{
             </Button>
           </div>
           <nav className="flex flex-col justify-between">
-            {/* <ul className=" menu pt-6"> */}
-            {workspaces?.map((workspace) => (
-              <>
-                <div key={workspace._id} className="flex justify-between align-center">
-                  <SideMenuItem
-                    className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
-                    itemClassName=" bg-[#71FDA9]"
-                    item={workspace.name}
-                    id={workspace._id}
-                    projects={projects}
+            <ul className=" menu pt-6 relative">
+              {workspaces?.map((workspace) => (
+                <>
 
-                  />
-                  <span onClick={() => setShowSettings(pre => !pre)} className="material-symbols-rounded cursor-pointer">
-                    more_horiz
-                  </span>
-                 
+                  <li onClick={() => setWorkspaceId(workspace._id)} key={workspace._id} className="flex justify-between items-start">
+                    <SideMenuItem
+                      className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer"
+                      item={workspace.name}
+                      id={workspace._id}
+                      workspaceColor={localStorage.getItem(workspace._id)}
+                      handleClickOnProject={handleClickOnProject}
+                      onClick={() => handleShowRelatedWorkspace(workspace._id)}
+                    />
 
-                  {showSettings && <ColumnMoreModal id={workspace._id} onDeleteWorkspace={onDeleteWorkspace} projects={projects} />}
-                </div>
-                {projects?.map((project)=>(
-                  <div className="cursor-pointer" onClick={()=>handleClickOnProject(project._id)} key={project._id}>{project.name}</div>
-                 ))}
-                {/* {projects.map((project)=>(
-                <SideMenuItem className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
-                itemClassName=" bg-[#71FDA9]"
-                item={project.name}
-                key={project._id}/>
-              ))} */}
-              </>
+                    <span onClick={() => setShowSettings(pre => !pre)} className="material-symbols-rounded cursor-pointer">
+                      more_horiz
+                    </span>
+
+                  </li>
+
+                  {workspace.projects.map((project) => (
+                    
+                    <ul>
+                      <li 
+                      onClick={() => {
+                        handleClickOnProject(project._id)
+                        setProjectId(project._id)
+                        }} 
+                        className="flex justify-between cursor-pointer" 
+                        key={project._id}
+                        >
+                          {console.log(project._id)}
+                        <p>{project.name}</p>
+                        <span onClick={() => {
+                          setShowModalProjectsMenu(pre => !pre)
+                        }}
+                          className="material-symbols-rounded cursor-pointer">
+                          more_horiz
+                        </span>
+                      </li>
+                      {showModalProjectsMenu &&
+                        <ModalProjectMenu
+                          id={projectId}
+                          onClick={() => setShowModalProjectsMenu(false)}
+                          getAllWorkspaces={getAllWorkspaces}
+                        />}
+                    </ul>
+                  ))}
+                  {showSettings &&
+                    <ColumnMoreModal
+                      id={workspaceId}
+                      onDeleteWorkspace={onDeleteWorkspace}
+                      onClickSettings={() => setShowSettings(false)}
+                      setShowNewWS={setShowNewWS}
+                      getAllWorkspaces={getAllWorkspaces}
+                    />}
+
+                  {/* {showProject && (
+                    <CreateProject
+                      onClick={() => setShowSettings(false)}
+                      id={workspace._id}
+                      setShowProject={setShowProject}
+                    />
+                  )} */}
+
+                  {/* {projects?.map((project)=>(
+            <div className="cursor-pointer" onClick={()=>handleClickOnProject(project._id)} key={project._id}>{project.name}</div>
+           ))} */}
+
+                  {/* {projects.map((project)=>(
+          <SideMenuItem className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
+          itemClassName=" bg-[#71FDA9]"
+          item={project.name}
+          key={project._id}/>
+        ))} */}
+                </>
 
 
-            ))}
+              ))}
 
-            {/* </ul> */}
-            {/* <SideMenuItem
-                className=" menu-title hover:bg-[#E9F9FF] text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
-                itemClassName=" bg-[#71FDA9]"
-                item="درس مدیریت پروژه"
-              ></SideMenuItem>
-              <SideMenuItem
-                className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
-                itemClassName=" bg-[#DE88FD]"
-                item="کارهای شخصی"
-              ></SideMenuItem>
-              <SideMenuItem
-                className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
-                itemClassName=" bg-[#FC0733]"
-                item="درس کامپایلر"
-              ></SideMenuItem>
-              <SideMenuItem
-                className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
-                itemClassName=" bg-[#92FF07]"
-                item="درس طراحی الگوریتم"
-              ></SideMenuItem> */}
+            </ul>
 
-
-            <ul className="menu pt-6">
+            <ul className="menu pt-6 flex flex-col justify-end absolute bottom-2.5">
               <a href="/profile" className=" no-underline">
-                <ProfileOption />
+                <ProfileOption workspaceColor={workspaceColor} color={color} />
               </a>
               <Link to="/login">
-                <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2"
-                onClick={handleLogout}>
+                <li className="menu-title hover:bg-[#E9F9FF]  text-black text-base flex items-center gap-x-4 cursor-pointer p-2">
                   <span className="material-symbols-rounded">door_open</span>
                   خروج
                 </li>
@@ -272,7 +327,8 @@ const handleLogout=()=>{
                 <a
                   href="/listview"
                   className="flex  pb-5 text-[16px] px-3 text-gray-700"
-                  style={{color: activeListViewBtn ? themeColor : "",
+                  style={{
+                    color: activeListViewBtn ? themeColor : "",
                     borderBottom: activeListViewBtn
                       ? `2px solid ${themeColor}`
                       : "",
@@ -281,7 +337,7 @@ const handleLogout=()=>{
                       !hover.listView && !activeListViewBtn
                         ? " rgb(55 65 81)"
                         : themeColor,
-                    }}
+                  }}
                   onMouseEnter={() => setHover({ listView: true })}
                   onMouseLeave={() => setHover({ listView: false })}
                 >
@@ -293,10 +349,12 @@ const handleLogout=()=>{
                 <hr className="inline-block liney" />
               </li>
               <li className="mr-3">
+
                 <a
                   href="/columnview"
                   className=" flex pb-5 text-[16px] px-3  text-gray-700"
-                  style={{color: activeColumnViewBtn ? themeColor : "",
+                  style={{
+                    color: activeColumnViewBtn ? themeColor : "",
                     borderBottom: activeColumnViewBtn
                       ? `2px solid ${themeColor}`
                       : "",
@@ -305,7 +363,7 @@ const handleLogout=()=>{
                       !hover.columnView && !activeColumnViewBtn
                         ? " rgb(55 65 81)"
                         : themeColor,
-                    }}
+                  }}
                   onMouseEnter={() => setHover({ columnView: true })}
                   onMouseLeave={() => setHover({ columnView: false })}
                 >
@@ -320,7 +378,8 @@ const handleLogout=()=>{
                 <a
                   href="/calendar"
                   className=" flex  text-[16px] px-3 pb-5 text-gray-700 "
-                  style={{color: activeCalendarBtn ? themeColor : "",
+                  style={{
+                    color: activeCalendarBtn ? themeColor : "",
                     borderBottom: activeCalendarBtn
                       ? `2px solid ${themeColor}`
                       : "",
@@ -329,7 +388,7 @@ const handleLogout=()=>{
                       !hover.calendarView && !activeCalendarBtn
                         ? " rgb(55 65 81)"
                         : themeColor,
-                    }}
+                  }}
                   onMouseEnter={() => setHover({ calendarView: true })}
                   onMouseLeave={() => setHover({ calendarView: false })}
                 >
@@ -371,12 +430,12 @@ const handleLogout=()=>{
 
             {!activeCalendarBtn && (
               <li className="mr-3"
-              onMouseEnter={() => setHover({ filter: true })}
-              onMouseLeave={() => setHover({ filter: false })}>
+                onMouseEnter={() => setHover({ filter: true })}
+                onMouseLeave={() => setHover({ filter: false })}>
                 <Button
-                  className=" flex  text-[14px] px-3 text-gray-700"
+                  className=" flex text-[14px] px-3 text-gray-700"
                   onClick={showFilterModal}
-                  textColor={hover.filter?themeColor:""}
+                  textColor={hover.filter ? themeColor : ""}
                 >
                   <span className=" px-2 material-symbols-rounded">
                     page_info
@@ -404,11 +463,7 @@ const handleLogout=()=>{
             {children}
 
             {/* Elahe's New task button */}
-            <Button
-              className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md text-center p-3 fixed z-50"
-              onClick={showNewTaskModal}
-              color={themeColor}
-            >
+            <Button className=" flex w-[118px] h-[40px] left-[50px] bottom-[30px] text-[#FFFFFF] items-center justify-center rounded-md bg-[#208D8E] text-center p-1 fixed" onClick={showNewTaskModal}>
               <span class=" text-[#FFFFFF] material-symbols-rounded">
                 add_box
               </span>
@@ -418,41 +473,69 @@ const handleLogout=()=>{
         </div>
       </div>
       {false && <ShareWSModal />}
-      {showShareProject && (
-        <ShareProjectModal onClick={() => setShowShareProject(false)} />
-      )}
-      {showFilter && (
-        <FilterModal onClick={() => setShowFilter(false)}></FilterModal>
-      )}
+      {
+        showShareProject && (
+          <ShareProjectModal onClick={() => setShowShareProject(false)} />
+        )
+      }
+      {
+        showFilter && (
+          <FilterModal onClick={() => setShowFilter(false)}></FilterModal>
+        )
+      }
       {showModalProjectsMenu && <ModalProjectMenu />}
       {false && <ModalTaskMenu></ModalTaskMenu>}
-      {showNewWS && (
-        <ModalNewWorkSpace
-          onClick={() => setShowNewWS(false)}
-          buttonOnClick={() => setShowPickColor(true)}
-          getAllWorkspaces={getAllWorkspaces}
+      {
+        showNewWS && (
+          <ModalNewWorkSpace
+            onClick={() => setShowNewWS(false)}
+            buttonOnClick={() => setShowPickColor(true)}
+            getAllWorkspaces={getAllWorkspaces}
+            setShowNewWS={setShowNewWS}
+            setShowSettings={setShowSettings}
+            showNewWS={showNewWS}
+            workspaceName={workspaceName}
+            setWorkspaceName={setWorkspaceName}
+          ></ModalNewWorkSpace>
+        )
+      }
+      {
+        showPickColor && (
+          <ModalPickColor
+            onClick={() => setShowPickColor(false)}
+            buttonOnClick={() => setShowInfo(true)}
+            workspaceName={workspaceName}
+            color={color}
+            setColor={setColor}
+            showPickColor={showPickColor}
+            setShowPickColor={setShowPickColor}
+          ></ModalPickColor>
+        )
+      }
+      {
+        showInfo && (
+          <InformationModal
+            onClick={() => setShowInfo(false)}
+            buttonOnClick={() => setShowInfo(false)}
+            workspaceName={workspaceName}
+            workspaceColor={color}
+            setColor={setColor}
+            setWorkspaceName={setWorkspaceName}
+            getAllWorkspaces={getAllWorkspaces}
+          ></InformationModal>
+        )
+      }
 
-        ></ModalNewWorkSpace>
-      )}
-      {showPickColor && (
-        <ModalPickColor
-          onClick={() => setShowPickColor(false)}
-          buttonOnClick={() => setShowInfo(true)}
-        ></ModalPickColor>
-      )}
-      {showInfo && (
-        <InformationModal
-          onClick={() => setShowInfo(false)}
-          buttonOnClick={() => setShowInfo(false)}
-        ></InformationModal>
-      )}
-      {showNewTask && (
-        <MakeTaskModal onClick={() => setShowNewTask(false)}></MakeTaskModal>
-      )}
+      {
+        showNewTask && (
+          <MakeTaskModal onClick={() => setShowNewTask(false)}></MakeTaskModal>
+        )
+      }
       {false && <TaskDetails></TaskDetails>}
       {false && <PickDateModal></PickDateModal>}
-    </ProjectsContext.Provider>
+    </>
   );
 };
 
 export default Layout;
+

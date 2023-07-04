@@ -1,12 +1,21 @@
 import Button from "../Common/Button/Button";
+import AXIOS from "../Dashboard/Task/ColumnView/axios.configs";
 
 const ModalProjectMenu = (props) => {
+console.log(props.id)
+  const handleDeleteProject=()=>{
+    AXIOS.delete(`/projects/${props.id}`)
+    .then(res=>console.log(res))
+    .catch(err=>console.log(err))
+    props.onClick();
+    props.getAllWorkspaces()
+  }
   return (
-    <div className=" fixed w-[184px] h-[215px] text-[14px] border rounded-[8px]">
+    <div className="modal w-[184px] h-[215px] text-[14px] border rounded-[8px]">
       <ul>
         <li className=" py-1 flex items-center ">
           <span class=" px-1 material-symbols-rounded">add</span>
-          ساختن پروژه جدید
+          ساختن تسک جدید
         </li>
         <li className=" py-1 flex items-center">
           <span class=" px-1 material-symbols-rounded">edit_square</span>
@@ -20,7 +29,7 @@ const ModalProjectMenu = (props) => {
           <span class=" px-1 material-symbols-rounded">link</span>
           کپی لینک
         </li>
-        <li className=" py-1 flex items-center text-[#9F0000]">
+        <li onClick={handleDeleteProject} className=" py-1 flex items-center text-[#9F0000]">
           <span class=" px-1 material-symbols-rounded">delete</span>
           حذف
         </li>

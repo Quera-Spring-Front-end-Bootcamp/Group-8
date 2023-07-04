@@ -19,27 +19,31 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
   const [showPicker, setShowPicker] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [tasks, setTasks] = useState([]);
+  const [tags,setTags] = useState([])
   
   useEffect(() => {
-    AXIOS.get(`/board/${boardId}/tasks`)
-      .then((res) => {
-        setTasks(res.data.data)
-      })
-      .catch(error => console.log(error))
+    getTasks()
   }, [])
 
+const getTasks= ()=>{
+  AXIOS.get(`/board/${boardId}/tasks`)
+      .then((res) => {
+        console.log(res.data.data)
+        const tasks= res.data.data;
+        setTasks(res.data.data)
+        setTags(res.data.data.tasktags)
+        setRowCount(prevRowCount=>prevRowCount+(tasks.length))
+      })
+      .catch(error => console.log(error))
+}
 
-  const update = (newTags) => {
-    console.log('tag hayee ke az ColTask mian')
-    console.log(newTags)
-  }
   const handleEvent = () => {
     setIsSettingOpen(false);
   }
 
-  const addRow = () => {
-    setRowCount((preRowCount)=>preRowCount + 1);
-  };
+  // const addRow = () => {
+  //   setRowCount((preRowCount)=>preRowCount + 1);
+  // };
 
 
   const updateEditData = () => {
@@ -91,18 +95,18 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
     setShowPicker(false);
   }
 
-  const onEditTask = (taskId) => {
+  // const onEditTask = (taskId) => {
 
-    tags?.map((tag) => {
-      AXIOS.post('/tags', {
-        name: tag.name,
-        taskId: taskId,
-        color: tag.color
-      }).then(res => console.log(res))
-        .catch(err => console.log(err))
-    })
+  //   tags?.map((tag) => {
+  //     AXIOS.post('/tags', {
+  //       name: tag.name,
+  //       taskId: taskId,
+  //       color: tag.color
+  //     }).then(res => console.log(res))
+  //       .catch(err => console.log(err))
+  //   })
 
-  }
+  // }
 
   const handleTaskEdit = (id) => {
     const clickedTask = tasks.find((task) => task._id === id)
@@ -200,29 +204,30 @@ const Column = ({ boardId, position, borderColor, columnText, handleDelete, hand
         {showPicker && <CirclePicker color={color} onChange={handleChangeColor} />}
       </div>
       <div>
-        {showModal && <MakeTaskModal boardId={boardId} onClick={() => setShowModal(false)} setShowModal={setShowModal} setTasks={setTasks} onIncrement={addRow} />}
+        {showModal && <MakeTaskModal boardId={boardId} onClick={() => setShowModal(false)} setShowModal={setShowModal} setTasks={setTasks} />}
       </div>
 
 
-      <div className='mt-4'>
+      
         {tasks?.map((task) => (
-          <>
+          <div key={task._id} className='mt-4'>
             <ColTask
               key={task._id}
               taskTitle={task.name}
               taskId={task._id}
               boardId={boardId}
-              onIncrement={addRow} 
-              onEditTask={onEditTask}
+              tags={tags}
+              // onIncrement={addRow} 
+              // onEditTask={onEditTask}
               handleTaskEdit={handleTaskEdit}
               selectedTask={selectedTask}
-              update={update}
+              // update={update}
             />
-          </>
+          </div>
 
         ))}
 
-      </div>
+      
     </div>
 
 

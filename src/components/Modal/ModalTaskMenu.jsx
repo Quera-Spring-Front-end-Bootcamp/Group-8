@@ -1,4 +1,4 @@
-import Button from "../common/Button/Button";
+import Button from "../Common/Button/Button";
 
 const ModalTaskMenu = (props) => {
   return (

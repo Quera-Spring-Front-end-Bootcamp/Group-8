@@ -3,7 +3,7 @@ import TagStructure from './TagStructure';
 import TagSettings from './TagSettings';
 import AXIOS from '../../Dashboard/Task/ColumnView/axios.configs';
 
-const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, boardId }) => {
+const CreateTag = ({ taskId, setIsTagOpen, updateTags, tags1, boardId, deleteTaskTags }) => {
     const [tag, setTag] = useState("")
     const [tags, setTags] = useState([]);
     const [showText, setShowText] = useState("هیچ تگی وجود ندارد");
@@ -14,7 +14,8 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
     const [isEditting, setIsEditting] = useState(false);
     const [updatedTag, setUpdatedTag] = useState({});
     const [newTags, setNewTags] = useState([])
-    const [tagName, setTagName] = useState("")
+    const [tagName, setTagName] = useState("");
+    const [editedTagId,setEditedTagId] = useState("")
     const parentRef = useRef();
     const inputRef = useRef(null);
 
@@ -26,7 +27,6 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                 console.log(res.data.data)
                 const boards = res.data.data
                 const desiredBoard = boards.find((board) => board._id === taskId)
-                console.log(desiredBoard.taskTags)
                 setTags(desiredBoard.taskTags)
             })
     }, [])
@@ -63,6 +63,7 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
 
     useEffect(() => {
         updateTags(tags, newTags);
+
     }, [tags, newTags]);
 
     const handleKeyPress = (e) => {
@@ -82,7 +83,22 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
 
                 setTags((prevTags) => [...prevTags, newTag]);
             } else {
-                setTags((prevTags) => [...prevTags, updatedTag])
+                AXIOS.patch(`tags/${editedTagId}`, {
+
+                    name: updatedTextTag,
+                    color: tag.color,
+
+                })
+                    .then(res => {
+                        console.log(res.data.tag)
+                        // updateTags(res.data.tag)
+                        const EditedTags=[...tags, res.data.tag]
+                        console.log(EditedTags)
+                        deleteTaskTags(EditedTags)
+                        setTags(EditedTags)
+                    })
+                    .catch(err => console.log(err))
+                // setTags((prevTags) => [...prevTags, updatedTag])
             }
 
             setTagName("");
@@ -112,8 +128,9 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                 console.log(res)
             })
             .catch(err => console.log(err))
-        const deletedTag = tags.filter((tag) => tag._id !== id)
-        updateTags(deletedTag)
+        const deletedTags = tags.filter((tag) => tag._id !== id)
+        console.log(deletedTags)
+        deleteTaskTags(deletedTags)
         setDeletedTags((prevTags) =>
             prevTags.filter((prevTag) => prevTag._id !== id))
         setTags((prevTags) =>
@@ -133,12 +150,12 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
             prevTags.map((tag) => tag._id === id ? { ...tag, color: newColor } : tag))
     };
 
-
     const handleEdit = (_id) => {
-
+        setEditedTagId(_id)
         setIsEditting(true)
         tags.map((tag) => {
             if (tag._id === _id) {
+                
                 setTagName(tag.name)
                 const editTag = {
                     id: tag._id,
@@ -149,7 +166,7 @@ const CreateTag = ({ taskId, setIsTagOpen, handlePostTags, updateTags, tags1, bo
                 setUpdatedTag(editTag)
                 const newTags = tags.filter((tag) => tag._id !== _id)
                 setTags(newTags)
-                setTaskTags(newTags)
+                // setTaskTags(newTags)
             }
         });
         deletedTags.map((deletedTag) => {
